@@ -97,6 +97,14 @@ public class ErlangLexerTest {
 		  assertThat(lexer.lex("A"), hasToken("A", GenericTokenType.IDENTIFIER));
 		  assertThat(lexer.lex("Aodule"), hasToken("Aodule", GenericTokenType.IDENTIFIER));
 	  }
+	 
+	  @Test
+	  public void keyword() {
+		  //assertThat(lexer.lex("-module(m)."), hasTokens("-","module","(","m",")","."));
+		  assertThat(lexer.lex("when"), hasToken("when", ErlangKeyword.WHEN));
+		  assertThat(lexer.lex("bor"), hasToken("bor", ErlangKeyword.BOR));
+		  assertThat(lexer.lex("andalso"), hasToken("andalso", ErlangKeyword.ANDALSO));
+	  }
 	  
 	  @Test
 	  public void bom() {
