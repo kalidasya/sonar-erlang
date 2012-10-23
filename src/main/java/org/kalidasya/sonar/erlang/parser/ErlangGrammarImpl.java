@@ -28,18 +28,29 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	private void functions() {
 		functionDeclaration.is(one2n(functionClause));
 		functionClause.is(clauseHead, ErlangPunctator.ARROW, clauseBody);
-		clauseHead.is(ErlangTokenType.ATOM, ErlangPunctator.LPARENTHESIS, o2n(LITERAL, ErlangPunctator.COMMA), opt(ErlangKeyword.WHEN, LITERAL), ErlangPunctator.ARROW);
-		clauseBody.is();
+		clauseHead.is(
+			ErlangTokenType.ATOM, 
+			ErlangPunctator.LPARENTHESIS, 
+			o2n(
+				IDENTIFIER, 
+				ErlangPunctator.COMMA
+			), 
+			opt(
+				ErlangKeyword.WHEN, 
+				guardSequence
+			), 
+			ErlangPunctator.ARROW);
+		clauseBody.is(o2n(expression, ErlangPunctator.COMMA));
 		moduleAttribute.is(
 				ErlangPunctator.MINUS, 
-				LITERAL, 
-				ErlangPunctator.LBRACKET, 
+				ErlangTokenType.ATOM, 
+				ErlangPunctator.LPARENTHESIS, 
 				or(
-					LITERAL,
+					ErlangTokenType.ATOM,
 					one2n(
 						and(
 							ErlangPunctator.LBRACKET, 
-							LITERAL, 
+							ErlangTokenType.ATOM, 
 							ErlangPunctator.RBRACKET)
 						)
 					),

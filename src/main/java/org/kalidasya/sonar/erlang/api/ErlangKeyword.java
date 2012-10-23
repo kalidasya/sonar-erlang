@@ -31,9 +31,7 @@ public enum ErlangKeyword implements TokenType {
 	REM("rem"), 
 	TRY("try"), 
 	WHEN("when"), 
-	XOR("xor"), 
-	FALSE("false"),
-	TRUE("true");
+	XOR("xor"); 
 
 	private final String value;
 

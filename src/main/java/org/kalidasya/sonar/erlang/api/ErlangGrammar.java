@@ -31,7 +31,10 @@ public class ErlangGrammar extends Grammar {
 
 	public Rule module;
 	public Rule moduleAttribute;
+	public Rule guardSequence;
 
+	public Rule expression;
+	
 	@Override
 	public Rule getRootRule() {
 		return module;

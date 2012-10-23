@@ -77,18 +77,27 @@ public class ErlangLexerTest {
 
 	  @Test
 	  public void booleanLiteral() {
-	    assertThat(lexer.lex("false"), hasToken("false", ErlangKeyword.FALSE));
-	    assertThat(lexer.lex("true"), hasToken("true", ErlangKeyword.TRUE));
+	    assertThat(lexer.lex("false"), hasToken("false", ErlangTokenType.ATOM));
+	    assertThat(lexer.lex("true"), hasToken("true", ErlangTokenType.ATOM));
 	  }
 
 	  @Test
 	  public void identifier() {
 	    assertThat(lexer.lex("$"), hasToken("$", ErlangPunctator.DOLLAR));
 	    assertThat(lexer.lex("'"), hasToken("'", ErlangPunctator.APOSTROPHE));
-	    assertThat(lexer.lex("_"), hasToken("_", GenericTokenType.IDENTIFIER));
-	    assertThat(lexer.lex("identifier"), hasToken("identifier", GenericTokenType.IDENTIFIER));
 	  }
 
+	  @Test
+	  public void custom() {
+		  //assertThat(lexer.lex("-module(m)."), hasTokens("-","module","(","m",")","."));
+		  assertThat(lexer.lex("module"), hasToken("module", ErlangTokenType.ATOM));
+		  assertThat(lexer.lex("m"), hasToken("m", ErlangTokenType.ATOM));
+		  assertThat(lexer.lex("_"), hasToken("_", ErlangTokenType.ATOM));
+		  assertThat(lexer.lex("ASDodule"), hasToken("ASDodule", GenericTokenType.IDENTIFIER));
+		  assertThat(lexer.lex("A"), hasToken("A", GenericTokenType.IDENTIFIER));
+		  assertThat(lexer.lex("Aodule"), hasToken("Aodule", GenericTokenType.IDENTIFIER));
+	  }
+	  
 	  @Test
 	  public void bom() {
 	    assertThat(lexer.lex(Character.toString(UnknownCharacterChannel.BOM_CHAR)), hasTokens("EOF"));
