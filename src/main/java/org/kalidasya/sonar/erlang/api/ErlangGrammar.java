@@ -32,6 +32,12 @@ public class ErlangGrammar extends Grammar {
 	public Rule module;
 	public Rule moduleAttribute;
 	public Rule guardSequence;
+	public Rule guard;
+	public Rule guardExpression;
+	public Rule term;
+	public Rule pattern;
+	public Rule list;
+	public Rule tuple;
 
 	public Rule expression;
 	

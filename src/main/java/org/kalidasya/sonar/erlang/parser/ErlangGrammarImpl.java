@@ -32,15 +32,23 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			ErlangTokenType.ATOM, 
 			ErlangPunctator.LPARENTHESIS, 
 			o2n(
-				IDENTIFIER, 
-				ErlangPunctator.COMMA
+				or(IDENTIFIER, 
+				ErlangPunctator.COMMA)
 			), 
+			ErlangPunctator.RPARENTHESIS,
 			opt(
 				ErlangKeyword.WHEN, 
 				guardSequence
 			), 
 			ErlangPunctator.ARROW);
-		clauseBody.is(o2n(expression, ErlangPunctator.COMMA));
+		clauseBody.is(o2n(or(expression, ErlangPunctator.COMMA)));
+		guardSequence.is(one2n(or(guard,ErlangPunctator.SEMI)));
+		guard.is(one2n(or(guardExpression, ErlangPunctator.COMMA)));
+		guardExpression.is(or(term, IDENTIFIER),or(ErlangPunctator.PLUS), or(term, IDENTIFIER));
+		term.is(or(LITERAL, ErlangTokenType.ATOM, ErlangTokenType.NUMERIC_LITERAL, list, tuple));
+		tuple.is(ErlangPunctator.LCURLYBRACE, one2n(or(or(IDENTIFIER, ErlangPunctator.COMMA),tuple)),ErlangPunctator.RCURLYBRACE);
+		list.is(ErlangPunctator.LBRACKET, one2n(or(or(IDENTIFIER, ErlangPunctator.COMMA),list)),ErlangPunctator.RBRACKET);
+		//pattern.is();
 		moduleAttribute.is(
 				ErlangPunctator.MINUS, 
 				ErlangTokenType.ATOM, 
@@ -50,7 +58,12 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 					one2n(
 						and(
 							ErlangPunctator.LBRACKET, 
-							ErlangTokenType.ATOM, 
+							one2n(
+								or(
+									ErlangTokenType.ATOM,
+									ErlangPunctator.DIV,
+									ErlangTokenType.NUMERIC_LITERAL,
+									ErlangPunctator.COMMA)), 
 							ErlangPunctator.RBRACKET)
 						)
 					),
