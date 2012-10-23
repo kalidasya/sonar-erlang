@@ -59,26 +59,25 @@ public class ErlangLexerTest {
 	  }
 
 	  @Test
-	  public void hexAtomLiteral() {
-	    assertThat(lexer.lex("'find/me'"), hasToken("'find/me'", ErlangTokenType.ATOM));
-	    assertThat(lexer.lex("whatShallW3d0"), hasToken("whatShallW3d0", ErlangTokenType.ATOM));
+	  public void atomLiteral() {
+	    assertThat(lexer.lex("'find/me'"), hasToken("'find/me'", GenericTokenType.IDENTIFIER));
+	    assertThat(lexer.lex("whatShallW3d0"), hasToken("whatShallW3d0", GenericTokenType.IDENTIFIER));
 	  }
 	
 	  @Test
 	  public void stringLiteral() {
 	    assertThat("empty", lexer.lex("\"\""), hasToken("\"\"", GenericTokenType.LITERAL));
-
 	    assertThat(lexer.lex("\"hello world\""), hasToken("\"hello world\"", GenericTokenType.LITERAL));
-
 	    assertThat("escaped double quote", lexer.lex("\"\\\"\""), hasToken("\"\\\"\"", GenericTokenType.LITERAL));
-
 	    assertThat("multiline", lexer.lex("\"\\\n\""), hasToken("\"\\\n\"", GenericTokenType.LITERAL));
+	    //assertThat("new line", lexer.lex("~n"), hasToken("~n", GenericTokenType.LITERAL));
+	    assertThat("new line in literal", lexer.lex("\"~n\""), hasToken("\"~n\"", GenericTokenType.LITERAL));
 	  }
 
 	  @Test
 	  public void booleanLiteral() {
-	    assertThat(lexer.lex("false"), hasToken("false", ErlangTokenType.ATOM));
-	    assertThat(lexer.lex("true"), hasToken("true", ErlangTokenType.ATOM));
+	    assertThat(lexer.lex("false"), hasToken("false", GenericTokenType.IDENTIFIER));
+	    assertThat(lexer.lex("true"), hasToken("true", GenericTokenType.IDENTIFIER));
 	  }
 
 	  @Test
@@ -90,9 +89,9 @@ public class ErlangLexerTest {
 	  @Test
 	  public void custom() {
 		  //assertThat(lexer.lex("-module(m)."), hasTokens("-","module","(","m",")","."));
-		  assertThat(lexer.lex("module"), hasToken("module", ErlangTokenType.ATOM));
-		  assertThat(lexer.lex("m"), hasToken("m", ErlangTokenType.ATOM));
-		  assertThat(lexer.lex("_"), hasToken("_", ErlangTokenType.ATOM));
+		  assertThat(lexer.lex("module"), hasToken("module", GenericTokenType.IDENTIFIER));
+		  assertThat(lexer.lex("m"), hasToken("m", GenericTokenType.IDENTIFIER));
+		  assertThat(lexer.lex("_"), hasToken("_", GenericTokenType.IDENTIFIER));
 		  assertThat(lexer.lex("ASDodule"), hasToken("ASDodule", GenericTokenType.IDENTIFIER));
 		  assertThat(lexer.lex("A"), hasToken("A", GenericTokenType.IDENTIFIER));
 		  assertThat(lexer.lex("Aodule"), hasToken("Aodule", GenericTokenType.IDENTIFIER));

@@ -5,8 +5,7 @@ import com.sonar.sslr.api.TokenType;
 
 public enum ErlangTokenType implements TokenType {
 	NUMERIC_LITERAL,
-	REGULAR_EXPRESSION_LITERAL, 
-	ATOM;
+	REGULAR_EXPRESSION_LITERAL;
 
 	public String getName() {
 		return name();

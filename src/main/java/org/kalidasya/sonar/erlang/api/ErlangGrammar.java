@@ -19,10 +19,10 @@ public class ErlangGrammar extends Grammar {
 	public Rule booleanLiteral;
 	public Rule stringLiteral;
 	public Rule regularExpressionLiteral;
-	
+
 	public Rule sourceElement;
 	public Rule sourceElements;
-	
+
 	public Rule statement;
 	public Rule functionDeclaration;
 	public Rule functionClause;
@@ -38,9 +38,17 @@ public class ErlangGrammar extends Grammar {
 	public Rule pattern;
 	public Rule list;
 	public Rule tuple;
+	public Rule funcArity;
+	public Rule funcCall;
+
+	public Rule termCompare;
+	public Rule arithmeticExp;
+	public Rule booleanExp;
+	public Rule shortcircuitExp;
+	public Rule functionCall;
 
 	public Rule expression;
-	
+
 	@Override
 	public Rule getRootRule() {
 		return module;

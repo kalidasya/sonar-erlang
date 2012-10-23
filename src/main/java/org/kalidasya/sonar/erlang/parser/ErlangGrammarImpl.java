@@ -29,13 +29,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		functionDeclaration.is(one2n(functionClause));
 		functionClause.is(clauseHead, ErlangPunctator.ARROW, clauseBody);
 		clauseHead.is(
-			ErlangTokenType.ATOM, 
-			ErlangPunctator.LPARENTHESIS, 
-			o2n(
-				or(IDENTIFIER, 
-				ErlangPunctator.COMMA)
-			), 
-			ErlangPunctator.RPARENTHESIS,
+			funcCall,
 			opt(
 				ErlangKeyword.WHEN, 
 				guardSequence
@@ -44,31 +38,39 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		clauseBody.is(o2n(or(expression, ErlangPunctator.COMMA)));
 		guardSequence.is(one2n(or(guard,ErlangPunctator.SEMI)));
 		guard.is(one2n(or(guardExpression, ErlangPunctator.COMMA)));
-		guardExpression.is(or(term, IDENTIFIER),or(ErlangPunctator.PLUS), or(term, IDENTIFIER));
-		term.is(or(LITERAL, ErlangTokenType.ATOM, ErlangTokenType.NUMERIC_LITERAL, list, tuple));
+		guardExpression.is(or(IDENTIFIER, termCompare, arithmeticExp, booleanExp, shortcircuitExp, functionCall));
+		term.is(or(LITERAL, IDENTIFIER, ErlangTokenType.NUMERIC_LITERAL, list, tuple));
 		tuple.is(ErlangPunctator.LCURLYBRACE, one2n(or(or(IDENTIFIER, ErlangPunctator.COMMA),tuple)),ErlangPunctator.RCURLYBRACE);
 		list.is(ErlangPunctator.LBRACKET, one2n(or(or(IDENTIFIER, ErlangPunctator.COMMA),list)),ErlangPunctator.RBRACKET);
 		//pattern.is();
 		moduleAttribute.is(
 				ErlangPunctator.MINUS, 
-				ErlangTokenType.ATOM, 
+				IDENTIFIER, 
 				ErlangPunctator.LPARENTHESIS, 
 				or(
-					ErlangTokenType.ATOM,
+					IDENTIFIER,
 					one2n(
 						and(
 							ErlangPunctator.LBRACKET, 
 							one2n(
 								or(
-									ErlangTokenType.ATOM,
-									ErlangPunctator.DIV,
-									ErlangTokenType.NUMERIC_LITERAL,
+									funcArity,
 									ErlangPunctator.COMMA)), 
 							ErlangPunctator.RBRACKET)
 						)
 					),
 				ErlangPunctator.RPARENTHESIS, 
 				ErlangPunctator.DOT);
+		funcArity.is(IDENTIFIER,
+					ErlangPunctator.DIV,
+					ErlangTokenType.NUMERIC_LITERAL);
+		funcCall.is(IDENTIFIER, 
+				ErlangPunctator.LPARENTHESIS, 
+				o2n(
+					or(IDENTIFIER, 
+					ErlangPunctator.COMMA)
+				), 
+				ErlangPunctator.RPARENTHESIS);
 		module.is(one2n(moduleAttribute), one2n(functionDeclaration), EOF);
 	}
 }
