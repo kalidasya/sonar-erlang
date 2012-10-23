@@ -33,7 +33,8 @@ public enum ErlangPunctator implements TokenType {
 	BINEND(">>"),
 	LISTCOMP("||"),
 	PIPE("|"),
-	DOLLAR("$")
+	DOLLAR("$"),
+	APOSTROPHE("'")
 	;
 	
 	private final String value;
