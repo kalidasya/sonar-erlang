@@ -56,6 +56,8 @@ public class ErlangLexerTest {
 	    
 	    assertThat(lexer.lex("2#12"), hasToken("2#12", ErlangTokenType.NUMERIC_LITERAL));
 	    assertThat(lexer.lex("16#1f"), hasToken("16#1f", ErlangTokenType.NUMERIC_LITERAL));
+	    assertThat(lexer.lex("$\n"), hasToken("$\n", ErlangTokenType.NUMERIC_LITERAL));
+	    assertThat(lexer.lex("$w"), hasToken("$w", ErlangTokenType.NUMERIC_LITERAL));
 	  }
 
 	  @Test
