@@ -41,11 +41,16 @@ public class ErlangGrammar extends Grammar {
 	public Rule funcArity;
 	public Rule funcCall;
 
-	public Rule termCompare;
+	public Rule termCompareExp;
 	public Rule arithmeticExp;
 	public Rule booleanExp;
 	public Rule shortcircuitExp;
-	public Rule functionCall;
+	public Rule termCompOp;
+	public Rule arithmeticOp;
+	public Rule booleanOp;
+	public Rule shortcircuitOp;
+	public Rule listOp;
+	public Rule listExp;
 
 	public Rule expression;
 
