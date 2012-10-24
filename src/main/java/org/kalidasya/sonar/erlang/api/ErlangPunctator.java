@@ -36,7 +36,8 @@ public enum ErlangPunctator implements TokenType {
 	DOLLAR("$"),
 	APOSTROPHE("'"),
 	PLUSPLUS("++"),
-	MINUSMINUS("--")
+	MINUSMINUS("--"),
+	NUMBERSIGN("#")
 	;
 	
 	private final String value;

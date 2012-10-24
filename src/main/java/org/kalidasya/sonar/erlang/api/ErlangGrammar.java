@@ -1,5 +1,7 @@
 package org.kalidasya.sonar.erlang.api;
 
+import static com.sonar.sslr.impl.matcher.GrammarFunctions.Standard.or;
+
 import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.api.Rule;
 
@@ -31,6 +33,7 @@ public class ErlangGrammar extends Grammar {
 
 	public Rule module;
 	public Rule moduleAttribute;
+	public Rule guardSequenceStart;
 	public Rule guardSequence;
 	public Rule guard;
 	public Rule guardExpression;
@@ -40,6 +43,7 @@ public class ErlangGrammar extends Grammar {
 	public Rule tuple;
 	public Rule funcArity;
 	public Rule funcCall;
+	public Rule funcExport;
 
 	public Rule termCompareExp;
 	public Rule arithmeticExp;
@@ -52,6 +56,14 @@ public class ErlangGrammar extends Grammar {
 	public Rule listOp;
 	public Rule listExp;
 
+	public Rule flowExp;
+	public Rule ifExp;
+	public Rule caseExp;
+	public Rule receiveExp;
+
+	public Rule branchExpression;
+	public Rule branchPatternExp;
+	
 	public Rule expression;
 
 	@Override
