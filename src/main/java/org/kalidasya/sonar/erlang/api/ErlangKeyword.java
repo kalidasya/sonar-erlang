@@ -50,5 +50,16 @@ public enum ErlangKeyword implements TokenType {
 	public boolean hasToBeSkippedFromAst(AstNode node) {
 		return false;
 	}
+	
+	public static String[] keywordValues() {
+	    ErlangKeyword[] keywordsEnum = ErlangKeyword.values();
+	    String[] keywords = new String[keywordsEnum.length];
+	    for (int i = 0; i < keywords.length; i++) {
+	      keywords[i] = keywordsEnum[i].getValue();
+	    }
+	    return keywords;
+	  }
+
+
 
 }

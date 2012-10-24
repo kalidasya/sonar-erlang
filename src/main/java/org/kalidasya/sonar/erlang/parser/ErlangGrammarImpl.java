@@ -23,116 +23,39 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	
 
 	public ErlangGrammarImpl() {
+		module.is(one2n(moduleAttribute), one2n(functionDeclaration), EOF);
 		functions();
+		statements();
+		guards();
 	}
 
-	private void functions() {
-		functionDeclaration.is(one2n(or(functionClause, or(ErlangPunctator.SEMI, ErlangPunctator.DOT))));
-		functionClause.is(clauseHead, ErlangPunctator.ARROW, clauseBody);
-		clauseHead.is(
-			funcCall,
-			opt(guardSequenceStart)
-		);
-		clauseBody.is(
-			o2n(
-				or(
-					expression, 
-					term,
-					ErlangPunctator.COMMA
-				)
-			)
-		);
-		guardSequenceStart.is(
-			ErlangKeyword.WHEN, 
-			guardSequence
-		);
-		guardSequence.is(one2n(or(guard,ErlangPunctator.SEMI)));
-		guard.is(one2n(or(guardExpression, ErlangPunctator.COMMA)));
-		guardExpression.is(
-			or(
-				termCompareExp, 
-				IDENTIFIER, 
-				arithmeticExp, 
-				booleanExp, 
-				shortcircuitExp, 
-				funcCall
-			)
-		);
-		term.is(or(LITERAL, IDENTIFIER, ErlangTokenType.NUMERIC_LITERAL, list, tuple));
-		tuple.is(
-			ErlangPunctator.LCURLYBRACE, 
-			one2n(
-				or(
-					IDENTIFIER, 
-					ErlangPunctator.COMMA, 
-					tuple
-				)
-			),
-			ErlangPunctator.RCURLYBRACE
-		);
-		list.is(
-			ErlangPunctator.LBRACKET, 
-			one2n(or(or(IDENTIFIER, ErlangPunctator.COMMA),list)),ErlangPunctator.RBRACKET
-		);
-		termCompOp.is(
-			or(
-				ErlangPunctator.EQUAL, 
-				ErlangPunctator.EQUAL2, 
-				ErlangPunctator.NOTEQUAL, 
-				ErlangPunctator.NOTEQUAL2, 
-				ErlangPunctator.LT, 
-				ErlangPunctator.GT, 
-				ErlangPunctator.LE, 
-				ErlangPunctator.GE
-			)
-		);
-		termCompareExp.is(term, termCompOp, term);
-		arithmeticOp.is(or(
-			ErlangPunctator.PLUS, 
-			ErlangPunctator.MINUS, 
-			ErlangPunctator.STAR, 
-			ErlangPunctator.DIV, 
-			ErlangKeyword.BNOT, 
-			ErlangKeyword.DIV, 
-			ErlangKeyword.REM, 
-			ErlangKeyword.BAND, 
-			ErlangKeyword.BOR,
-			ErlangKeyword.BXOR, 
-			ErlangKeyword.BSL, 
-			ErlangKeyword.BSR,
-			ErlangPunctator.NUMBERSIGN
-		));
+	private void statements(){
 		arithmeticExp.is(
 			opt(
 				ErlangTokenType.NUMERIC_LITERAL, 
-				funcCall, 
-				IDENTIFIER
+				IDENTIFIER,
+				funcCall
 			), 
 			arithmeticOp, 
 			or(
-				ErlangTokenType.NUMERIC_LITERAL, 
-				funcCall, 
-				IDENTIFIER
+				ErlangTokenType.NUMERIC_LITERAL,
+				IDENTIFIER,
+				funcCall
 			)
 		);
-		booleanOp.is(or(
-			ErlangKeyword.NOT, 
-			ErlangKeyword.AND, 
-			ErlangKeyword.OR, 
-			ErlangKeyword.XOR
-		));
+		
+		termCompareExp.is(term, termCompOp, term);
+		
 		booleanExp.is(opt(expression), booleanOp, expression);
-		shortcircuitOp.is(or(ErlangKeyword.ANDALSO, ErlangKeyword.ORELSE));
+		
 		shortcircuitExp.is(
 			opt(ErlangPunctator.LPARENTHESIS), 
 			expression, 
 			o2n(shortcircuitOp, shortcircuitExp), 
 			opt(ErlangPunctator.RPARENTHESIS)
 		);
-		
-		listOp.is(or(ErlangPunctator.PLUSPLUS, ErlangPunctator.MINUSMINUS));
 		listExp.is(list, listOp, list);
-		expression.is(or(funcCall, term, arithmeticExp, listExp, flowExp));
+		expression.is(or(arithmeticExp, listExp, flowExp, term, funcCall));
 		flowExp.is(or(ifExp, caseExp, receiveExp));
 		caseExp.is(
 			ErlangKeyword.CASE, 
@@ -140,17 +63,6 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			ErlangKeyword.OF, 
 			one2n(or(pattern,ErlangPunctator.SEMI)),
 			ErlangKeyword.END
-		);
-		pattern.is(
-			expression,
-			opt(guardSequenceStart),
-			ErlangPunctator.ARROW,
-			one2n(
-				or(
-					branchExpression,
-					ErlangPunctator.SEMI
-				)
-			)
 		);
 		
 		ifExp.is(
@@ -181,14 +93,127 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			ErlangPunctator.SEMI
 		);
 		
+		pattern.is(
+			expression,
+			opt(guardSequenceStart),
+			ErlangPunctator.ARROW,
+			one2n(
+				or(
+					branchExpression,
+					ErlangPunctator.SEMI
+				)
+			)
+		);
+	}
+	
+	private void guards(){
+		guardSequenceStart.is(
+				ErlangKeyword.WHEN, 
+				guardSequence
+			);
+		guardSequence.is(one2n(or(guard,ErlangPunctator.SEMI)));
+		guard.is(one2n(or(guardExpression, ErlangPunctator.COMMA)));
+		guardExpression.is(
+			or(
+				termCompareExp, 
+				arithmeticExp, 
+				booleanExp, 
+				shortcircuitExp, 
+				funcCall,
+				IDENTIFIER
+			)
+		);
+	}
+	
+	private void dataTypes(){
+		term.is(or(LITERAL, ErlangTokenType.NUMERIC_LITERAL, list, tuple, IDENTIFIER));
+		listedTermsOrFunCalls.is(
+			or(
+				funcCall,
+				term
+			)
+		);
+		tuple.is(
+			ErlangPunctator.LCURLYBRACE, 
+			listedTermsOrFunCalls,
+			o2n(
+				ErlangPunctator.COMMA,
+				listedTermsOrFunCalls
+			),
+			ErlangPunctator.RCURLYBRACE
+		);
+		list.is(
+			ErlangPunctator.LBRACKET, 
+			o2n(
+				listedTermsOrFunCalls
+			),
+			ErlangPunctator.RBRACKET
+		);
+	}
+	
+	private void operators(){
+		termCompOp.is(
+			or(
+				ErlangPunctator.EQUAL, 
+				ErlangPunctator.EQUAL2, 
+				ErlangPunctator.NOTEQUAL, 
+				ErlangPunctator.NOTEQUAL2, 
+				ErlangPunctator.LT, 
+				ErlangPunctator.GT, 
+				ErlangPunctator.LE, 
+				ErlangPunctator.GE
+			)
+		);
+		booleanOp.is(or(
+			ErlangKeyword.NOT, 
+			ErlangKeyword.AND, 
+			ErlangKeyword.OR, 
+			ErlangKeyword.XOR
+		));
+		arithmeticOp.is(or(
+			ErlangPunctator.PLUS, 
+			ErlangPunctator.MINUS, 
+			ErlangPunctator.STAR, 
+			ErlangPunctator.DIV, 
+			ErlangKeyword.BNOT, 
+			ErlangKeyword.DIV, 
+			ErlangKeyword.REM, 
+			ErlangKeyword.BAND, 
+			ErlangKeyword.BOR,
+			ErlangKeyword.BXOR, 
+			ErlangKeyword.BSL, 
+			ErlangKeyword.BSR,
+			ErlangPunctator.NUMBERSIGN
+		));
+		listOp.is(or(ErlangPunctator.PLUSPLUS, ErlangPunctator.MINUSMINUS));
+		shortcircuitOp.is(or(ErlangKeyword.ANDALSO, ErlangKeyword.ORELSE));
+	}
+	
+	private void functions() {
+		functionDeclaration.is(one2n(or(functionClause, or(ErlangPunctator.SEMI, ErlangPunctator.DOT))));
+		functionClause.is(clauseHead, ErlangPunctator.ARROW, clauseBody);
+		clauseHead.is(
+			funcCall,
+			opt(guardSequenceStart)
+		);
+		clauseBody.is(
+			o2n(
+				or(
+					expression, 
+					term,
+					ErlangPunctator.COMMA
+				)
+			)
+		);
+		
 		moduleAttribute.is(
 				ErlangPunctator.MINUS, 
 				IDENTIFIER, 
 				ErlangPunctator.LPARENTHESIS, 
 				or(
-					IDENTIFIER,
+					funcExport,
 					LITERAL,
-					funcExport
+					IDENTIFIER
 				),
 				ErlangPunctator.RPARENTHESIS, 
 				ErlangPunctator.DOT);
@@ -206,19 +231,26 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 					ErlangPunctator.DIV,
 					ErlangTokenType.NUMERIC_LITERAL);
 		funcCall.is(
-				opt(IDENTIFIER, ErlangPunctator.COLON),
-				IDENTIFIER, 
-				ErlangPunctator.LPARENTHESIS, 
+			opt(IDENTIFIER, ErlangPunctator.COLON),
+			IDENTIFIER, 
+			ErlangPunctator.LPARENTHESIS, 
+			opt(
+				or(
+					expression, 
+					ErlangTokenType.NUMERIC_LITERAL,
+					GenericTokenType.LITERAL,
+					IDENTIFIER
+				),
 				o2n(
+					ErlangPunctator.COMMA,
 					or(
-						IDENTIFIER, 
 						expression, 
 						ErlangTokenType.NUMERIC_LITERAL,
 						GenericTokenType.LITERAL,
-						ErlangPunctator.COMMA
+						IDENTIFIER
 					)
-				), 
-				ErlangPunctator.RPARENTHESIS);
-		module.is(one2n(moduleAttribute), one2n(functionDeclaration), EOF);
+				)
+			), 
+			ErlangPunctator.RPARENTHESIS);
 	}
 }

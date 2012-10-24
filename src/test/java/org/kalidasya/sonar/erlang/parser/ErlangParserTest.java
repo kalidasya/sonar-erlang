@@ -40,6 +40,13 @@ public class ErlangParserTest {
 		
 		assertThat(p, parse(readFromFile("user_auth_mnesia.erl")));
 	}
+	
+	@Test
+	public void realLife3() throws IOException, URISyntaxException {
+		
+		assertThat(p, parse(code("-module(m).","dodo(A) ->","{a, node()}.")));
+	}
+
 
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);
