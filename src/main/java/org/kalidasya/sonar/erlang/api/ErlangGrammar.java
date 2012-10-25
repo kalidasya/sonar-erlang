@@ -65,6 +65,7 @@ public class ErlangGrammar extends Grammar {
 	public Rule branchPatternExp;
 	public Rule listedTermsOrFunCalls;
 	public Rule termsOrFunCalls;
+	public Rule typeFunctionSpec;
 	
 	public Rule expression;
 

@@ -32,7 +32,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	}
 
 	private void module() {
-		module.is(one2n(moduleAttribute), one2n(functionDeclaration), EOF);
+		module.is(one2n(moduleAttribute), o2n(typeFunctionSpec), one2n(functionDeclaration), EOF);
 		moduleAttribute.is(
 				ErlangPunctator.MINUS, 
 				IDENTIFIER, 
@@ -44,7 +44,29 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 					IDENTIFIER
 				),
 				ErlangPunctator.RPARENTHESIS, 
-				ErlangPunctator.DOT);
+			ErlangPunctator.DOT
+		);
+		typeFunctionSpec.is(
+			ErlangPunctator.MINUS, 
+			IDENTIFIER,
+			funcCall,
+			or(
+				and(
+					ErlangPunctator.COLON,
+					ErlangPunctator.COLON,
+					funcCall,
+					o2n(
+						ErlangPunctator.PIPE,
+						funcCall
+					)
+				),
+				and(
+					ErlangPunctator.ARROW,
+					funcCall
+				)
+			),
+			ErlangPunctator.DOT
+		);
 		//TODO: is it possible to have something like: -export().?
 		funcExport.is(
 			or(

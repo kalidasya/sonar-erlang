@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.kalidasya.sonar.erlang.ErlangConfiguration;
@@ -16,12 +17,17 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.io.Files;
 import com.sonar.sslr.impl.Parser;
+import com.sonar.sslr.impl.events.ExtendedStackTrace;
+import com.sonar.sslr.impl.events.ExtendedStackTraceStream;
+
 import static com.sonar.sslr.test.parser.ParserMatchers.parse;
 import static org.junit.Assert.assertThat;
 
 public class ErlangParserTest {
+	ExtendedStackTrace listener = new ExtendedStackTrace();
+	Parser<ErlangGrammar> p = ErlangParser.create(new ErlangConfiguration(Charsets.UTF_8), listener);
 
-	Parser<ErlangGrammar> p = ErlangParser.create(new ErlangConfiguration(Charsets.UTF_8));
+
 	ErlangGrammar g = p.getGrammar();
 
 	@Before
@@ -53,6 +59,11 @@ public class ErlangParserTest {
 		assertThat(p, parse(code("-module(m).", "-export([dodo/1]).","-export(dodo/2).","-export([]).", "dodo(A) ->","{a, node()}.")));
 	}
 
+	@Test
+	public void realLife_specs() throws IOException, URISyntaxException {
+		
+		assertThat(p, parse(code("-module(m).", "-type my_type() :: atom() | integer().", "-spec my_function(integer()) -> integer().", "-export(dodo/1).", "dodo(A) ->","{a, node()}.")));
+	}
 
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);
@@ -67,6 +78,11 @@ public class ErlangParserTest {
 			text.append(line).append("\n");
 		}
 		return text.toString();
+	}
+	
+	@After
+	public void log(){
+		ExtendedStackTraceStream.print(listener, System.out);
 	}
 
 }
