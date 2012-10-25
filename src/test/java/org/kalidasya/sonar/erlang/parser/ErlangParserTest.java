@@ -43,24 +43,34 @@ public class ErlangParserTest {
 
 	@Test
 	public void realLife2() throws IOException, URISyntaxException {
-		
 		assertThat(p, parse(readFromFile("user_auth_mnesia.erl")));
 	}
 	
 	@Test
-	public void realLife3() throws IOException, URISyntaxException {
-		
+	public void tuple() throws IOException, URISyntaxException {
 		assertThat(p, parse(code("-module(m).","dodo(A) ->","{a, node()}.")));
 	}
 	
 	@Test
-	public void realLife_exports() throws IOException, URISyntaxException {
+	public void returnWithNumber() throws IOException, URISyntaxException {
+		assertThat(p, parse(code("-module(m).","dodo(A) ->","1.")));
+	}
+
+	
+	@Test
+	public void emptyArgFuncCall() throws IOException, URISyntaxException {
+		
+		assertThat(p, parse(code("-module(m).","dodo(A) ->","integer().")));
+	}
+	
+	@Test
+	public void exports() throws IOException, URISyntaxException {
 		
 		assertThat(p, parse(code("-module(m).", "-export([dodo/1]).","-export(dodo/2).","-export([]).", "dodo(A) ->","{a, node()}.")));
 	}
 
 	@Test
-	public void realLife_specs() throws IOException, URISyntaxException {
+	public void specs() throws IOException, URISyntaxException {
 		
 		assertThat(p, parse(code("-module(m).", "-type my_type() :: atom() | integer().", "-spec my_function(integer()) -> integer().", "-export(dodo/1).", "dodo(A) ->","{a, node()}.")));
 	}

@@ -29,7 +29,7 @@ public final class ErlangLexer {
 				.withChannel(new BlackHoleChannel("\\s++"))
 				.withChannel(commentRegexp("%[^\\n\\r]*+"))
 				.withChannel(regexp(LITERAL, "\"([^\"\\\\]*+(\\\\[\\s\\S])?+)*+\""))
-				.withChannel(regexp(NUMERIC_LITERAL, "[0-9]++\\.([0-9]++)?+" + EXP + "?"))
+				.withChannel(regexp(NUMERIC_LITERAL, "[0-9]++\\.([0-9]++)" + EXP + "?"))
 				.withChannel(regexp(NUMERIC_LITERAL, "[0-9]++\\#([0-9A-Fa-f]++)?+"))
 				.withChannel(regexp(NUMERIC_LITERAL, "[0-9]++"))
 				.withChannel(regexp(NUMERIC_LITERAL, "\\$[\\x00-\\x7F]"))

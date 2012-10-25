@@ -2,6 +2,7 @@ package org.kalidasya.sonar.erlang.lexer;
 
 import java.nio.charset.Charset;
 
+import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.kalidasya.sonar.erlang.ErlangConfiguration;
@@ -100,6 +101,7 @@ public class ErlangLexerTest {
 		  assertThat(lexer.lex("ASDodule"), hasToken("ASDodule", GenericTokenType.IDENTIFIER));
 		  assertThat(lexer.lex("A"), hasToken("A", GenericTokenType.IDENTIFIER));
 		  assertThat(lexer.lex("Aodule"), hasToken("Aodule", GenericTokenType.IDENTIFIER));
+		  assertThat(lexer.lex("1."), Matchers.allOf(hasToken("1", ErlangTokenType.NUMERIC_LITERAL),hasToken(".", ErlangPunctator.DOT)));
 	  }
 	 
 	  @Test

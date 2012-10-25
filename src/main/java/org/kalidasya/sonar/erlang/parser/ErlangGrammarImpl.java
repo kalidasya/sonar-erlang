@@ -89,15 +89,17 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	private void statements(){
 		arithmeticExp.is(
 			opt(
-				ErlangTokenType.NUMERIC_LITERAL, 
-				IDENTIFIER,
-				funcCall
+				or(
+					ErlangTokenType.NUMERIC_LITERAL, 
+					funcCall,
+					IDENTIFIER
+				)
 			), 
 			arithmeticOp, 
 			or(
 				ErlangTokenType.NUMERIC_LITERAL,
-				IDENTIFIER,
-				funcCall
+				funcCall,
+				IDENTIFIER
 			)
 		);
 		
@@ -112,7 +114,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			opt(ErlangPunctator.RPARENTHESIS)
 		);
 		listExp.is(list, listOp, list);
-		expression.is(or(arithmeticExp, listExp, flowExp, term, funcCall));
+		expression.is(or(arithmeticExp, listExp, flowExp, funcCall, term ));
 		flowExp.is(or(ifExp, caseExp, receiveExp));
 		caseExp.is(
 			ErlangKeyword.CASE, 
@@ -254,19 +256,28 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	}
 	
 	private void functions() {
-		functionDeclaration.is(one2n(or(functionClause, or(ErlangPunctator.SEMI, ErlangPunctator.DOT))));
+		functionDeclaration.is(
+			functionClause, 
+			o2n(
+				ErlangPunctator.SEMI,
+				functionClause
+			), 
+			ErlangPunctator.DOT
+		);
 		functionClause.is(clauseHead, ErlangPunctator.ARROW, clauseBody);
 		clauseHead.is(
 			funcCall,
 			opt(guardSequenceStart)
 		);
 		clauseBody.is(
+			or(expression, term),
+			
 			o2n(
+				ErlangPunctator.COMMA,
 				or(
-					expression, 
-					term,
-					ErlangPunctator.COMMA
-				)
+					expression,
+					term
+				) 
 			)
 		);
 		
@@ -279,17 +290,17 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			ErlangPunctator.LPARENTHESIS, 
 			opt(
 				or(
-					expression, 
 					ErlangTokenType.NUMERIC_LITERAL,
 					GenericTokenType.LITERAL,
+					expression,
 					IDENTIFIER
 				),
 				o2n(
 					ErlangPunctator.COMMA,
 					or(
-						expression, 
 						ErlangTokenType.NUMERIC_LITERAL,
 						GenericTokenType.LITERAL,
+						expression,
 						IDENTIFIER
 					)
 				)
