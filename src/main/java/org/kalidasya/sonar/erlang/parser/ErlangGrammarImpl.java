@@ -32,7 +32,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	}
 
 	private void module() {
-		module.is(one2n(moduleAttribute), o2n(typeFunctionSpec), one2n(functionDeclaration), EOF);
+		module.is(one2n(or(moduleAttribute, typeFunctionSpec)), one2n(functionDeclaration), EOF);
 		moduleAttribute.is(
 				ErlangPunctator.MINUS, 
 				IDENTIFIER, 
