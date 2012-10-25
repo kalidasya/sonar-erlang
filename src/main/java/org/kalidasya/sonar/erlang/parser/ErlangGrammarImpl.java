@@ -23,10 +23,45 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	
 
 	public ErlangGrammarImpl() {
-		module.is(one2n(moduleAttribute), one2n(functionDeclaration), EOF);
+		module();
 		functions();
 		statements();
+		dataTypes();
+		operators();
 		guards();
+	}
+
+	private void module() {
+		module.is(one2n(moduleAttribute), one2n(functionDeclaration), EOF);
+		moduleAttribute.is(
+				ErlangPunctator.MINUS, 
+				IDENTIFIER, 
+				ErlangPunctator.LPARENTHESIS, 
+				or(
+					funcExport,
+					listedTermsOrFunCalls,
+					LITERAL,
+					IDENTIFIER
+				),
+				ErlangPunctator.RPARENTHESIS, 
+				ErlangPunctator.DOT);
+		//TODO: is it possible to have something like: -export().?
+		funcExport.is(
+			or(
+				and(
+					ErlangPunctator.LBRACKET,
+					o2n(
+						funcArity,
+						o2n(
+							ErlangPunctator.COMMA,
+							funcArity
+						)
+					),
+					ErlangPunctator.RBRACKET
+				), 
+				funcArity
+			)
+		);
 	}
 
 	private void statements(){
@@ -127,17 +162,24 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	
 	private void dataTypes(){
 		term.is(or(LITERAL, ErlangTokenType.NUMERIC_LITERAL, list, tuple, IDENTIFIER));
-		listedTermsOrFunCalls.is(
+		termsOrFunCalls.is(
 			or(
 				funcCall,
 				term
 			)
 		);
+		listedTermsOrFunCalls.is(
+			and(
+				termsOrFunCalls,
+				o2n(
+					ErlangPunctator.COMMA,
+					termsOrFunCalls
+				)
+			)
+		);
 		tuple.is(
 			ErlangPunctator.LCURLYBRACE, 
-			listedTermsOrFunCalls,
 			o2n(
-				ErlangPunctator.COMMA,
 				listedTermsOrFunCalls
 			),
 			ErlangPunctator.RCURLYBRACE
@@ -206,27 +248,6 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			)
 		);
 		
-		moduleAttribute.is(
-				ErlangPunctator.MINUS, 
-				IDENTIFIER, 
-				ErlangPunctator.LPARENTHESIS, 
-				or(
-					funcExport,
-					LITERAL,
-					IDENTIFIER
-				),
-				ErlangPunctator.RPARENTHESIS, 
-				ErlangPunctator.DOT);
-		funcExport.is(
-				ErlangPunctator.LBRACKET,
-				one2n(
-					or(
-						funcArity,
-						ErlangPunctator.COMMA
-					)
-				),
-				ErlangPunctator.RBRACKET
-		);
 		funcArity.is(IDENTIFIER,
 					ErlangPunctator.DIV,
 					ErlangTokenType.NUMERIC_LITERAL);

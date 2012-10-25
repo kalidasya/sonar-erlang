@@ -46,6 +46,12 @@ public class ErlangParserTest {
 		
 		assertThat(p, parse(code("-module(m).","dodo(A) ->","{a, node()}.")));
 	}
+	
+	@Test
+	public void realLife_exports() throws IOException, URISyntaxException {
+		
+		assertThat(p, parse(code("-module(m).", "-export([dodo/1]).","-export(dodo/2).","-export([]).", "dodo(A) ->","{a, node()}.")));
+	}
 
 
 	private static String code(String... lines) {

@@ -83,9 +83,12 @@ public class ErlangLexerTest {
 	  }
 
 	  @Test
-	  public void identifier() {
+	  public void punctator() {
 	    assertThat(lexer.lex("$"), hasToken("$", ErlangPunctator.DOLLAR));
 	    assertThat(lexer.lex("'"), hasToken("'", ErlangPunctator.APOSTROPHE));
+	    assertThat(lexer.lex("."), hasToken(".", ErlangPunctator.DOT));
+	    assertThat(lexer.lex(","), hasToken(",", ErlangPunctator.COMMA));
+	    assertThat(lexer.lex("("), hasToken("(", ErlangPunctator.LPARENTHESIS));
 	  }
 
 	  @Test

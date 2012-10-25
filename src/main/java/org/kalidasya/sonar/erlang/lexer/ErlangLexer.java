@@ -35,9 +35,9 @@ public final class ErlangLexer {
 				.withChannel(regexp(NUMERIC_LITERAL, "\\$[\\x00-\\x7F]"))
 				/**
 				 * javaidentifier szutyok meccsel a $-ra
-				 * végig kéne tesztelni a punctuatorokat
+				 * vÃ©gig kÃ©ne tesztelni a punctuatorokat
 				 */
-				.withChannel(new IdentifierAndKeywordChannel(or("('[^'\n\r]+')","(\\p{javaJavaIdentifierStart}++\\p{javaJavaIdentifierPart}*+)"), true, ErlangKeyword.values()))
+				.withChannel(new IdentifierAndKeywordChannel(or("('[^'\n\r]+')","^(?!\\$)(\\p{javaJavaIdentifierStart}++\\p{javaJavaIdentifierPart}*+)"), true, ErlangKeyword.values()))
 				.withChannel(new PunctuatorChannel(ErlangPunctator.values()))
 				.withChannel(new UnknownCharacterChannel(true))
 				.build();
