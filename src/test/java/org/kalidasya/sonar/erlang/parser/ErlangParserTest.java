@@ -56,6 +56,13 @@ public class ErlangParserTest {
 		assertThat(p, parse(code("-module(m).","dodo(A) ->","1.")));
 	}
 
+	@Test
+	public void caseTuple() throws IOException, URISyntaxException {
+		assertThat(p, parse(code("-module(m).","dodo(A) ->","case A of", "{aborted, {already_exists, user}} -> ok end.")));
+		assertThat(p, parse(code("-module(m).","dodo(A) ->","case A of","{atomic, ok} -> init_user_data();", " {aborted, {already_exists, user}} -> ok end.")));
+	}
+	
+	
 	
 	@Test
 	public void emptyArgFuncCall() throws IOException, URISyntaxException {
