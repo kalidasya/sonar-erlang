@@ -114,7 +114,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			opt(ErlangPunctator.RPARENTHESIS)
 		);
 		listExp.is(list, listOp, list);
-		expression.is(or(funcCall, arithmeticExp, listExp, flowExp, term ));
+		expression.is(or(recordRef, funExpr, funcCall, arithmeticExp, listExp, flowExp, matchExp, term ));
 		flowExp.is(or(ifExp, caseExp, receiveExp));
 		caseExp.is(
 			ErlangKeyword.CASE, 
@@ -164,6 +164,41 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 					branchExpression
 			)
 		);
+		
+		recordRef.is(
+			or(
+				recordSet,
+				recordAcc
+			)
+		);
+		
+		recordSet.is(
+			opt(IDENTIFIER),
+			ErlangPunctator.NUMBERSIGN,
+			IDENTIFIER,
+			ErlangPunctator.LCURLYBRACE,
+			matchExp,
+			o2n(
+				ErlangPunctator.COMMA,
+				matchExp
+			),
+			ErlangPunctator.RCURLYBRACE
+		);
+		matchExp.is(
+			IDENTIFIER,
+			ErlangPunctator.MATCHOP,
+			expression
+		);
+		recordAcc.is(
+			opt(IDENTIFIER),
+			ErlangPunctator.NUMBERSIGN,
+			IDENTIFIER,
+			o2n(
+				ErlangPunctator.DOT,
+				IDENTIFIER
+			)
+		);
+	
 	}
 	
 	private void guards(){
@@ -263,6 +298,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				ErlangPunctator.SEMI,
 				functionClause
 			), 
+			
 			ErlangPunctator.DOT
 		);
 		functionClause.is(clauseHead, ErlangPunctator.ARROW, clauseBody);
@@ -271,14 +307,10 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			opt(guardSequenceStart)
 		);
 		clauseBody.is(
-			or(expression, term),
-			
+			expression,
 			o2n(
 				ErlangPunctator.COMMA,
-				or(
-					expression,
-					term
-				) 
+				expression
 			)
 		);
 		
@@ -288,6 +320,9 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		funcCall.is(
 			opt(IDENTIFIER, ErlangPunctator.COLON),
 			IDENTIFIER, 
+			funcArgs 
+		);
+		funcArgs.is(
 			ErlangPunctator.LPARENTHESIS, 
 			opt(
 				or(
@@ -305,7 +340,20 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 						IDENTIFIER
 					)
 				)
-			), 
-			ErlangPunctator.RPARENTHESIS);
+			),
+			ErlangPunctator.RPARENTHESIS
+		);
+		funExpr.is(
+			ErlangKeyword.FUN,
+			funcArgs,
+			opt(guardSequenceStart),
+			ErlangPunctator.ARROW,
+			expression,
+			o2n(
+				ErlangPunctator.SEMI,
+				expression
+			),
+			ErlangKeyword.END
+		);
 	}
 }

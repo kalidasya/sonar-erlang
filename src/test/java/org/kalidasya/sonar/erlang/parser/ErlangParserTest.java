@@ -71,6 +71,12 @@ public class ErlangParserTest {
 	}
 	
 	@Test
+	public void recordSet() throws IOException, URISyntaxException {
+		
+		assertThat(p, parse(code("-module(m).","dodo(A) ->","#msg{to=void, no=3}.")));
+	}
+	
+	@Test
 	public void exports() throws IOException, URISyntaxException {
 		
 		assertThat(p, parse(code("-module(m).", "-export([dodo/1]).","-export(dodo/2).","-export([]).", "dodo(A) ->","{a, node()}.")));
