@@ -102,7 +102,7 @@ public class ErlangLexerTest {
 		  assertThat(lexer.lex("A"), hasToken("A", GenericTokenType.IDENTIFIER));
 		  assertThat(lexer.lex("Aodule"), hasToken("Aodule", GenericTokenType.IDENTIFIER));
 		  assertThat(lexer.lex("1."), Matchers.allOf(hasToken("1", ErlangTokenType.NUMERIC_LITERAL),hasToken(".", ErlangPunctator.DOT)));
-		 // assertThat(lexer.lex("User#user{credits = UserInfo#user.credits}"), hasToken("1", ErlangTokenType.NUMERIC_LITERAL));
+		 // assertThat(lexer.lex("parse_args([Arg|Args]) ->"), hasToken("1", ErlangTokenType.NUMERIC_LITERAL));
 		  
 	  }
 	 

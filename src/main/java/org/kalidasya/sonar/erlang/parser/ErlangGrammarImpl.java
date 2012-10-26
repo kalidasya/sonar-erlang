@@ -113,8 +113,8 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			o2n(shortcircuitOp, shortcircuitExp), 
 			opt(ErlangPunctator.RPARENTHESIS)
 		);
-		listExp.is(or(list, recordRef, funcCall), listOp, or(list, recordRef, funcCall));
-		expression.is(or(listExp, recordRef, funExpr, funcCall, arithmeticExp, flowExp, matchExp, term ));
+		listExp.is(termsOrFunCalls, listOp, termsOrFunCalls);
+		expression.is(or(listExp, listCompExp, recordRef, funExpr, funcCall, arithmeticExp, flowExp, matchExp, term ));
 		flowExp.is(or(ifExp, caseExp, receiveExp));
 		caseExp.is(
 			ErlangKeyword.CASE, 
@@ -199,6 +199,24 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			)
 		);
 	
+		listCompExp.is(
+			ErlangPunctator.LBRACKET,
+			expression,
+			ErlangPunctator.LISTCOMP,
+			one2n(qualifier),
+			ErlangPunctator.RBRACKET
+		);
+		
+		qualifier.is(
+			or(
+				and(
+					expression,
+					ErlangPunctator.ARROWBACK,
+					expression
+				),
+				expression
+			)
+		);
 	}
 	
 	private void guards(){
@@ -224,7 +242,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		term.is(or(LITERAL, ErlangTokenType.NUMERIC_LITERAL, list, tuple, recordRef, IDENTIFIER));
 		termsOrFunCalls.is(
 			or(
-				funcCall,
+				//funcCall,
 				term
 			)
 		);
@@ -247,7 +265,11 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		list.is(
 			ErlangPunctator.LBRACKET, 
 			o2n(
-				listedTermsOrFunCalls
+				listedTermsOrFunCalls,
+				o2n(
+					ErlangPunctator.PIPE, 
+					listedTermsOrFunCalls
+				)
 			),
 			ErlangPunctator.RBRACKET
 		);
@@ -325,20 +347,10 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		funcArgs.is(
 			ErlangPunctator.LPARENTHESIS, 
 			opt(
-				or(
-					ErlangTokenType.NUMERIC_LITERAL,
-					GenericTokenType.LITERAL,
-					expression,
-					IDENTIFIER
-				),
+				expression,
 				o2n(
 					ErlangPunctator.COMMA,
-					or(
-						ErlangTokenType.NUMERIC_LITERAL,
-						GenericTokenType.LITERAL,
-						expression,
-						IDENTIFIER
-					)
+					expression
 				)
 			),
 			ErlangPunctator.RPARENTHESIS

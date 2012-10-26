@@ -47,6 +47,11 @@ public class ErlangParserTest {
 	}
 	
 	@Test
+	public void realLife3() throws IOException, URISyntaxException {
+		assertThat(p, parse(readFromFile("agner_main.erl")));
+	}
+	
+	@Test
 	public void tuple() throws IOException, URISyntaxException {
 		assertThat(p, parse(code("-module(m).","dodo(A) ->","{a, node()}.")));
 	}
