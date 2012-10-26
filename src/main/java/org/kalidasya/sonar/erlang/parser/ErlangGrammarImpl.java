@@ -120,7 +120,11 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			ErlangKeyword.CASE, 
 			expression, 
 			ErlangKeyword.OF, 
-			one2n(pattern),
+			pattern,
+			o2n(
+				ErlangPunctator.SEMI,
+				pattern
+			),
 			ErlangKeyword.END
 		);
 		
@@ -156,12 +160,8 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			expression,
 			opt(guardSequenceStart),
 			ErlangPunctator.ARROW,
-			branchExpression,
-			o2n(
-				or(
-					ErlangPunctator.SEMI,
+			one2n(
 					branchExpression
-				)
 			)
 		);
 	}
