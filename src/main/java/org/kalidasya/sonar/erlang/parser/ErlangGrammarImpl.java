@@ -242,7 +242,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		term.is(or(LITERAL, ErlangTokenType.NUMERIC_LITERAL, list, tuple, recordRef, IDENTIFIER));
 		termsOrFunCalls.is(
 			or(
-				//funcCall,
+				funcCall,
 				term
 			)
 		);
@@ -336,9 +336,15 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			)
 		);
 		
-		funcArity.is(IDENTIFIER,
-					ErlangPunctator.DIV,
-					ErlangTokenType.NUMERIC_LITERAL);
+		funcArity.is(
+			opt(
+				IDENTIFIER,
+				ErlangPunctator.COLON
+			),
+			IDENTIFIER,
+			ErlangPunctator.DIV,
+			ErlangTokenType.NUMERIC_LITERAL
+		);
 		funcCall.is(
 			opt(IDENTIFIER, ErlangPunctator.COLON),
 			IDENTIFIER, 
@@ -357,15 +363,20 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		);
 		funExpr.is(
 			ErlangKeyword.FUN,
-			funcArgs,
-			opt(guardSequenceStart),
-			ErlangPunctator.ARROW,
-			expression,
-			o2n(
-				ErlangPunctator.SEMI,
-				expression
-			),
-			ErlangKeyword.END
+			or(
+				and(
+					funcArgs,
+					opt(guardSequenceStart),
+					ErlangPunctator.ARROW,
+					expression,
+					o2n(
+						ErlangPunctator.SEMI,
+						expression
+					),
+					ErlangKeyword.END
+				),
+				funcArity
+			)
 		);
 	}
 }

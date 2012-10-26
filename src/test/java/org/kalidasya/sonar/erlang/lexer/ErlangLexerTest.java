@@ -73,7 +73,6 @@ public class ErlangLexerTest {
 	    assertThat(lexer.lex("\"hello world\""), hasToken("\"hello world\"", GenericTokenType.LITERAL));
 	    assertThat("escaped double quote", lexer.lex("\"\\\"\""), hasToken("\"\\\"\"", GenericTokenType.LITERAL));
 	    assertThat("multiline", lexer.lex("\"\\\n\""), hasToken("\"\\\n\"", GenericTokenType.LITERAL));
-	    //assertThat("new line", lexer.lex("~n"), hasToken("~n", GenericTokenType.LITERAL));
 	    assertThat("new line in literal", lexer.lex("\"~n\""), hasToken("\"~n\"", GenericTokenType.LITERAL));
 	  }
 
@@ -102,7 +101,7 @@ public class ErlangLexerTest {
 		  assertThat(lexer.lex("A"), hasToken("A", GenericTokenType.IDENTIFIER));
 		  assertThat(lexer.lex("Aodule"), hasToken("Aodule", GenericTokenType.IDENTIFIER));
 		  assertThat(lexer.lex("1."), Matchers.allOf(hasToken("1", ErlangTokenType.NUMERIC_LITERAL),hasToken(".", ErlangPunctator.DOT)));
-		 // assertThat(lexer.lex("parse_args([Arg|Args]) ->"), hasToken("1", ErlangTokenType.NUMERIC_LITERAL));
+		 // assertThat(lexer.lex("io:format(\"~s~n\",[agner_spec:property_to_list(lists:keyfind(list_to_atom(Property), 1, Spec))])"), hasToken("1", ErlangTokenType.NUMERIC_LITERAL));
 		  
 	  }
 	 

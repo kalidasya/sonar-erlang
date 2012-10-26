@@ -67,7 +67,15 @@ public class ErlangParserTest {
 		assertThat(p, parse(code("-module(m).","dodo(A) ->","case A of","{atomic, ok} -> init_user_data();", " {aborted, {already_exists, user}} -> ok end.")));
 	}
 	
+	@Test
+	public void deepFuncArg(){
+		assertThat(p, parse(code("-module(m).","dodo(A) ->","io:format(\"~s~n\",[agner_spec:property_to_list(lists:keyfind(list_to_atom(Property), 1, Spec))]).")));
+	}
 	
+	@Test
+	public void funWithArity(){
+		assertThat(p, parse(code("-module(m).","dodo(A) ->","Properties = lists:map(fun list_to_atom/1, string:tokens(proplists:get_value(properties, Opts,\"\"),\",\")).")));
+	}
 	
 	@Test
 	public void emptyArgFuncCall() throws IOException, URISyntaxException {
