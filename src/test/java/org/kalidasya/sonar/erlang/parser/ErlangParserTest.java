@@ -73,6 +73,22 @@ public class ErlangParserTest {
 	}
 	
 	@Test
+	public void custom(){
+		assertThat(p, parse(code("-module(m).","dodo(A) ->","Spec = agner:spec(Name).")));
+	}
+	
+	
+	@Test
+	public void deepFuncArg2(){
+		assertThat(p, parse(code("-module(m).","dodo(A) ->",
+				"io:format(\"~s\",[lists:usort(plists:map(fun (Name) ->",
+			    "Spec = agner:spec(Name),",
+			    "Searchable = string:to_lower(lists:flatten([Name,proplists:get_value(description,Spec,[])|proplists:get_value(keywords,Spec,[])]))",
+				".")));
+	}
+	
+	
+	@Test
 	public void funWithArity(){
 		assertThat(p, parse(code("-module(m).","dodo(A) ->","Properties = lists:map(fun list_to_atom/1, string:tokens(proplists:get_value(properties, Opts,\"\"),\",\")).")));
 	}
