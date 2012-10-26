@@ -113,8 +113,8 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			o2n(shortcircuitOp, shortcircuitExp), 
 			opt(ErlangPunctator.RPARENTHESIS)
 		);
-		listExp.is(list, listOp, list);
-		expression.is(or(recordRef, funExpr, funcCall, arithmeticExp, listExp, flowExp, matchExp, term ));
+		listExp.is(or(list, recordRef, funcCall), listOp, or(list, recordRef, funcCall));
+		expression.is(or(listExp, recordRef, funExpr, funcCall, arithmeticExp, flowExp, matchExp, term ));
 		flowExp.is(or(ifExp, caseExp, receiveExp));
 		caseExp.is(
 			ErlangKeyword.CASE, 
@@ -221,7 +221,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	}
 	
 	private void dataTypes(){
-		term.is(or(LITERAL, ErlangTokenType.NUMERIC_LITERAL, list, tuple, IDENTIFIER));
+		term.is(or(LITERAL, ErlangTokenType.NUMERIC_LITERAL, list, tuple, recordRef, IDENTIFIER));
 		termsOrFunCalls.is(
 			or(
 				funcCall,
