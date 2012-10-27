@@ -74,7 +74,9 @@ public class ErlangGrammar extends Grammar {
 	public Rule funExpr;
 	public Rule qualifier;
 	public Rule listCompExp;
+	public Rule casePattern;
 	
+	public Rule funcDecl;
 	public Rule expression;
 
 	@Override

@@ -25,8 +25,8 @@ import static org.junit.Assert.assertThat;
 
 public class ErlangParserTest {
 	ExtendedStackTrace listener = new ExtendedStackTrace();
-	Parser<ErlangGrammar> p = ErlangParser.create(new ErlangConfiguration(Charsets.UTF_8), listener);
-
+	Parser<ErlangGrammar> p = ErlangParser.create(new ErlangConfiguration(
+			Charsets.UTF_8), listener);
 
 	ErlangGrammar g = p.getGrammar();
 
@@ -37,93 +37,139 @@ public class ErlangParserTest {
 
 	@Test
 	public void realLife() {
-		assertThat(p, parse(code("-module(m).", "-export([fact/1]).", "", "fact(N) when N>0 ->",
-				"N * fact(N-1);", "fact(0) ->", "1.")));
+		assertThat(
+				p,
+				parse(code("-module(m).", "-export([fact/1]).", "",
+						"fact(N) when N>0 ->", "N * fact(N-1);", "fact(0) ->",
+						"1.")));
 	}
 
 	@Test
 	public void realLife2() throws IOException, URISyntaxException {
 		assertThat(p, parse(readFromFile("user_auth_mnesia.erl")));
 	}
-	
+
 	@Test
 	public void realLife3() throws IOException, URISyntaxException {
 		assertThat(p, parse(readFromFile("agner_main.erl")));
 	}
-	
+
 	@Test
 	public void tuple() throws IOException, URISyntaxException {
-		assertThat(p, parse(code("-module(m).","dodo(A) ->","{a, node()}.")));
+		assertThat(p, parse(code("-module(m).", "dodo(A) ->", "{a, node()}.")));
 	}
-	
+
 	@Test
 	public void returnWithNumber() throws IOException, URISyntaxException {
-		assertThat(p, parse(code("-module(m).","dodo(A) ->","1.")));
+		assertThat(p, parse(code("-module(m).", "dodo(A) ->", "1.")));
 	}
 
 	@Test
 	public void caseTuple() throws IOException, URISyntaxException {
-		assertThat(p, parse(code("-module(m).","dodo(A) ->","case A of", "{aborted, {already_exists, user}} -> ok end.")));
-		assertThat(p, parse(code("-module(m).","dodo(A) ->","case A of","{atomic, ok} -> init_user_data();", " {aborted, {already_exists, user}} -> ok end.")));
+		assertThat(
+				p,
+				parse(code("-module(m).", "dodo(A) ->", "case A of",
+						"{aborted, {already_exists, user}} -> ok end.")));
+		assertThat(
+				p,
+				parse(code("-module(m).", "dodo(A) ->", "case A of",
+						"{atomic, ok} -> init_user_data();",
+						" {aborted, {already_exists, user}} -> ok end.")));
+	}
+
+	@Test
+	public void deepFuncArg() {
+		assertThat(
+				p,
+				parse(code(
+						"-module(m).",
+						"dodo(A) ->",
+						"io:format(\"~s~n\",[agner_spec:property_to_list(lists:keyfind(list_to_atom(Property), 1, Spec))]).")));
+	}
+
+	@Test
+	public void deepFuncArg2() {
+		assertThat(
+				p,
+				parse(code(
+						"-module(m).",
+						"dodo(A) ->",
+						"io:format(\"~s~n\",fun (Name) ->"
+								+ "Spec = agner:spec(Name),"
+								+ "Searchable = string:to_lower(lists:flatten([Name,proplists:get_value(description,Spec,[])|proplists:get_value(keywords,Spec,[])]))"
+								+ "end).")));
+	}
+
+	@Test
+	public void custom() {
+		assertThat(
+				p,
+				parse(code("-module(m).", "dodo(A) ->",
+						"Spec = agner:spec(Name).")));
 	}
 	
 	@Test
-	public void deepFuncArg(){
-		assertThat(p, parse(code("-module(m).","dodo(A) ->","io:format(\"~s~n\",[agner_spec:property_to_list(lists:keyfind(list_to_atom(Property), 1, Spec))]).")));
+	public void noArgFunction() {
+		assertThat(
+				p,
+				parse(code("-module(m).", "dodo() ->",
+						"{maci}.")));
 	}
 	
 	@Test
-	public void custom(){
-		assertThat(p, parse(code("-module(m).","dodo(A) ->","Spec = agner:spec(Name).")));
+	public void funWithArity() {
+		assertThat(
+				p,
+				parse(code(
+						"-module(m).",
+						"dodo(A) ->",
+						"Properties = lists:map(fun list_to_atom/1, string:tokens(proplists:get_value(properties, Opts,\"\"),\",\")).")));
 	}
-	
-	
-	@Test
-	public void deepFuncArg2(){
-		assertThat(p, parse(code("-module(m).","dodo(A) ->",
-				"io:format(\"~s\",[lists:usort(plists:map(fun (Name) ->",
-			    "Spec = agner:spec(Name),",
-			    "Searchable = string:to_lower(lists:flatten([Name,proplists:get_value(description,Spec,[])|proplists:get_value(keywords,Spec,[])]))",
-				".")));
-	}
-	
-	
-	@Test
-	public void funWithArity(){
-		assertThat(p, parse(code("-module(m).","dodo(A) ->","Properties = lists:map(fun list_to_atom/1, string:tokens(proplists:get_value(properties, Opts,\"\"),\",\")).")));
-	}
-	
+
 	@Test
 	public void emptyArgFuncCall() throws IOException, URISyntaxException {
-		
-		assertThat(p, parse(code("-module(m).","dodo(A) ->","integer().")));
+
+		assertThat(p, parse(code("-module(m).", "dodo(A) ->", "integer().")));
 	}
-	
+
 	@Test
 	public void recordSet() throws IOException, URISyntaxException {
-		
-		assertThat(p, parse(code("-module(m).","dodo(A) ->","#msg{to=void, no=3}.")));
+
+		assertThat(
+				p,
+				parse(code("-module(m).", "dodo(A) ->", "#msg{to=void, no=3}.")));
 	}
-	
+
 	@Test
 	public void exports() throws IOException, URISyntaxException {
-		
-		assertThat(p, parse(code("-module(m).", "-export([dodo/1]).","-export(dodo/2).","-export([]).", "dodo(A) ->","{a, node()}.")));
+
+		assertThat(
+				p,
+				parse(code("-module(m).", "-export([dodo/1]).",
+						"-export(dodo/2).", "-export([]).", "dodo(A) ->",
+						"{a, node()}.")));
 	}
 
 	@Test
 	public void specs() throws IOException, URISyntaxException {
-		
-		assertThat(p, parse(code("-module(m).", "-type my_type() :: atom() | integer().", "-spec my_function(integer()) -> integer().", "-export(dodo/1).", "dodo(A) ->","{a, node()}.")));
+
+		assertThat(
+				p,
+				parse(code("-module(m).",
+						"-type my_type() :: atom() | integer().",
+						"-spec my_function(integer()) -> integer().",
+						"-export(dodo/1).", "dodo(A) ->", "{a, node()}.")));
 	}
 
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);
 	}
 
-	private String readFromFile(String fileName) throws IOException, URISyntaxException {
+	private String readFromFile(String fileName) throws IOException,
+			URISyntaxException {
 		StringBuilder text = new StringBuilder();
-		File file = new File(ErlangParserTest.class.getClassLoader().getResource(fileName).toURI());
+		File file = new File(ErlangParserTest.class.getClassLoader()
+				.getResource(fileName).toURI());
 		BufferedReader reader = Files.newReader(file, Charsets.UTF_8);
 		String line = null;
 		while ((line = reader.readLine()) != null) {
@@ -131,9 +177,9 @@ public class ErlangParserTest {
 		}
 		return text.toString();
 	}
-	
+
 	@After
-	public void log(){
+	public void log() {
 		ExtendedStackTraceStream.print(listener, System.out);
 	}
 

@@ -105,7 +105,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		
 		termCompareExp.is(term, termCompOp, term);
 		
-		booleanExp.is(opt(expression), booleanOp, expression);
+		booleanExp.is(expression, booleanOp, expression);
 		
 		shortcircuitExp.is(
 			opt(ErlangPunctator.LPARENTHESIS), 
@@ -114,18 +114,25 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			opt(ErlangPunctator.RPARENTHESIS)
 		);
 		listExp.is(termsOrFunCalls, listOp, termsOrFunCalls);
-		expression.is(or(listExp, listCompExp, recordRef, funExpr, funcCall, arithmeticExp, flowExp, matchExp, term ));
+		expression.is(or(funcCall, /*listExp,*/ listCompExp, recordRef, funExpr, /*booleanExp,*/ arithmeticExp, flowExp, matchExp, term ));
 		flowExp.is(or(ifExp, caseExp, receiveExp));
 		caseExp.is(
 			ErlangKeyword.CASE, 
 			expression, 
 			ErlangKeyword.OF, 
+			casePattern,
+			ErlangKeyword.END
+		);
+		
+		casePattern.is(
 			pattern,
+			opt(guardSequenceStart),
+			ErlangPunctator.ARROW,
+			branchExpression,
 			o2n(
 				ErlangPunctator.SEMI,
-				pattern
-			),
-			ErlangKeyword.END
+				branchExpression
+			)
 		);
 		
 		ifExp.is(
@@ -157,12 +164,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		);
 		
 		pattern.is(
-			expression,
-			opt(guardSequenceStart),
-			ErlangPunctator.ARROW,
-			one2n(
-					branchExpression
-			)
+			term
 		);
 		
 		recordRef.is(
@@ -325,7 +327,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		);
 		functionClause.is(clauseHead, ErlangPunctator.ARROW, clauseBody);
 		clauseHead.is(
-			funcCall,
+			funcDecl,
 			opt(guardSequenceStart)
 		);
 		clauseBody.is(
@@ -344,6 +346,21 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			IDENTIFIER,
 			ErlangPunctator.DIV,
 			ErlangTokenType.NUMERIC_LITERAL
+		);
+		/*
+		 * What can be in a pattern?
+		 */
+		funcDecl.is(
+			IDENTIFIER,
+			ErlangPunctator.LPARENTHESIS, 
+			opt(
+				pattern,
+				o2n(
+					ErlangPunctator.COMMA,
+					pattern
+				)
+			),
+			ErlangPunctator.RPARENTHESIS
 		);
 		funcCall.is(
 			opt(IDENTIFIER, ErlangPunctator.COLON),
@@ -370,7 +387,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 					ErlangPunctator.ARROW,
 					expression,
 					o2n(
-						ErlangPunctator.SEMI,
+						ErlangPunctator.COMMA,
 						expression
 					),
 					ErlangKeyword.END

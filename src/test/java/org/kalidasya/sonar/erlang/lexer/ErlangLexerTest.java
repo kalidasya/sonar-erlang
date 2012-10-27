@@ -102,6 +102,7 @@ public class ErlangLexerTest {
 		  assertThat(lexer.lex("Aodule"), hasToken("Aodule", GenericTokenType.IDENTIFIER));
 		  assertThat(lexer.lex("1."), Matchers.allOf(hasToken("1", ErlangTokenType.NUMERIC_LITERAL),hasToken(".", ErlangPunctator.DOT)));
 		 // assertThat(lexer.lex("io:format(\"~s~n\",[agner_spec:property_to_list(lists:keyfind(list_to_atom(Property), 1, Spec))])"), hasToken("1", ErlangTokenType.NUMERIC_LITERAL));
+		  //assertThat(lexer.lex("-module(m).\ndodo() ->{maci}."), hasToken("1", ErlangTokenType.NUMERIC_LITERAL));
 		  
 	  }
 	 
