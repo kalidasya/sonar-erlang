@@ -88,6 +88,18 @@ public class ErlangParserTest {
 	}
 
 	@Test
+	public void booleanReturn() {
+		assertThat(
+				p,
+				parse(code(
+						"-module(m).",
+						"dodo(A) ->",
+						"string:rstr(Searchable, string:to_lower(Search)) > 0.")));
+	}
+	
+	
+	
+	@Test
 	public void deepFuncArg2() {
 		assertThat(
 				p,

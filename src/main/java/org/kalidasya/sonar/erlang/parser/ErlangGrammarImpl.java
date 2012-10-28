@@ -103,9 +103,10 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			)
 		);
 		
-		termCompareExp.is(term, termCompOp, term);
+		termCompareExp.is(or(funcCall, term), termCompOp, or(funcCall, term));
 		
-		booleanExp.is(expression, booleanOp, expression);
+		//booleanExp.is(expression, booleanOp, expression);
+		booleanExp.is(or(funcCall, term), booleanOp, or(funcCall, term));
 		
 		shortcircuitExp.is(
 			opt(ErlangPunctator.LPARENTHESIS), 
@@ -114,7 +115,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			opt(ErlangPunctator.RPARENTHESIS)
 		);
 		listExp.is(termsOrFunCalls, listOp, termsOrFunCalls);
-		expression.is(or(funcCall, listExp, listCompExp, recordRef, funExpr, /*booleanExp,*/ arithmeticExp, flowExp, matchExp, term ));
+		expression.is(or(termCompareExp, booleanExp, funcCall, listExp, listCompExp, recordRef, funExpr, arithmeticExp, flowExp, matchExp, term ));
 		flowExp.is(or(ifExp, caseExp, receiveExp));
 		caseExp.is(
 			ErlangKeyword.CASE, 
@@ -145,17 +146,6 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		
 		receiveExp.is(ErlangKeyword.RECEIVE, one2n(branchPatternExp), ErlangKeyword.END);
 		
-	/*	branchPatternExp.is(
-			or(
-				and(
-					guardExpression, 
-					ErlangPunctator.ARROW, 
-					one2n(branchExpression)
-				), 
-				ErlangPunctator.SEMI
-			)
-		);
-		*/
 		branchExpression.is(
 			expression,
 			o2n(
