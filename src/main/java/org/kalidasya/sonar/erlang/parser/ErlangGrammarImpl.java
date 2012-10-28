@@ -115,11 +115,13 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			opt(ErlangPunctator.RPARENTHESIS)
 		);
 		listExp.is(termsOrFunCalls, listOp, termsOrFunCalls);
-		expression.is(or(termCompareExp, booleanExp, funcCall, listExp, listCompExp, recordRef, funExpr, arithmeticExp, flowExp, matchExp, term ));
+		expression.is(opt(ErlangKeyword.CATCH), or(matchExp, termCompareExp, booleanExp, funcCall, listExp, listCompExp, recordRef, funExpr, arithmeticExp, flowExp, term ));
 		flowExp.is(or(ifExp, caseExp, receiveExp));
 		caseExp.is(
 			ErlangKeyword.CASE, 
-			expression, 
+			opt(ErlangPunctator.LPARENTHESIS),
+			expression,
+			opt(ErlangPunctator.RPARENTHESIS),
 			ErlangKeyword.OF, 
 			casePattern,
 			o2n(ErlangPunctator.SEMI, casePattern),
@@ -178,7 +180,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			ErlangPunctator.RCURLYBRACE
 		);
 		matchExp.is(
-			IDENTIFIER,
+			term,
 			ErlangPunctator.MATCHOP,
 			expression
 		);
