@@ -78,6 +78,14 @@ public class ErlangGrammar extends Grammar {
 	public Rule possibleExpressions;
 	public Rule expressionSub;
 	
+	public Rule aExpression;
+	public Rule additiveExp;
+	public Rule multiplicativeExp;
+	public Rule unaryExp;
+	public Rule primaryExp;
+	public Rule arithmeticPExp;
+	
+	
 	public Rule funcDecl;
 	public Rule expression;
 

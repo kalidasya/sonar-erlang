@@ -98,21 +98,59 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	}
 
 	private void statements(){
-		/*arithmeticExp.is(
+		arithmeticExp.is(
+			additiveExp
+		);
+		arithmeticPExp.is(
 			or(
-				ErlangTokenType.NUMERIC_LITERAL, 
-				funcCall,
-				IDENTIFIER
-			), 
-			arithmeticOp, 
+				and(
+					ErlangPunctator.LPARENTHESIS,
+					arithmeticExp,
+					ErlangPunctator.RPARENTHESIS
+				)
+			)
+		);
+		aExpression.is(
+			additiveExp
+		);
+		additiveExp.is(
+			multiplicativeExp, o2n(or(ErlangPunctator.PLUS, ErlangPunctator.MINUS), multiplicativeExp)
+		);
+		multiplicativeExp.is(
+			unaryExp, 
+			o2n(
+				or(
+					ErlangPunctator.STAR,
+					ErlangPunctator.DIV,
+					ErlangKeyword.BNOT,
+					ErlangKeyword.DIV,
+					ErlangKeyword.REM,
+					ErlangKeyword.BAND,
+					ErlangKeyword.BOR,
+					ErlangKeyword.BXOR,
+					ErlangKeyword.BSL,
+					ErlangKeyword.BSR
+				),
+			unaryExp)
+		);
+		unaryExp.is(
+			or(
+				and(
+					or(ErlangPunctator.PLUS, ErlangPunctator.MINUS), 
+					unaryExp
+				),
+				primaryExp
+			)
+		);
+		primaryExp.is(
 			or(
 				ErlangTokenType.NUMERIC_LITERAL,
 				funcCall,
-				arithmeticExp,
-				IDENTIFIER
+				IDENTIFIER,
+				arithmeticPExp
 			)
-		);*/
-		
+		);
+		/*
 		arithmeticExp.is(
 			or(
 				and(
@@ -149,7 +187,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 					)
 				)
 			)
-		);
+		);*/
 		
 		termCompareExp.is(termsOrFunCalls, termCompOp, termsOrFunCalls);
 		
@@ -170,27 +208,27 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			)
 			
 		);
-		listExp.is(termsOrFunCalls, listOp, termsOrFunCalls);
+		listExp.is(termsOrFunCalls, one2n(listOp, termsOrFunCalls));
 		expression.is(
-			or(
+		/*	or(
 				and(
 					ErlangPunctator.LPARENTHESIS,
 					expression,
 					ErlangPunctator.RPARENTHESIS
-				),
+				),*/
 				possibleExpressions
-			)
+			//)
 		);
 		possibleExpressions.is(
 			opt(ErlangKeyword.CATCH), 
 			or(
+				matchExp,
+				termCompareExp,
 				flowExp,
-				funExpr,
+			    funExpr,
 				listExp,
 				recordRef,
 				arithmeticExp, 
-				matchExp, 
-				termCompareExp, 
 				booleanExp, 
 				listCompExp,
 				termsOrFunCalls 

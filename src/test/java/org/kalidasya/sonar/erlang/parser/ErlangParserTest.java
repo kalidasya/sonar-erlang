@@ -118,13 +118,20 @@ public class ErlangParserTest {
 	}
 
 	@Test
-	public void deepListCreation(){
+	public void deepArithmetic(){
 		assertThat(
 				p,
 				parse(code(
 						"-module(m).",
 						"dodo(A) ->",
-						"(A band 16#f).")));
+						"2*4.")));
+		
+		assertThat(
+				p,
+				parse(code(
+						"-module(m).",
+						"dodo(A) ->",
+						"((2)+3)+4*((3+2)*4).")));
 		assertThat(
 				p,
 				parse(code(
