@@ -98,11 +98,56 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	}
 
 	private void statements(){
+		/*arithmeticExp.is(
+			or(
+				ErlangTokenType.NUMERIC_LITERAL, 
+				funcCall,
+				IDENTIFIER
+			), 
+			arithmeticOp, 
+			or(
+				ErlangTokenType.NUMERIC_LITERAL,
+				funcCall,
+				arithmeticExp,
+				IDENTIFIER
+			)
+		);*/
+		
 		arithmeticExp.is(
-			expression,
-			one2n(
-				arithmeticOp,
-				expression
+			or(
+				and(
+					ErlangPunctator.LPARENTHESIS,
+					or(
+						funcCall,
+						ErlangTokenType.NUMERIC_LITERAL,
+						IDENTIFIER//,
+			//			arithmeticExp
+						
+					), 
+					arithmeticOp, 
+					or(
+						funcCall,
+						ErlangTokenType.NUMERIC_LITERAL,
+						IDENTIFIER,
+						arithmeticExp
+					),
+					ErlangPunctator.RPARENTHESIS
+				),
+				and(
+					or(
+						funcCall,
+						ErlangTokenType.NUMERIC_LITERAL,
+						IDENTIFIER//,
+			//			arithmeticExp
+					), 
+					arithmeticOp,
+					or(
+						funcCall,
+						ErlangTokenType.NUMERIC_LITERAL,
+						IDENTIFIER//,
+			//			arithmeticExp
+					)
+				)
 			)
 		);
 		
@@ -125,22 +170,30 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			)
 			
 		);
-		listExp.is(termsOrFunCalls, one2n(listOp, termsOrFunCalls));
+		listExp.is(termsOrFunCalls, listOp, termsOrFunCalls);
 		expression.is(
 			or(
 				and(
 					ErlangPunctator.LPARENTHESIS,
-					or(
-						expression
-					),
+					expression,
 					ErlangPunctator.RPARENTHESIS
 				),
 				possibleExpressions
 			)
 		);
 		possibleExpressions.is(
+			opt(ErlangKeyword.CATCH), 
 			or(
-				arithmeticExp, listExp, matchExp, termCompareExp, booleanExp, funcCall, listCompExp, recordRef, funExpr, flowExp, term 
+				flowExp,
+				funExpr,
+				listExp,
+				recordRef,
+				arithmeticExp, 
+				matchExp, 
+				termCompareExp, 
+				booleanExp, 
+				listCompExp,
+				termsOrFunCalls 
 			)
 		);
 		flowExp.is(or(ifExp, caseExp, receiveExp));
