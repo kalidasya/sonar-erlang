@@ -55,6 +55,11 @@ public class ErlangParserTest {
 	}
 
 	@Test
+	public void realLife4() throws IOException, URISyntaxException {
+		assertThat(p, parse(readFromFile("erl_img.erl")));
+	}
+	
+	@Test
 	public void tuple() throws IOException, URISyntaxException {
 		assertThat(p, parse(code("-module(m).", "dodo(A) ->", "{a, node()}.")));
 	}
@@ -112,6 +117,23 @@ public class ErlangParserTest {
 								+ "end).")));
 	}
 
+	@Test
+	public void deepListCreation(){
+		assertThat(
+				p,
+				parse(code(
+						"-module(m).",
+						"dodo(A) ->",
+						"(A band 16#f).")));
+		assertThat(
+				p,
+				parse(code(
+						"-module(m).",
+						"dodo(A) ->",
+						"((A bsr 4) band 16#f).")));
+		
+	}
+	
 	@Test
 	public void custom() {
 		assertThat(
