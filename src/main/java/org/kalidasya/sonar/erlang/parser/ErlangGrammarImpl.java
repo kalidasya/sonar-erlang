@@ -32,7 +32,18 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	}
 
 	private void module() {
-		module.is(one2n(or(moduleAttribute, typeFunctionSpec)), one2n(functionDeclaration), EOF);
+		module.is(
+			one2n(
+				or(
+					moduleAttribute, 
+					typeFunctionSpec
+				)
+			), 
+			one2n(
+				functionDeclaration
+			), 
+			EOF
+		);
 		moduleAttribute.is(
 				ErlangPunctator.MINUS, 
 				IDENTIFIER, 
@@ -88,16 +99,15 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 
 	private void statements(){
 		arithmeticExp.is(
-			expression, 
+			expression,
 			one2n(
-				arithmeticOp, 
+				arithmeticOp,
 				expression
 			)
 		);
 		
 		termCompareExp.is(termsOrFunCalls, termCompOp, termsOrFunCalls);
 		
-		//booleanExp.is(expression, booleanOp, expression);
 		booleanExp.is(termsOrFunCalls, booleanOp, termsOrFunCalls);
 		
 		shortcircuitExp.is(
@@ -118,15 +128,14 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		listExp.is(termsOrFunCalls, one2n(listOp, termsOrFunCalls));
 		expression.is(
 			or(
-				possibleExpressions,
 				and(
 					ErlangPunctator.LPARENTHESIS,
 					or(
 						expression
 					),
 					ErlangPunctator.RPARENTHESIS
-				)
-				
+				),
+				possibleExpressions
 			)
 		);
 		possibleExpressions.is(
@@ -269,7 +278,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	}
 	
 	private void dataTypes(){
-		term.is(or(IDENTIFIER, LITERAL, ErlangTokenType.NUMERIC_LITERAL, list, tuple, recordRef));
+		term.is(or(LITERAL, ErlangTokenType.NUMERIC_LITERAL, list, tuple, recordRef, IDENTIFIER));
 		termsOrFunCalls.is(
 			or(
 				funcCall,
@@ -355,8 +364,8 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		);
 		functionClause.is(clauseHead, ErlangPunctator.ARROW, clauseBody);
 		clauseHead.is(
-			funcDecl/*,
-			opt(guardSequenceStart)*/
+			funcDecl,
+			opt(guardSequenceStart)
 		);
 		clauseBody.is(
 			expression,
@@ -382,11 +391,11 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			IDENTIFIER,
 			ErlangPunctator.LPARENTHESIS, 
 			opt(
-				pattern/*,
+				pattern,
 				o2n(
 					ErlangPunctator.COMMA,
 					pattern
-				)*/
+				)
 			),
 			ErlangPunctator.RPARENTHESIS
 		);
