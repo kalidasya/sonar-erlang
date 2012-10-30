@@ -46,6 +46,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				exportAttr,
 				compileAttr,
 				defineAttr,
+				typeOrFunctionSpec,
 				genericAttr
 			)
 		);
@@ -105,7 +106,10 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		);
 		typeOrFunctionSpec.is(
 			ErlangPunctator.MINUS, 
-			IDENTIFIER,
+			or(
+				"type",
+				"spec"
+			),
 			funcCall,
 			or(
 				and(
@@ -238,7 +242,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				recordRef,
 				arithmeticExp, 
 				booleanExp, 
-				listComprehensionExp,
+				comprehensionExps,
 				macroExp,
 				termsOrFunCalls 
 			)
@@ -357,12 +361,27 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			)
 		);
 	
+		comprehensionExps.is(
+			or(
+				listComprehensionExp,
+				binaryComprehensionExp
+			)
+		);
+		
 		listComprehensionExp.is(
 			ErlangPunctator.LBRACKET,
 			expression,
 			ErlangPunctator.LISTCOMP,
 			one2n(qualifier),
 			ErlangPunctator.RBRACKET
+		);
+		
+		binaryComprehensionExp.is(
+			ErlangPunctator.BINSTART,
+			binary,
+			ErlangPunctator.LISTCOMP,
+			one2n(qualifier),
+			ErlangPunctator.BINEND
 		);
 		
 		qualifier.is(
@@ -475,6 +494,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			or(
 				LITERAL, 
 				ErlangTokenType.NUMERIC_LITERAL, 
+				binary,
 				IDENTIFIER
 			),
 			opt(

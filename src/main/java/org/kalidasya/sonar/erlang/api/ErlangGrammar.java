@@ -100,6 +100,8 @@ public class ErlangGrammar extends Grammar {
 	public Rule genericAttr;
 	public Rule defineAttr;
 	public Rule branchPatternExps;
+	public Rule binaryComprehensionExp;
+	public Rule comprehensionExps;
 	
 	
 	@Override

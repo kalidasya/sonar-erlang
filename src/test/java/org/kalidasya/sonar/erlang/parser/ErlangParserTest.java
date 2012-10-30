@@ -200,6 +200,7 @@ public class ErlangParserTest {
 		
 	}
 	
+
 	@Test
 	public void recordInFuncCall(){
 		assertThat(
@@ -220,6 +221,15 @@ public class ErlangParserTest {
 							"dodo(A) ->",
 							"User#user{ibuttons = User#user.ibuttons ++ [IButton]}",
 							".")));
+	}
+	
+	@Test
+	public void nestedBinaryMatch(){
+		assertThat(
+				p,
+				parse(code(	"-module(m).", 
+							"dodo(A) ->",
+							"UCS2Name = << << X:8, 0:8 >> || X <- Name >>.")));
 	}
 	
 	@Test
