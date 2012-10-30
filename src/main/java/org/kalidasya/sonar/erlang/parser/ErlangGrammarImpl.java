@@ -150,44 +150,6 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				arithmeticPExp
 			)
 		);
-		/*
-		arithmeticExp.is(
-			or(
-				and(
-					ErlangPunctator.LPARENTHESIS,
-					or(
-						funcCall,
-						ErlangTokenType.NUMERIC_LITERAL,
-						IDENTIFIER//,
-			//			arithmeticExp
-						
-					), 
-					arithmeticOp, 
-					or(
-						funcCall,
-						ErlangTokenType.NUMERIC_LITERAL,
-						IDENTIFIER,
-						arithmeticExp
-					),
-					ErlangPunctator.RPARENTHESIS
-				),
-				and(
-					or(
-						funcCall,
-						ErlangTokenType.NUMERIC_LITERAL,
-						IDENTIFIER//,
-			//			arithmeticExp
-					), 
-					arithmeticOp,
-					or(
-						funcCall,
-						ErlangTokenType.NUMERIC_LITERAL,
-						IDENTIFIER//,
-			//			arithmeticExp
-					)
-				)
-			)
-		);*/
 		
 		termCompareExp.is(termsOrFunCalls, termCompOp, termsOrFunCalls);
 		
@@ -210,7 +172,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		);
 		listExp.is(termsOrFunCalls, one2n(listOp, termsOrFunCalls));
 		expression.is(
-		/*	or(
+			/*or(
 				and(
 					ErlangPunctator.LPARENTHESIS,
 					expression,
@@ -231,6 +193,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				arithmeticExp, 
 				booleanExp, 
 				listCompExp,
+				macroExp,
 				termsOrFunCalls 
 			)
 		);
@@ -283,6 +246,17 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			term
 		);
 		
+		
+		/**
+		 * TODO: MACROS
+		 */
+		
+		macroExp.is(
+			"?",
+			IDENTIFIER,
+			opt(funcArgs)
+		);
+		
 		recordRef.is(
 			or(
 				recordSet,
@@ -295,7 +269,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			ErlangPunctator.NUMBERSIGN,
 			IDENTIFIER,
 			ErlangPunctator.LCURLYBRACE,
-			matchExp,
+			matchExp, 
 			o2n(
 				ErlangPunctator.COMMA,
 				matchExp
@@ -314,6 +288,10 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			o2n(
 				ErlangPunctator.DOT,
 				IDENTIFIER
+			),
+			opt(
+				ErlangPunctator.LCURLYBRACE,	
+				ErlangPunctator.RCURLYBRACE
 			)
 		);
 	
@@ -369,7 +347,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	}
 	
 	private void dataTypes(){
-		term.is(or(LITERAL, ErlangTokenType.NUMERIC_LITERAL, list, tuple, recordRef, IDENTIFIER));
+		term.is(or(LITERAL, ErlangTokenType.NUMERIC_LITERAL, list, tuple, binary, recordRef, IDENTIFIER));
 		termsOrFunCalls.is(
 			or(
 				funcCall,
@@ -402,6 +380,38 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				)
 			),
 			ErlangPunctator.RBRACKET
+		);
+		
+		binary.is(
+			ErlangPunctator.BINSTART,
+			bitSyntaxExpression,
+			ErlangPunctator.BINEND
+		);
+		
+		bitSyntaxExpression.is(
+			opt(
+				bitValue,
+				o2n(
+					ErlangPunctator.COMMA,
+					bitValue
+				)
+			)
+		);
+		
+		bitValue.is(
+			or(LITERAL, ErlangTokenType.NUMERIC_LITERAL),
+			opt(
+				ErlangPunctator.COLON,
+				ErlangTokenType.NUMERIC_LITERAL
+			),
+			opt(
+				ErlangPunctator.DIV,
+				IDENTIFIER,
+				o2n(
+					ErlangPunctator.MINUS,
+					IDENTIFIER
+				)
+			)
 		);
 	}
 	

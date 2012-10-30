@@ -84,7 +84,10 @@ public class ErlangGrammar extends Grammar {
 	public Rule unaryExp;
 	public Rule primaryExp;
 	public Rule arithmeticPExp;
-	
+	public Rule macroExp;
+	public Rule binary;
+	public Rule bitValue;
+	public Rule bitSyntaxExpression;
 	
 	public Rule funcDecl;
 	public Rule expression;
