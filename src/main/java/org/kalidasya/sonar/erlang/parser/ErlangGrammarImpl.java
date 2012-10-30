@@ -72,7 +72,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			"compile",
 			ErlangPunctator.LPARENTHESIS, 
 			or(
-				listedTermsOrFunCalls,
+				//listedTermsOrFunCalls,
 				LITERAL,
 				IDENTIFIER
 			),
@@ -97,7 +97,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				IDENTIFIER, 
 				ErlangPunctator.LPARENTHESIS, 
 				or(
-					listedTermsOrFunCalls,
+			//		listedTermsOrFunCalls,
 					LITERAL,
 					IDENTIFIER
 				),
@@ -150,7 +150,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	private void statements(){
 		arithmeticExp.is(
 			additiveExp
-		);
+		).skipIfOneChild();
 		arithmeticPExp.is(
 			or(
 				and(
@@ -159,13 +159,13 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 					ErlangPunctator.RPARENTHESIS
 				)
 			)
-		);
+		).skipIfOneChild();
 		aExpression.is(
 			additiveExp
 		);
 		additiveExp.is(
 			multiplicativeExp, o2n(or(ErlangPunctator.PLUS, ErlangPunctator.MINUS), multiplicativeExp)
-		);
+		).skipIfOneChild();
 		multiplicativeExp.is(
 			unaryExp, 
 			o2n(
@@ -182,7 +182,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 					ErlangKeyword.BSR
 				),
 			unaryExp)
-		);
+		).skipIfOneChild();
 		unaryExp.is(
 			or(
 				and(
@@ -191,7 +191,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				),
 				primaryExp
 			)
-		);
+		).skipIfOneChild();
 		primaryExp.is(
 			or(
 				ErlangTokenType.NUMERIC_LITERAL,
@@ -199,7 +199,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				IDENTIFIER,
 				arithmeticPExp
 			)
-		);
+		).skipIfOneChild();
 		
 		termCompareExp.is(termsOrFunCalls, termCompOp, termsOrFunCalls);
 		
@@ -221,17 +221,13 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			
 		);
 		listExp.is(termsOrFunCalls, one2n(listOp, termsOrFunCalls));
+		/**
+		 * CANNOT ADD optional parenthesis here...
+		 */
 		expression.is(
-			/*or(
-				and(
-					ErlangPunctator.LPARENTHESIS,
-					expression,
-					ErlangPunctator.RPARENTHESIS
-				),*/
-				possibleExpressions
-			//)
+		/*	possibleExpressions
 		);
-		possibleExpressions.is(
+		possibleExpressions.is(*/
 			opt(ErlangKeyword.CATCH), 
 			or(
 				matchExp,
@@ -343,7 +339,10 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			ErlangPunctator.RCURLYBRACE
 		);
 		matchExp.is(
-			term,
+			or(
+				arithmeticExp,
+				term
+			),
 			ErlangPunctator.MATCHOP,
 			expression
 		);
@@ -417,6 +416,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		);
 		guardExpression.is(
 			or(
+				matchExp,
 				termCompareExp, 
 				arithmeticExp, 
 				booleanExp, 
@@ -440,6 +440,9 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				IDENTIFIER
 			)
 		);
+		/**
+		 * TODO: check can it be replaced with expression
+		 */
 		termsOrFunCalls.is(
 			or(
 				funcCall,
@@ -455,20 +458,27 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				)
 			)
 		);
+		listedExpressions.is(
+			expression,
+			o2n(
+				ErlangPunctator.COMMA,
+				expression
+			)
+		);
 		tuple.is(
 			ErlangPunctator.LCURLYBRACE, 
-			o2n(
-				listedTermsOrFunCalls
+			opt(
+				listedExpressions
 			),
 			ErlangPunctator.RCURLYBRACE
 		);
 		list.is(
 			ErlangPunctator.LBRACKET, 
 			o2n(
-				listedTermsOrFunCalls,
+				listedExpressions,
 				o2n(
 					ErlangPunctator.PIPE, 
-					listedTermsOrFunCalls
+					listedExpressions
 				)
 			),
 			ErlangPunctator.RBRACKET
@@ -495,11 +505,19 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				LITERAL, 
 				ErlangTokenType.NUMERIC_LITERAL, 
 				binary,
+				and(
+					ErlangPunctator.LPARENTHESIS,
+					expression,
+					ErlangPunctator.RPARENTHESIS
+				),
 				IDENTIFIER
 			),
 			opt(
 				ErlangPunctator.COLON,
-				ErlangTokenType.NUMERIC_LITERAL
+				or(
+					ErlangTokenType.NUMERIC_LITERAL,
+					IDENTIFIER
+				)
 			),
 			opt(
 				ErlangPunctator.DIV,

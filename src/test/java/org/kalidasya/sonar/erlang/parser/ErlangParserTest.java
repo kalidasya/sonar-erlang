@@ -75,6 +75,17 @@ public class ErlangParserTest {
 	}
 
 	@Test
+	public void returnWithCalc() throws IOException, URISyntaxException {
+		assertThat(p, parse(code("-module(m).", "dodo(A) ->", "{a, A + 2}.")));
+	}
+	
+	@Test
+	public void returnWithCalcCase() throws IOException, URISyntaxException {
+		assertThat(p, parse(code("-module(m).", "dodo(A) ->","case A of",
+				"0->", "{a, (A + 2), <<0>>} end.")));
+	}
+	
+	@Test
 	public void caseTuple() throws IOException, URISyntaxException {
 		assertThat(
 				p,
