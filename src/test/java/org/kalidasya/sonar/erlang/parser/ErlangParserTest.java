@@ -190,7 +190,36 @@ public class ErlangParserTest {
 		assertThat(
 				p,
 				parse(code("-module(m).", "dodo(A) ->", "if A =:= B -> ok; true -> io:format(\"assert error in module ~p on line ~p~n\", [?MODULE, ?LINE]) end.")));
+	}
+	
+	@Test
+	public void recordInFuncMatch(){
+		assertThat(
+				p,
+				parse(code("-module(m).", "send_010a(ItemsList, Client=#client{gid=DestGID}) ->", "true.")));
 		
+	}
+	
+	@Test
+	public void recordInFuncCall(){
+		assertThat(
+				p,
+				parse(code(	"-module(m).", 
+							"dodo(A) ->",
+							"case mnesia:read(user, Username) of",
+							"[User] -> mnesia:write(User#user{ibuttons = User#user.ibuttons ++ [IButton]});",
+							"E -> E",
+							"end.")));
+	}
+	
+	@Test
+	public void recordSetWithListExp(){
+		assertThat(
+				p,
+				parse(code(	"-module(m).", 
+							"dodo(A) ->",
+							"User#user{ibuttons = User#user.ibuttons ++ [IButton]}",
+							".")));
 	}
 	
 	@Test

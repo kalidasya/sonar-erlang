@@ -96,7 +96,6 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				IDENTIFIER, 
 				ErlangPunctator.LPARENTHESIS, 
 				or(
-					//funcExport,
 					listedTermsOrFunCalls,
 					LITERAL,
 					IDENTIFIER
@@ -307,7 +306,10 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		);
 		
 		pattern.is(
-			term
+			or(
+				matchExp,
+				term
+			)
 		);
 		
 		
@@ -470,7 +472,11 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		);
 		
 		bitValue.is(
-			or(LITERAL, ErlangTokenType.NUMERIC_LITERAL),
+			or(
+				LITERAL, 
+				ErlangTokenType.NUMERIC_LITERAL, 
+				IDENTIFIER
+			),
 			opt(
 				ErlangPunctator.COLON,
 				ErlangTokenType.NUMERIC_LITERAL
