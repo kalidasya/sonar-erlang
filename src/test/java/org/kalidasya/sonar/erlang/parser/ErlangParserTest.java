@@ -60,6 +60,11 @@ public class ErlangParserTest {
 	}
 	
 	@Test
+	public void realLife5() throws IOException, URISyntaxException {
+		assertThat(p, parse(readFromFile("egs_proto.erl")));
+	}
+	
+	@Test
 	public void tuple() throws IOException, URISyntaxException {
 		assertThat(p, parse(code("-module(m).", "dodo(A) ->", "{a, node()}.")));
 	}
@@ -175,12 +180,19 @@ public class ErlangParserTest {
 
 	@Test
 	public void recordSet() throws IOException, URISyntaxException {
-
 		assertThat(
 				p,
 				parse(code("-module(m).", "dodo(A) ->", "#msg{to=void, no=3}.")));
 	}
 
+	@Test
+	public void ifTest(){
+		assertThat(
+				p,
+				parse(code("-module(m).", "dodo(A) ->", "if A =:= B -> ok; true -> io:format(\"assert error in module ~p on line ~p~n\", [?MODULE, ?LINE]) end.")));
+		
+	}
+	
 	@Test
 	public void exports() throws IOException, URISyntaxException {
 

@@ -1,5 +1,6 @@
 package org.kalidasya.sonar.erlang.api;
 
+import static com.sonar.sslr.impl.matcher.GrammarFunctions.Standard.o2n;
 import static com.sonar.sslr.impl.matcher.GrammarFunctions.Standard.or;
 
 import com.sonar.sslr.api.Grammar;
@@ -65,7 +66,7 @@ public class ErlangGrammar extends Grammar {
 	public Rule branchPatternExp;
 	public Rule listedTermsOrFunCalls;
 	public Rule termsOrFunCalls;
-	public Rule typeFunctionSpec;
+	public Rule typeOrFunctionSpec;
 	public Rule recordRef;
 	public Rule recordSet;
 	public Rule recordAcc;
@@ -73,7 +74,7 @@ public class ErlangGrammar extends Grammar {
 	public Rule funcArgs;
 	public Rule funExpr;
 	public Rule qualifier;
-	public Rule listCompExp;
+	public Rule listComprehensionExp;
 	public Rule casePattern;
 	public Rule possibleExpressions;
 	public Rule expressionSub;
@@ -92,6 +93,15 @@ public class ErlangGrammar extends Grammar {
 	public Rule funcDecl;
 	public Rule expression;
 
+	public Rule moduleAttributes;
+	public Rule moduleAttr;
+	public Rule exportAttr;
+	public Rule compileAttr;
+	public Rule genericAttr;
+	public Rule defineAttr;
+	public Rule branchPatternExps;
+	
+	
 	@Override
 	public Rule getRootRule() {
 		return module;

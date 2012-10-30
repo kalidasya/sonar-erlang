@@ -33,23 +33,70 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 
 	private void module() {
 		module.is(
-			one2n(
-				or(
-					moduleAttribute, 
-					typeFunctionSpec
-				)
-			), 
+			one2n(moduleAttributes), 
 			one2n(
 				functionDeclaration
 			), 
 			EOF
 		);
-		moduleAttribute.is(
+		
+		moduleAttributes.is(
+			or(
+				moduleAttr,
+				exportAttr,
+				compileAttr,
+				defineAttr,
+				genericAttr
+			)
+		);
+		
+		moduleAttr.is(
+			ErlangPunctator.MINUS,
+			"module",
+			ErlangPunctator.LPARENTHESIS, 
+			IDENTIFIER,
+			ErlangPunctator.RPARENTHESIS,
+			ErlangPunctator.DOT
+		);
+		exportAttr.is(
+			ErlangPunctator.MINUS,
+			"export",
+			ErlangPunctator.LPARENTHESIS, 
+			funcExport,
+			ErlangPunctator.RPARENTHESIS,
+			ErlangPunctator.DOT
+		);
+		compileAttr.is(
+			ErlangPunctator.MINUS,
+			"compile",
+			ErlangPunctator.LPARENTHESIS, 
+			or(
+				listedTermsOrFunCalls,
+				LITERAL,
+				IDENTIFIER
+			),
+			ErlangPunctator.RPARENTHESIS, 
+			ErlangPunctator.DOT
+		);
+		
+		defineAttr.is(
+			ErlangPunctator.MINUS,
+			"define",
+			ErlangPunctator.LPARENTHESIS, 
+			or(
+				and(IDENTIFIER, ErlangPunctator.COMMA, IDENTIFIER),
+				and(funcCall, ErlangPunctator.COMMA, expression)
+			),
+			ErlangPunctator.RPARENTHESIS, 
+			ErlangPunctator.DOT
+		);
+		
+		genericAttr.is(
 				ErlangPunctator.MINUS, 
 				IDENTIFIER, 
 				ErlangPunctator.LPARENTHESIS, 
 				or(
-					funcExport,
+					//funcExport,
 					listedTermsOrFunCalls,
 					LITERAL,
 					IDENTIFIER
@@ -57,7 +104,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				ErlangPunctator.RPARENTHESIS, 
 			ErlangPunctator.DOT
 		);
-		typeFunctionSpec.is(
+		typeOrFunctionSpec.is(
 			ErlangPunctator.MINUS, 
 			IDENTIFIER,
 			funcCall,
@@ -192,7 +239,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				recordRef,
 				arithmeticExp, 
 				booleanExp, 
-				listCompExp,
+				listComprehensionExp,
 				macroExp,
 				termsOrFunCalls 
 			)
@@ -227,12 +274,29 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		
 		ifExp.is(
 			ErlangKeyword.IF, 
-			one2n(
+			branchPatternExps,
+			ErlangKeyword.END
+		);
+		
+		receiveExp.is(ErlangKeyword.RECEIVE, branchPatternExps, ErlangKeyword.END);
+		
+		branchPatternExps.is(
+			branchPatternExp,
+			o2n(
+				ErlangPunctator.SEMI,
 				branchPatternExp
 			)
 		);
 		
-		receiveExp.is(ErlangKeyword.RECEIVE, one2n(branchPatternExp), ErlangKeyword.END);
+		branchPatternExp.is(
+			guardSequence,
+			ErlangPunctator.ARROW,
+			expression,
+			o2n(
+				ErlangPunctator.COMMA,
+				expression
+			)
+		);
 		
 		branchExpression.is(
 			expression,
@@ -246,10 +310,6 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			term
 		);
 		
-		
-		/**
-		 * TODO: MACROS
-		 */
 		
 		macroExp.is(
 			"?",
@@ -295,7 +355,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			)
 		);
 	
-		listCompExp.is(
+		listComprehensionExp.is(
 			ErlangPunctator.LBRACKET,
 			expression,
 			ErlangPunctator.LISTCOMP,
@@ -347,7 +407,18 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	}
 	
 	private void dataTypes(){
-		term.is(or(LITERAL, ErlangTokenType.NUMERIC_LITERAL, list, tuple, binary, recordRef, IDENTIFIER));
+		term.is(
+			or(
+				LITERAL, 
+				ErlangTokenType.NUMERIC_LITERAL,
+				macroExp,
+				binary,
+				list, 
+				tuple, 
+				recordRef, 
+				IDENTIFIER
+			)
+		);
 		termsOrFunCalls.is(
 			or(
 				funcCall,
