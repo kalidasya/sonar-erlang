@@ -400,7 +400,7 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 	    assignmentOperator.is(
 	        MATCHOP);
 
-	    expression.is(assignmentExpression, o2n(COMMA, assignmentExpression));
+	    expression.is(opt(CATCH), assignmentExpression, o2n(COMMA, assignmentExpression));
 	}
 
 		/**
@@ -421,8 +421,9 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 				ifStatement,
 				caseStatement,
 				receiveStatement,
-				funStatement/*,
-				tryStatement*/
+				funStatement,
+				tryStatement,
+				blockStatement
 			)
 		);
 		statements.is(
@@ -453,6 +454,11 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 			o2n(SEMI, patternStatement)
 		);
 		
+		catchPatternStatements.is(
+			catchPatternStatement,
+			o2n(SEMI, catchPatternStatement)
+		);
+		
 		patternStatement.is(
 			pattern,
 			opt(guardSequenceStart),
@@ -460,7 +466,19 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 			statements
 		);
 		
+		catchPatternStatement.is(
+			catchPattern,
+			opt(guardSequenceStart),
+			ARROW,
+			statements
+		);
+		
 		pattern.is(
+			assignmentExpression
+		);
+		
+		catchPattern.is(
+			opt(IDENTIFIER, COLON),
 			assignmentExpression
 		);
 		
@@ -510,55 +528,29 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 			RECEIVE, patternStatements, opt(AFTER, expression, ARROW, statements), END
 		);
 		
+		tryStatement.is(
+			TRY, 
+			expression, 
+			opt(OF, patternStatements), 
+			or(
+				and(catchExpression, afterExpression),
+				catchExpression,
+				afterExpression
+			), 
+			END
+		);
 		
+		afterExpression.is(
+			AFTER, statements
+		);
+		
+		catchExpression.is(
+			CATCH,
+			catchPatternStatements
+		);
+		
+		blockStatement.is(
+			BEGIN, statements, END
+		);
 	  }
-	/*    
-	    block.is(LCURLYBRACE, opt(statementList), RCURLYBRACE);
-	    statementList.is(one2n(or(statement, permissive(functionDeclaration))));
-	    variableStatement.is(VAR, variableDeclarationList, eos);
-	    variableDeclarationList.is(variableDeclaration, o2n(COMMA, variableDeclaration));
-	    variableDeclarationListNoIn.is(variableDeclarationNoIn, o2n(COMMA, variableDeclarationNoIn));
-	    variableDeclaration.is(IDENTIFIER, opt(initialiser));
-	    variableDeclarationNoIn.is(IDENTIFIER, opt(initialiserNoIn));
-	    initialiser.is(EQU, assignmentExpression);
-	    initialiserNoIn.is(EQU, assignmentExpressionNoIn);
-	    emptyStatement.is(SEMI);
-	    condition.is(expression);
-	   
-	    iterationStatement.is(or(
-	        doWhileStatement,
-	        whileStatement,
-	        forInStatement,
-	        forStatement));
-	    doWhileStatement.is(DO, statement, WHILE, LPARENTHESIS, condition, RPARENTHESIS, eos);
-	    whileStatement.is(WHILE, LPARENTHESIS, condition, RPARENTHESIS, statement);
-	    forInStatement.is(or(
-	        and(FOR, LPARENTHESIS, leftHandSideExpression, IN, expression, RPARENTHESIS, statement),
-	        and(FOR, LPARENTHESIS, VAR, variableDeclarationListNoIn, IN, expression, RPARENTHESIS, statement)));
-	    forStatement.is(or(
-	        and(FOR, LPARENTHESIS, opt(expressionNoIn), SEMI, opt(condition), SEMI, opt(expression), RPARENTHESIS, statement),
-	        and(FOR, LPARENTHESIS, VAR, variableDeclarationListNoIn, SEMI, opt(condition), SEMI, opt(expression), RPARENTHESIS, statement)));
-	    continueStatement.is(or(
-	        and(CONTINUE, IDENTIFIER, eos),
-	        and(CONTINUE, eosNoLb)));
-	    breakStatement.is(or(
-	        and(BREAK, IDENTIFIER, eos),
-	        and(BREAK, eosNoLb)));
-	    returnStatement.is(or(
-	        and(RETURN, expression, eos),
-	        and(RETURN, eosNoLb)));
-	    withStatement.is(WITH, LPARENTHESIS, expression, RPARENTHESIS, statement);
-	    switchStatement.is(SWITCH, LPARENTHESIS, expression, RPARENTHESIS, caseBlock);
-	    caseBlock.is(LCURLYBRACE, opt(caseClauses), opt(defaultClause, opt(caseClauses)), RCURLYBRACE);
-	    caseClauses.is(one2n(caseClause));
-	    caseClause.is(CASE, expression, COLON, opt(statementList));
-	    defaultClause.is(DEFAULT, COLON, opt(statementList));
-	    labelledStatement.is(IDENTIFIER, COLON, statement);
-	    throwStatement.is(THROW, expression, eos);
-	    tryStatement.is(TRY, block, or(and(catch_, opt(finally_)), finally_));
-	    catch_.is(CATCH, LPARENTHESIS, IDENTIFIER, RPARENTHESIS, block);
-	    finally_.is(FINALLY, block);
-	    debuggerStatement.is(DEBUGGER, eos);
-	  }*/
-
 }

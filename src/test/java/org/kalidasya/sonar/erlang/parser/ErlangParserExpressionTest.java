@@ -109,6 +109,14 @@ public class ErlangParserExpressionTest {
 		assertThat(p, parse(code("io:format(\"assert error in module ~p on line ~p~n\")")));
 	}
 
+	@Test
+	public void catchExpressions(){
+		assertThat(p, parse(code("catch 1+2")));
+		assertThat(p, parse(code("catch 1+a")));
+		assertThat(p, parse(code("A = (catch 1+2)")));
+		assertThat(p, parse(code("catch throw(hello)")));
+	}
+	
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);
 	}

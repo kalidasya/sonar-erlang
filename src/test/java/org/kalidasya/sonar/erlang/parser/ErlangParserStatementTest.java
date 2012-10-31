@@ -115,6 +115,8 @@ public class ErlangParserStatementTest {
 	@Test
 	public void sendStatements() {
 		assertThat(p, parse(code("Client ! {self(), data_sent}")));
+		assertThat(p, parse(code("Client ! {self(), data_sent}, A")));
+		assertThat(p, parse(code("B, Client ! {self(), data_sent}, A")));
 	}
 
 	@Test
@@ -125,6 +127,39 @@ public class ErlangParserStatementTest {
 						"{connect, B} ->", "B ! {busy, self()},",
 						"wait_for_onhook()", "after", "60000 ->",
 						"disconnect(),", "error()", "end")));
+	}
+
+	@Test
+	public void tryStatements() {
+		assertThat(
+				p,
+				parse(code("try Exprs of Pattern when GuardSeq -> Body after AfterBody end")));
+
+		assertThat(
+				p,
+				parse(code("try Exprs catch ExpressionPattern -> ExpressionBody after AfterBody end")));
+
+		assertThat(p, parse(code("try Exprs after AfterBody end")));
+
+		assertThat(
+				p,
+				parse(code("try", "{ok,Bin} = file:read(F, 1024*1024),",
+						"binary_to_term(Bin)", "after", "file:close(F)", "end")));
+
+		assertThat(
+				p,
+				parse(code(
+						"try Expr",
+						"catch",
+						"throw:Term -> Term;",
+						"exit:Reason -> {'EXIT',Reason};",
+						"error:Reason -> {'EXIT',{Reason,erlang:get_stacktrace()}}",
+						"end")));
+	}
+	
+	@Test
+	public void blockStatements() {
+		assertThat(p, parse(code("begin a, S=2 end")));
 	}
 
 	private static String code(String... lines) {

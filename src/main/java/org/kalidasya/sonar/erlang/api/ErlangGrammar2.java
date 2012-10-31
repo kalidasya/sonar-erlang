@@ -83,6 +83,13 @@ public class ErlangGrammar2 extends Grammar {
 	public Rule patternStatement;
 	public Rule statements;
 	public Rule sendStatement;
+	public Rule catchExpression;
+	public Rule afterExpression;
+	public Rule catchPattern;
+	public Rule catchPatternStatement;
+	public Rule catchPatternStatements;
+	public Rule blockStatement;
+	
 	
 	@Override
 	public Rule getRootRule() {
