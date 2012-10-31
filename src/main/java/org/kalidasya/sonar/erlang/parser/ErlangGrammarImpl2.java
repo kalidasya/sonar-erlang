@@ -29,11 +29,13 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 	public ErlangGrammarImpl2() {
 		expressions();
 		statements();
+		module();
+		functions();
 	}
-	/*
+	
 	private void module() {
 		module.is(
-			one2n(moduleAttributes), 
+			moduleAttributes, 
 			one2n(
 				functionDeclaration
 			), 
@@ -41,13 +43,15 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 		);
 		
 		moduleAttributes.is(
-			or(
-				moduleAttr,
-				exportAttr,
-				compileAttr,
-				defineAttr,
-				typeOrFunctionSpec,
-				genericAttr
+			one2n(
+				or(
+					moduleAttr,
+					exportAttr,
+					compileAttr,
+					defineAttr,
+					typeOrFunctionSpec,
+					genericAttr
+				)
 			)
 		);
 		
@@ -72,7 +76,6 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 			"compile",
 			ErlangPunctator.LPARENTHESIS, 
 			or(
-				//listedTermsOrFunCalls,
 				LITERAL,
 				IDENTIFIER
 			),
@@ -86,7 +89,7 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 			ErlangPunctator.LPARENTHESIS, 
 			or(
 				and(IDENTIFIER, ErlangPunctator.COMMA, IDENTIFIER),
-				and(funcCall, ErlangPunctator.COMMA, expression)
+				and(funcDecl, ErlangPunctator.COMMA, expression)
 			),
 			ErlangPunctator.RPARENTHESIS, 
 			ErlangPunctator.DOT
@@ -97,7 +100,6 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 				IDENTIFIER, 
 				ErlangPunctator.LPARENTHESIS, 
 				or(
-			//		listedTermsOrFunCalls,
 					LITERAL,
 					IDENTIFIER
 				),
@@ -115,15 +117,15 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 				and(
 					ErlangPunctator.COLON,
 					ErlangPunctator.COLON,
-					funcCall,
+					funcDecl,
 					o2n(
 						ErlangPunctator.PIPE,
-						funcCall
+						funcDecl
 					)
 				),
 				and(
 					ErlangPunctator.ARROW,
-					funcCall
+					funcDecl
 				)
 			),
 			ErlangPunctator.DOT
@@ -147,43 +149,6 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 		);
 	}
 	
-	private void operators(){
-		termCompOp.is(
-			or(
-				ErlangPunctator.EQUAL, 
-				ErlangPunctator.EQUAL2, 
-				ErlangPunctator.NOTEQUAL, 
-				ErlangPunctator.NOTEQUAL2, 
-				ErlangPunctator.LT, 
-				ErlangPunctator.GT, 
-				ErlangPunctator.LE, 
-				ErlangPunctator.GE
-			)
-		);
-		booleanOp.is(or(
-			ErlangKeyword.NOT, 
-			ErlangKeyword.AND, 
-			ErlangKeyword.OR, 
-			ErlangKeyword.XOR
-		));
-		arithmeticOp.is(or(
-			ErlangPunctator.PLUS, 
-			ErlangPunctator.MINUS, 
-			ErlangPunctator.STAR, 
-			ErlangPunctator.DIV, 
-			ErlangKeyword.BNOT, 
-			ErlangKeyword.DIV, 
-			ErlangKeyword.REM, 
-			ErlangKeyword.BAND, 
-			ErlangKeyword.BOR,
-			ErlangKeyword.BXOR, 
-			ErlangKeyword.BSL, 
-			ErlangKeyword.BSR,
-			ErlangPunctator.NUMBERSIGN
-		));
-		listOp.is(or(ErlangPunctator.PLUSPLUS, ErlangPunctator.MINUSMINUS));
-		shortcircuitOp.is(or(ErlangKeyword.ANDALSO, ErlangKeyword.ORELSE));
-	}
 	
 	private void functions() {
 		functionDeclaration.is(
@@ -201,11 +166,7 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 			opt(guardSequenceStart)
 		);
 		clauseBody.is(
-			expression,
-			o2n(
-				ErlangPunctator.COMMA,
-				expression
-			)
+			statements
 		);
 		
 		funcArity.is(
@@ -217,56 +178,13 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 			ErlangPunctator.DIV,
 			ErlangTokenType.NUMERIC_LITERAL
 		);
-		//
-		 // What can be in a pattern?
-		 //
+
 		funcDecl.is(
 			IDENTIFIER,
-			ErlangPunctator.LPARENTHESIS, 
-			opt(
-				pattern,
-				o2n(
-					ErlangPunctator.COMMA,
-					pattern
-				)
-			),
-			ErlangPunctator.RPARENTHESIS
-		);
-		funcCall.is(
-			opt(IDENTIFIER, ErlangPunctator.COLON),
-			IDENTIFIER, 
-			funcArgs 
-		);
-		funcArgs.is(
-			ErlangPunctator.LPARENTHESIS, 
-			opt(
-				expression,
-				o2n(
-					ErlangPunctator.COMMA,
-					expression
-				)
-			),
-			ErlangPunctator.RPARENTHESIS
-		);
-		funExpr.is(
-			ErlangKeyword.FUN,
-			or(
-				and(
-					funcArgs,
-					opt(guardSequenceStart),
-					ErlangPunctator.ARROW,
-					expression,
-					o2n(
-						ErlangPunctator.COMMA,
-						expression
-					),
-					ErlangKeyword.END
-				),
-				funcArity
-			)
+			arguments
 		);
 	}
-	*/
+	
 	private void expressions() {
 		literal.is(
 				or(
@@ -348,6 +266,7 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 		);
 	    memberExpression.is(
 	        or(
+	        	funExpression,
 	            primaryExpression
 	        ));
 	    /**
@@ -401,6 +320,21 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 	        MATCHOP);
 
 	    expression.is(opt(CATCH), assignmentExpression, o2n(COMMA, assignmentExpression));
+	    
+	    funExpression.is(
+			ErlangKeyword.FUN,
+			or(
+				funcArity,
+				and(functionDeclarationsNoName, END)
+			)
+		);
+		functionDeclarationsNoName.is(
+			functionDeclarationNoName,
+			o2n(SEMI, functionDeclarationNoName)
+		);
+		functionDeclarationNoName.is(
+			arguments, opt(guardSequenceStart), ARROW, statements
+		);
 	}
 
 		/**
@@ -421,7 +355,7 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 				ifStatement,
 				caseStatement,
 				receiveStatement,
-				funStatement,
+				funExpression,
 				tryStatement,
 				blockStatement
 			)
@@ -431,19 +365,6 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 			o2n(COMMA, statement)
 		);
 		expressionStatement.is(expression);
-		
-		funStatement.is(
-			ErlangKeyword.FUN,
-			functionDeclarationsNoName,
-			ErlangKeyword.END
-		);
-		functionDeclarationsNoName.is(
-			functionDeclarationNoName,
-			o2n(SEMI, functionDeclarationNoName)
-		);
-		functionDeclarationNoName.is(
-			arguments, opt(guardSequenceStart), ARROW, statements
-		);
 		
 		caseStatement.is(
 			CASE, expression, OF, patternStatements, END

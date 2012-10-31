@@ -41,7 +41,7 @@ public class ErlangGrammar2 extends Grammar {
 	public Rule binaryLiteral;
 	public Rule assignmentExpression;
 	public Rule memberExpression;
-	public Rule funStatement;
+	public Rule funExpression;
 	public Rule arguments;
 	public Rule unaryExpression;
 	public Rule multiplicativeExpression;
