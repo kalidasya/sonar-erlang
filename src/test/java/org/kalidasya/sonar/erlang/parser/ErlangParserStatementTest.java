@@ -27,55 +27,106 @@ public class ErlangParserStatementTest {
 		p.setRootRule(g.statement);
 	}
 
-
 	@Test
 	public void statements() {
-		assertThat(p, parse(code("1,","A")));
-		assertThat(p, parse(code("1+3,","<<A>>")));
+		assertThat(p, parse(code("1,", "A")));
+		assertThat(p, parse(code("1+3,", "<<A>>")));
 	}
 
 	@Test
-	public void ifSimple(){
+	public void ifSimple() {
 		g.branchExps.mock();
 		assertThat(p, parse(code("if branchExps end")));
 	}
-	
+
 	@Test
-	public void ifSimple2(){
+	public void ifSimple2() {
 		g.branchExp.mock();
 		assertThat(p, parse(code("if branchExp; branchExp end")));
 	}
-	
+
 	@Test
-	public void ifSimple3(){
+	public void ifSimple3() {
 		g.guardSequence.mock();
 		g.expression.mock();
-		assertThat(p, parse(code("if guardSequence -> expression, expression end")));
-		assertThat(p, parse(code("if guardSequence -> expression, expression; guardSequence -> expression end")));
+		assertThat(p,
+				parse(code("if guardSequence -> expression, expression end")));
+		assertThat(
+				p,
+				parse(code("if guardSequence -> expression, expression; guardSequence -> expression end")));
 	}
-	
+
 	@Test
-	public void ifSimple4(){
+	public void ifSimple4() {
 		g.guard.mock();
 		g.expression.mock();
-		assertThat(p, parse(code("if guard; guard; guard -> expression, expression end")));
-		assertThat(p, parse(code("if guard; guard -> expression, expression; guard; guard -> expression end")));
+		assertThat(
+				p,
+				parse(code("if guard; guard; guard -> expression, expression end")));
+		assertThat(
+				p,
+				parse(code("if guard; guard -> expression, expression; guard; guard -> expression end")));
 	}
-	
+
 	@Test
-	public void ifSimple5(){
+	public void ifSimple5() {
 		g.guardExpression.mock();
 		g.expression.mock();
-		assertThat(p, parse(code("if guardExpression, guardExpression; guardExpression; guardExpression, guardExpression ,guardExpression -> expression, expression end")));
-		assertThat(p, parse(code("if guardExpression; guardExpression, guardExpression -> expression, expression; guardExpression, guardExpression; guardExpression -> expression end")));
+		assertThat(
+				p,
+				parse(code("if guardExpression, guardExpression; guardExpression; guardExpression, guardExpression ,guardExpression -> expression, expression end")));
+		assertThat(
+				p,
+				parse(code("if guardExpression; guardExpression, guardExpression -> expression, expression; guardExpression, guardExpression; guardExpression -> expression end")));
 	}
-	
+
 	@Test
-	public void ifStatements(){
+	public void ifStatements() {
 		assertThat(p, parse(code("if A =:= B -> ok end")));
-		assertThat(p, parse(code("if A =:= B -> ok; true -> io:format(\"assert error in module ~p on line ~p~n\") end")));
+		assertThat(
+				p,
+				parse(code("if A =:= B -> ok; true -> io:format(\"assert error in module ~p on line ~p~n\") end")));
 	}
-	
+
+	@Test
+	public void funStatements() {
+
+		assertThat(p, parse(code("fun (Name) ->" + "Spec = agner:spec(Name),"
+				+ "Searchable = string:to_lower(\"hElO\")" + "end")));
+
+		assertThat(
+				p,
+				parse(code("fun	(Name) ->", "Spec = agner:spec(Name),",
+						"Searchable = string:to_lower(\"hElO\");",
+						"(Name, 23) when Name>=2 ->",
+						"Spec = agner:spec(Name),",
+						"Searchable = string:to_lower(\"hElO\")", "end")));
+	}
+
+	@Test
+	public void caseStatements() {
+		assertThat(
+				p,
+				parse(code("case Signal of", "{signal, _What, _From, _To} ->",
+						"true;", "{signal, _What, _To} ->", "true;",
+						"_Else -> false", "end")));
+	}
+
+	@Test
+	public void sendStatements() {
+		assertThat(p, parse(code("Client ! {self(), data_sent}")));
+	}
+
+	@Test
+	public void receiveStatements() {
+		assertThat(
+				p,
+				parse(code("receive", "onhook ->", "disconnect(),", "idle();",
+						"{connect, B} ->", "B ! {busy, self()},",
+						"wait_for_onhook()", "after", "60000 ->",
+						"disconnect(),", "error()", "end")));
+	}
+
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);
 	}

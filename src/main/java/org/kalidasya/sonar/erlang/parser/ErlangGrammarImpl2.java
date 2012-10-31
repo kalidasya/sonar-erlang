@@ -25,6 +25,7 @@ import static org.kalidasya.sonar.erlang.api.ErlangTokenType.*;
 
 public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 
+
 	public ErlangGrammarImpl2() {
 		expressions();
 		statements();
@@ -415,36 +416,54 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 		);
 		statement.is(
 			or(
-				//block,
-				//variableStatement,
-				//emptyStatement,
-				//labelledStatement,
+				sendStatement,
 				expressionStatement,
 				ifStatement,
-				/*caseStatement,
-				receiveStatement,*/
+				caseStatement,
+				receiveStatement,
 				funStatement/*,
 				tryStatement*/
 			)
 		);
+		statements.is(
+			statement,
+			o2n(COMMA, statement)
+		);
+		expressionStatement.is(expression);
+		
 		funStatement.is(
 			ErlangKeyword.FUN,
-			or(
-				and(
-					arguments,
-					opt(guardSequenceStart),
-					ErlangPunctator.ARROW,
-					expression,
-					o2n(
-						ErlangPunctator.COMMA,
-						expression
-					),
-					ErlangKeyword.END
-				),
-				funcArity
-			)
+			functionDeclarationsNoName,
+			ErlangKeyword.END
 		);
-		expressionStatement.is(expression, o2n(COMMA, expression));
+		functionDeclarationsNoName.is(
+			functionDeclarationNoName,
+			o2n(SEMI, functionDeclarationNoName)
+		);
+		functionDeclarationNoName.is(
+			arguments, opt(guardSequenceStart), ARROW, statements
+		);
+		
+		caseStatement.is(
+			CASE, expression, OF, patternStatements, END
+		);		
+		
+		patternStatements.is(
+			patternStatement,
+			o2n(SEMI, patternStatement)
+		);
+		
+		patternStatement.is(
+			pattern,
+			opt(guardSequenceStart),
+			ARROW,
+			statements
+		);
+		
+		pattern.is(
+			assignmentExpression
+		);
+		
 		ifStatement.is(IF, branchExps, END);
 		branchExps.is(
 			branchExp,
@@ -457,8 +476,14 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 		branchExp.is(
 			guardSequence,
 			ErlangPunctator.ARROW,
-			one2n(statement)
+			statements
 		);
+		
+		guardSequenceStart.is(
+			ErlangKeyword.WHEN, 
+			guardSequence
+		);
+		
 		guardSequence.is(
 			guard,
 			o2n(
@@ -476,6 +501,16 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 		guardExpression.is(
 			expression
 		);
+		
+		sendStatement.is(
+			expression, EXCLAMATION, expression
+		);
+		
+		receiveStatement.is(
+			RECEIVE, patternStatements, opt(AFTER, expression, ARROW, statements), END
+		);
+		
+		
 	  }
 	/*    
 	    block.is(LCURLYBRACE, opt(statementList), RCURLYBRACE);

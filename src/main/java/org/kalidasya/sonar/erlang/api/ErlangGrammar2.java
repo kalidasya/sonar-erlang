@@ -77,6 +77,12 @@ public class ErlangGrammar2 extends Grammar {
 	public Rule eos;
 	public Rule guard;
 	public Rule guardExpression;
+	public Rule functionDeclarationsNoName;
+	public Rule functionDeclarationNoName;
+	public Rule patternStatements;
+	public Rule patternStatement;
+	public Rule statements;
+	public Rule sendStatement;
 	
 	@Override
 	public Rule getRootRule() {
