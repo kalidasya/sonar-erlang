@@ -62,6 +62,8 @@ public class ErlangGrammar2 extends Grammar {
 	public Rule logicalXorExpression;
 	public Rule shortCircuitOrElseExpression;
 	public Rule shortCircuitAndAlsoExpression;
+	public Rule binaryElement;
+	public Rule binaryQualifier;
 	
 	@Override
 	public Rule getRootRule() {

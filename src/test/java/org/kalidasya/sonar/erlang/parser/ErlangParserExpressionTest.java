@@ -66,8 +66,10 @@ public class ErlangParserExpressionTest {
 		assertThat(p, parse(code("[X*2 || X <- [1,2,3]]")));
 		assertThat(p, parse(code("[X*2 || X <- [1,2,3]] ++ [7,8,9]")));
 		assertThat(p, parse(code("[X*2 || X <- [1,2,3]] -- [7,8,9]")));
-		assertThat(p, parse(code("[10, 23] -- [X*2 || X <- [1,2,3]] ++ [7,8,9]")));
-		assertThat(p, parse(code("[756, 877] ++ [X*2 || X <- [1,2,3]] -- [7,8,9]")));
+		assertThat(p,
+				parse(code("[10, 23] -- [X*2 || X <- [1,2,3]] ++ [7,8,9]")));
+		assertThat(p,
+				parse(code("[756, 877] ++ [X*2 || X <- [1,2,3]] -- [7,8,9]")));
 	}
 
 	@Test
@@ -81,7 +83,22 @@ public class ErlangParserExpressionTest {
 		assertThat(p, parse(code("not A andalso B or false")));
 		assertThat(p, parse(code("(not (A andalso B)) or false")));
 	}
-	
+
+	@Test
+	public void binaryExpressions() {
+		assertThat(p, parse(code("<<1,17,42>>")));
+		assertThat(p, parse(code("<<1,17,42:16>>")));
+		assertThat(p, parse(code("<<1024/utf8>>")));
+		assertThat(p, parse(code("<<1024:16/utf8>>")));
+		assertThat(p, parse(code("<<$a,$b,$c>>")));
+		assertThat(p, parse(code("<<\"hello\">>")));
+		assertThat(p, parse(code("<<A,B,C:16>> = <<1,17,42:16>>")));
+		assertThat(p, parse(code("<<D:16,E,F>> = <<1,17,42:16>>")));
+		assertThat(p, parse(code("<<G,H/binary>> = <<1,17,42:16>>")));
+		assertThat(p, parse(code("<<G,H/bitstring>> = <<1,17,42:12>>")));
+		assertThat(p, parse(code("<< << (X*2) >> || <<X>> <= << 1,2,3 >> >>")));
+	}
+
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);
 	}

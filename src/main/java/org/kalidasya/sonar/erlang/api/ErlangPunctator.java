@@ -6,6 +6,7 @@ import com.sonar.sslr.api.TokenType;
 public enum ErlangPunctator implements TokenType {
 	ARROW("->"),
 	ARROWBACK("<-"),
+	DOUBLEARROWBACK("<="),
 	LCURLYBRACE("{"),
 	RCURLYBRACE("}"),
 	LPARENTHESIS("("),

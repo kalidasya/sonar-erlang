@@ -21,6 +21,7 @@ import static com.sonar.sslr.impl.matcher.GrammarFunctions.Standard.opt;
 import static com.sonar.sslr.impl.matcher.GrammarFunctions.Standard.or;
 import static org.kalidasya.sonar.erlang.api.ErlangPunctator.*;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.*;
+import static org.kalidasya.sonar.erlang.api.ErlangTokenType.*;
 
 public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 
@@ -269,7 +270,7 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 	private void expressions() {
 		literal.is(
 				or(
-					ErlangTokenType.NUMERIC_LITERAL,
+					NUMERIC_LITERAL,
 					LITERAL
 				)
 			);
@@ -280,6 +281,22 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 	        tupleLiteral,
 	        binaryLiteral,
 	        and(LPARENTHESIS, expression, RPARENTHESIS)));
+	    
+	    binaryElement.is(
+	    	or(
+	    		and(
+					expression, 
+					opt(
+						COLON, 
+						or(NUMERIC_LITERAL,	IDENTIFIER)
+					), 
+					opt(
+						ErlangPunctator.DIV, 
+						or(NUMERIC_LITERAL, IDENTIFIER)
+					)
+				)
+	    	)
+	    );
 	    
 	    
 	    listLiteral.is(
@@ -305,7 +322,31 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
    			)
 	    );
 	    tupleLiteral.is(LCURLYBRACE, o2n(or(COMMA, assignmentExpression)), RCURLYBRACE);
-	    binaryLiteral.is(BINSTART, o2n(or(COMMA, assignmentExpression)), BINEND);
+	    binaryLiteral.is(
+	    	BINSTART,
+	    	or(
+	    		and(
+    				and(
+   		    			assignmentExpression,
+  		    			LISTCOMP,
+   		    			one2n(binaryQualifier)
+   		    		),
+   		    		o2n(or(COMMA, assignmentExpression))
+	    		),
+	    		o2n(or(COMMA, binaryElement))
+	    	),
+	    	BINEND
+	    );
+	    binaryQualifier.is(
+		    	or(
+		    		and(
+	   					binaryLiteral,
+	   					ErlangPunctator.DOUBLEARROWBACK,
+	   					expression
+	   				),
+	   				expression
+	   			)
+		    );
 	    memberExpression.is(
 	        or(
 	            primaryExpression,
