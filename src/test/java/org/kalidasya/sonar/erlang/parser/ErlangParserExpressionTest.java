@@ -98,6 +98,14 @@ public class ErlangParserExpressionTest {
 		assertThat(p, parse(code("<<G,H/bitstring>> = <<1,17,42:12>>")));
 		assertThat(p, parse(code("<< << (X*2) >> || <<X>> <= << 1,2,3 >> >>")));
 	}
+	
+	@Test
+	public void functionCall(){
+		assertThat(p, parse(code("method(\"hello\")")));
+		assertThat(p, parse(code("method(12)")));
+		assertThat(p, parse(code("method(\"hello\",234234)")));
+		assertThat(p, parse(code("haho:method(\"hello\")")));
+	}
 
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);

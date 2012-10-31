@@ -25,7 +25,6 @@ import static org.kalidasya.sonar.erlang.api.ErlangTokenType.*;
 
 public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 
-
 	public ErlangGrammarImpl2() {
 		expressions();
 		statements();
@@ -282,23 +281,6 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 	        binaryLiteral,
 	        and(LPARENTHESIS, expression, RPARENTHESIS)));
 	    
-	    binaryElement.is(
-	    	or(
-	    		and(
-					expression, 
-					opt(
-						COLON, 
-						or(NUMERIC_LITERAL,	IDENTIFIER)
-					), 
-					opt(
-						ErlangPunctator.DIV, 
-						or(NUMERIC_LITERAL, IDENTIFIER)
-					)
-				)
-	    	)
-	    );
-	    
-	    
 	    listLiteral.is(
 	    	LBRACKET,
 	    	or(
@@ -338,33 +320,48 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 	    	BINEND
 	    );
 	    binaryQualifier.is(
-		    	or(
-		    		and(
-	   					binaryLiteral,
-	   					ErlangPunctator.DOUBLEARROWBACK,
-	   					expression
-	   				),
+		   	or(
+		   		and(
+	   				binaryLiteral,
+	   				ErlangPunctator.DOUBLEARROWBACK,
 	   				expression
-	   			)
-		    );
+	   			),
+	   			expression
+	   		)
+		);
+	    
+	    binaryElement.is(
+		   	or(
+		   		and(
+					expression, 
+					opt(
+						COLON, 
+						or(NUMERIC_LITERAL,	IDENTIFIER)
+					), 
+					opt(
+						ErlangPunctator.DIV, 
+						or(NUMERIC_LITERAL, IDENTIFIER)
+					)
+				)
+		   	)
+		);
 	    memberExpression.is(
 	        or(
-	            primaryExpression,
-	            funStatement
+	            primaryExpression
 	        ));
 	    /**
-	     * It is a record ref (originaly a.b['a'])
-	     * and a func call
+	     * It can be a record ref (originaly a.b['a']) as well
 	     */
 	    callExpression.is(
 	    	or(
 	    		and(memberExpression, arguments),
+	    		and(IDENTIFIER, COLON, memberExpression, arguments),
 	    		memberExpression
 	    	)
 	     );
 	    arguments.is(LPARENTHESIS, opt(assignmentExpression, o2n(COMMA, assignmentExpression)), RPARENTHESIS);
 	    unaryExpression.is(or(
-	        memberExpression,
+	        callExpression,
 	        and(NOT, unaryExpression)
 	        ));
 	    multiplicativeExpression.is(unaryExpression, o2n(or(STAR, ErlangPunctator.DIV), unaryExpression)).skipIfOneChild();
@@ -393,54 +390,78 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 	    
 	    listOperationExpression.is(shortCircuitAndAlsoExpression, o2n(or(PLUSPLUS, MINUSMINUS), shortCircuitAndAlsoExpression)).skipIfOneChild();
 
-	    assignmentExpression.is(or(
-	        and(callExpression, assignmentOperator, assignmentExpression),
-	        listOperationExpression)).skipIfOneChild();
+	    assignmentExpression.is(
+	    	or(
+	    		and(callExpression, assignmentOperator, assignmentExpression),
+	    		listOperationExpression
+	    	)
+	    ).skipIfOneChild();
 
 	    assignmentOperator.is(
 	        MATCHOP);
 
 	    expression.is(assignmentExpression, o2n(COMMA, assignmentExpression));
-	  }
+	}
 
-	  /**
-	   * A.4 Statement
-	   */
-	  private void statements() {
-		  funStatement.is(
-				ErlangKeyword.FUN,
-				or(
-					and(
-						arguments,
-						opt(guardSequenceStart),
-						ErlangPunctator.ARROW,
-						expression,
-						o2n(
-							ErlangPunctator.COMMA,
-							expression
-						),
-						ErlangKeyword.END
+		/**
+		 * A.4 Statement
+		 **/
+	private void statements() {
+		eos.is(
+			or(
+				COMMA,
+				next(EOF),
+				next(DOT)
+			)
+		);
+		statement.is(
+			or(
+				//block,
+				//variableStatement,
+				//emptyStatement,
+				//labelledStatement,
+				expressionStatement,
+				ifStatement,
+				caseStatement,
+				receiveStatement,
+				funStatement,
+				tryStatement
+			)
+		);
+		funStatement.is(
+			ErlangKeyword.FUN,
+			or(
+				and(
+					arguments,
+					opt(guardSequenceStart),
+					ErlangPunctator.ARROW,
+					expression,
+					o2n(
+						ErlangPunctator.COMMA,
+						expression
 					),
-					funcArity
+					ErlangKeyword.END
+				),
+				funcArity
+			)
+		);
+		expressionStatement.is(expression, eos);
+		ifStatement.is(IF, branchPatternExps, END);
+		branchExps.is(
+				branchExp,
+				o2n(
+					ErlangPunctator.SEMI,
+					branchExp
 				)
 			);
+			
+			branchExp.is(
+				guardSequence,
+				ErlangPunctator.ARROW,
+				one2n(statement)
+			);
 	  }
-	/*    statement.is(or(
-	        block,
-	        variableStatement,
-	        emptyStatement,
-	        labelledStatement,
-	        expressionStatement,
-	        ifStatement,
-	        iterationStatement,
-	        continueStatement,
-	        breakStatement,
-	        returnStatement,
-	        withStatement,
-	        switchStatement,
-	        throwStatement,
-	        tryStatement,
-	        debuggerStatement));
+	/*    
 	    block.is(LCURLYBRACE, opt(statementList), RCURLYBRACE);
 	    statementList.is(one2n(or(statement, permissive(functionDeclaration))));
 	    variableStatement.is(VAR, variableDeclarationList, eos);
@@ -451,9 +472,8 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 	    initialiser.is(EQU, assignmentExpression);
 	    initialiserNoIn.is(EQU, assignmentExpressionNoIn);
 	    emptyStatement.is(SEMI);
-	    expressionStatement.is(not(or(LCURLYBRACE, FUNCTION)), expression, eos);
 	    condition.is(expression);
-	    ifStatement.is(IF, LPARENTHESIS, condition, RPARENTHESIS, statement, opt(ELSE, statement));
+	   
 	    iterationStatement.is(or(
 	        doWhileStatement,
 	        whileStatement,
