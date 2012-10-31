@@ -112,7 +112,7 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 				"type",
 				"spec"
 			),
-			funcCall,
+			funcDecl,
 			or(
 				and(
 					ErlangPunctator.COLON,
@@ -202,13 +202,19 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 	    
 	    listLiteral.is(
 	    	LBRACKET,
-	    	or(
-	    		and(
-	    			assignmentExpression,
-	    			LISTCOMP,
-	    			one2n(qualifier)
-	    		),
-	    		o2n(or(COMMA, assignmentExpression))
+	    	opt(
+	    		or(
+		    		and(
+		    			assignmentExpression,
+		    			LISTCOMP,
+		    			one2n(qualifier)
+		    		),
+		    		and(
+		    			assignmentExpression,
+		    			o2n(or(COMMA, assignmentExpression)),
+		    			opt(PIPE, assignmentExpression)
+		    		)
+	    		)
 	    	),
 	    	RBRACKET
 	    );
@@ -319,7 +325,7 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 	    assignmentOperator.is(
 	        MATCHOP);
 
-	    expression.is(opt(CATCH), assignmentExpression, o2n(COMMA, assignmentExpression));
+	    expression.is(opt(CATCH), assignmentExpression/*, o2n(COMMA, assignmentExpression)*/);
 	    
 	    funExpression.is(
 			ErlangKeyword.FUN,
@@ -451,7 +457,7 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 		
 		tryStatement.is(
 			TRY, 
-			expression, 
+			statements, 
 			opt(OF, patternStatements), 
 			or(
 				and(catchExpression, afterExpression),

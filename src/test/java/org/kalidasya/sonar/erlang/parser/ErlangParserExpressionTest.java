@@ -53,6 +53,12 @@ public class ErlangParserExpressionTest {
 	@Test
 	public void listExpression() {
 		assertThat(p, parse(code("[asd,ore,[ow,2,3],[hello,23]]")));
+		assertThat(p, parse(code("[]")));
+		assertThat(p, parse(code("[d|T]")));
+		assertThat(p, parse(code("[c|[]]")));
+		assertThat(p, parse(code("[a|[b|[c|[]]]]")));
+		assertThat(p, parse(code("[a,2,{c,4}]")));
+		assertThat(p, parse(code("[Name,proplists:get_value(description,Spec,[])|proplists:get_value(keywords,Spec,[])]")));
 
 	}
 
@@ -99,24 +105,26 @@ public class ErlangParserExpressionTest {
 		assertThat(p, parse(code("<<G,H/bitstring>> = <<1,17,42:12>>")));
 		assertThat(p, parse(code("<< << (X*2) >> || <<X>> <= << 1,2,3 >> >>")));
 	}
-	
+
 	@Test
-	public void functionCall(){
+	public void functionCall() {
 		assertThat(p, parse(code("method(\"hello\")")));
 		assertThat(p, parse(code("method(12)")));
 		assertThat(p, parse(code("method(\"hello\",234234)")));
 		assertThat(p, parse(code("haho:method(\"hello\")")));
-		assertThat(p, parse(code("io:format(\"assert error in module ~p on line ~p~n\")")));
+		assertThat(
+				p,
+				parse(code("io:format(\"assert error in module ~p on line ~p~n\")")));
 	}
 
 	@Test
-	public void catchExpressions(){
+	public void catchExpressions() {
 		assertThat(p, parse(code("catch 1+2")));
 		assertThat(p, parse(code("catch 1+a")));
 		assertThat(p, parse(code("A = (catch 1+2)")));
 		assertThat(p, parse(code("catch throw(hello)")));
 	}
-	
+
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);
 	}

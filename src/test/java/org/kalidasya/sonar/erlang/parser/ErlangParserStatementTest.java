@@ -24,7 +24,7 @@ public class ErlangParserStatementTest {
 
 	@Before
 	public void init() {
-		p.setRootRule(g.statement);
+		p.setRootRule(g.statements);
 	}
 
 	@Test
