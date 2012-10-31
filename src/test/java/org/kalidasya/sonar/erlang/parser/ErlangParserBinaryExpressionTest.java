@@ -39,9 +39,9 @@ public class ErlangParserBinaryExpressionTest {
 		assertThat(p, parse(code("<<A,B,C:16>>")));
 		assertThat(p, parse(code("<<G,H/binary>>")));
 		assertThat(p, parse(code("<<G,H:16/bitstring>>")));
-		assertThat(p, parse(code("<< << X:8, 0:8/utf8 >> || X <= << 1, A, 3 >> >>")));
+		assertThat(p, parse(code("<< << X:8, 0:8/utf8 >> || << X >> <= << 1, A, 3 >> >>")));
 	}
-
+	
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);
 	}

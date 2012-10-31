@@ -354,8 +354,7 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 	     */
 	    callExpression.is(
 	    	or(
-	    		and(memberExpression, arguments),
-	    		and(IDENTIFIER, COLON, memberExpression, arguments),
+	    		and(opt(IDENTIFIER, COLON), memberExpression, arguments),
 	    		memberExpression
 	    	)
 	     );
@@ -422,10 +421,10 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 				//labelledStatement,
 				expressionStatement,
 				ifStatement,
-				caseStatement,
-				receiveStatement,
-				funStatement,
-				tryStatement
+				/*caseStatement,
+				receiveStatement,*/
+				funStatement/*,
+				tryStatement*/
 			)
 		);
 		funStatement.is(
@@ -445,21 +444,38 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 				funcArity
 			)
 		);
-		expressionStatement.is(expression, eos);
-		ifStatement.is(IF, branchPatternExps, END);
+		expressionStatement.is(expression, o2n(COMMA, expression));
+		ifStatement.is(IF, branchExps, END);
 		branchExps.is(
-				branchExp,
-				o2n(
-					ErlangPunctator.SEMI,
-					branchExp
-				)
-			);
-			
-			branchExp.is(
-				guardSequence,
-				ErlangPunctator.ARROW,
-				one2n(statement)
-			);
+			branchExp,
+			o2n(
+				ErlangPunctator.SEMI,
+				branchExp
+			)
+		);
+		
+		branchExp.is(
+			guardSequence,
+			ErlangPunctator.ARROW,
+			one2n(statement)
+		);
+		guardSequence.is(
+			guard,
+			o2n(
+				ErlangPunctator.SEMI,
+				guard
+			)
+		);
+		guard.is(
+			guardExpression,
+			o2n(
+				ErlangPunctator.COMMA, 
+				guardExpression
+			)
+		);
+		guardExpression.is(
+			expression
+		);
 	  }
 	/*    
 	    block.is(LCURLYBRACE, opt(statementList), RCURLYBRACE);

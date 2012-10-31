@@ -9,6 +9,7 @@ import java.nio.charset.Charset;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.kalidasya.sonar.erlang.ErlangConfiguration;
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
@@ -23,6 +24,7 @@ import com.sonar.sslr.impl.events.ExtendedStackTraceStream;
 import static com.sonar.sslr.test.parser.ParserMatchers.parse;
 import static org.junit.Assert.assertThat;
 
+@Ignore
 public class ErlangParserTest {
 	ExtendedStackTrace listener = new ExtendedStackTrace();
 	Parser<ErlangGrammar> p = ErlangParser.create(new ErlangConfiguration(

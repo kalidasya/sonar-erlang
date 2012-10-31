@@ -30,8 +30,9 @@ public class ErlangParserExpressionTest {
 	@Test
 	public void simpleExpression() {
 		assertThat(p, parse(code("1+3")));
+		assertThat(p, parse(code("true")));
 		assertThat(p, parse(code("6 + 5 * 4 - 3 / 2")));
-
+		assertThat(p, parse(code("ok")));
 	}
 
 	@Test
@@ -105,6 +106,7 @@ public class ErlangParserExpressionTest {
 		assertThat(p, parse(code("method(12)")));
 		assertThat(p, parse(code("method(\"hello\",234234)")));
 		assertThat(p, parse(code("haho:method(\"hello\")")));
+		assertThat(p, parse(code("io:format(\"assert error in module ~p on line ~p~n\")")));
 	}
 
 	private static String code(String... lines) {

@@ -24,7 +24,7 @@ public class ErlangParserStatementTest {
 
 	@Before
 	public void init() {
-		p.setRootRule(g.expression);
+		p.setRootRule(g.statement);
 	}
 
 
@@ -35,7 +35,44 @@ public class ErlangParserStatementTest {
 	}
 
 	@Test
+	public void ifSimple(){
+		g.branchExps.mock();
+		assertThat(p, parse(code("if branchExps end")));
+	}
+	
+	@Test
+	public void ifSimple2(){
+		g.branchExp.mock();
+		assertThat(p, parse(code("if branchExp; branchExp end")));
+	}
+	
+	@Test
+	public void ifSimple3(){
+		g.guardSequence.mock();
+		g.expression.mock();
+		assertThat(p, parse(code("if guardSequence -> expression, expression end")));
+		assertThat(p, parse(code("if guardSequence -> expression, expression; guardSequence -> expression end")));
+	}
+	
+	@Test
+	public void ifSimple4(){
+		g.guard.mock();
+		g.expression.mock();
+		assertThat(p, parse(code("if guard; guard; guard -> expression, expression end")));
+		assertThat(p, parse(code("if guard; guard -> expression, expression; guard; guard -> expression end")));
+	}
+	
+	@Test
+	public void ifSimple5(){
+		g.guardExpression.mock();
+		g.expression.mock();
+		assertThat(p, parse(code("if guardExpression, guardExpression; guardExpression; guardExpression, guardExpression ,guardExpression -> expression, expression end")));
+		assertThat(p, parse(code("if guardExpression; guardExpression, guardExpression -> expression, expression; guardExpression, guardExpression; guardExpression -> expression end")));
+	}
+	
+	@Test
 	public void ifStatements(){
+		assertThat(p, parse(code("if A =:= B -> ok end")));
 		assertThat(p, parse(code("if A =:= B -> ok; true -> io:format(\"assert error in module ~p on line ~p~n\") end")));
 	}
 	
