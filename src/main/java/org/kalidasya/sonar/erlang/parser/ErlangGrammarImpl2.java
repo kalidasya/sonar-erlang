@@ -350,7 +350,7 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 	        	macroLiteral,
 	        	funExpression,
 	            primaryExpression
-	        ));
+	        )).skipIfOneChild();
 	    /**
 	     * It can be a record ref (originaly a.b['a']) as well
 	     */
@@ -359,12 +359,12 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 	    		and(opt(IDENTIFIER, COLON), memberExpression, arguments),
 	    		memberExpression
 	    	)
-	     );
+	     ).skipIfOneChild();
 	    arguments.is(LPARENTHESIS, opt(assignmentExpression, o2n(COMMA, assignmentExpression)), RPARENTHESIS);
 	    unaryExpression.is(or(
 	        callExpression,
 	        and(NOT, unaryExpression)
-	        ));
+	        )).skipIfOneChild();
 	    multiplicativeExpression.is(unaryExpression, o2n(or(STAR, ErlangPunctator.DIV), unaryExpression)).skipIfOneChild();
 	    additiveExpression.is(multiplicativeExpression, o2n(or(PLUS, MINUS), multiplicativeExpression)).skipIfOneChild();
 	    shiftExpression.is(additiveExpression, o2n(or(BSL, BSR), additiveExpression)).skipIfOneChild();
