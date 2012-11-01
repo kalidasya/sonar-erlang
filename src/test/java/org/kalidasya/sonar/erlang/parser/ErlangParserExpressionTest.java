@@ -130,7 +130,7 @@ public class ErlangParserExpressionTest {
 	}
 
 	@Test
-	public void recordCreate() {
+	public void recordCreate() {p.setRootRule(g.expression);
 		assertThat(p, parse(code("#Name{Field1=Expr1,Field2=Expr2,FieldK=ExprK}")));
 		assertThat(p, parse(code("#person{name=Name, _='_'}")));
 		assertThat(p, parse(code("A = #Name{Field1=Expr1,Field2=Expr2,FieldK=ExprK}")));
@@ -157,6 +157,55 @@ public class ErlangParserExpressionTest {
 
 	}
 
+	@Test
+	public void ifSimple() {
+		g.branchExps.mock();
+		assertThat(p, parse(code("if branchExps end")));
+	}
+
+	@Test
+	public void ifSimple2() {
+		g.branchExp.mock();
+		assertThat(p, parse(code("if branchExp; branchExp end")));
+	}
+
+	@Test
+	public void ifSimple3() {
+		g.guardSequence.mock();
+		g.assignmentExpression.mock();
+		p.setRootRule(g.ifExpression);
+		assertThat(p,
+				parse(code("if guardSequence -> assignmentExpression, assignmentExpression end")));
+		assertThat(
+				p,
+				parse(code("if guardSequence -> assignmentExpression, assignmentExpression; guardSequence -> assignmentExpression end")));
+	}
+
+	@Test
+	public void ifSimple4() {
+		g.guard.mock();
+		g.assignmentExpression.mock();
+		p.setRootRule(g.ifExpression);
+		assertThat(
+				p,
+				parse(code("if guard; guard; guard -> assignmentExpression, assignmentExpression end")));
+		assertThat(
+				p,
+				parse(code("if guard; guard -> assignmentExpression, assignmentExpression; guard; guard -> assignmentExpression end")));
+	}
+
+	@Test
+	public void ifSimple5() {
+		g.guardExpression.mock();
+		g.assignmentExpression.mock();
+		p.setRootRule(g.ifExpression);
+		assertThat(
+				p,
+				parse(code("if guardExpression, guardExpression; guardExpression; guardExpression, guardExpression ,guardExpression -> assignmentExpression, assignmentExpression end")));
+		assertThat(
+				p,
+				parse(code("if guardExpression; guardExpression, guardExpression -> assignmentExpression, assignmentExpression; guardExpression, guardExpression; guardExpression -> assignmentExpression end")));
+	}
 	
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);

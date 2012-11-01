@@ -66,7 +66,7 @@ public class ErlangGrammar2 extends Grammar {
 	public Rule binaryQualifier;
 	public Rule expressionStatement;
 	public Rule statement;
-	public Rule ifStatement;
+	public Rule ifExpression;
 	public Rule caseExpression;
 	public Rule receiveStatement;
 	public Rule tryStatement;

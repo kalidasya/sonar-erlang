@@ -63,6 +63,8 @@ import static org.kalidasya.sonar.erlang.api.ErlangPunctator.SEMI;
 import static org.kalidasya.sonar.erlang.api.ErlangPunctator.STAR;
 import static org.kalidasya.sonar.erlang.api.ErlangPunctator.QUESTIONMARK;
 import static org.kalidasya.sonar.erlang.api.ErlangPunctator.DIV;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctator.ARROWBACK;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctator.NUMBERSIGN;
 import static org.kalidasya.sonar.erlang.api.ErlangTokenType.NUMERIC_LITERAL;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar2;
@@ -271,11 +273,11 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 	    qualifier.is(
 	    	or(
 	    		and(
-   					IDENTIFIER,
-   					ErlangPunctator.ARROWBACK,
+   					primaryExpression,
+   					ARROWBACK,
    					expression
-   				),
-   				expression
+   				)/*,
+   				expression*/
    			)
 	    );
 	    recordLiteral.is(
@@ -284,21 +286,21 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 	    			recordLiteralHead
 	    		),
 		    	opt(
-		    		ErlangPunctator.LCURLYBRACE,
+		    		LCURLYBRACE,
 		    		opt(
 		    			assignmentExpression,
 		    			o2n(COMMA,
 		    				assignmentExpression
 		    			)
 		    		),
-		    		ErlangPunctator.RCURLYBRACE
+		    		RCURLYBRACE
 		    	)
 		    );
 	    recordLiteralHead.is(
-	    		ErlangPunctator.NUMBERSIGN,
+	    		NUMBERSIGN,
     			IDENTIFIER,
     			o2n(
-    				ErlangPunctator.DOT,
+    				DOT,
     				IDENTIFIER
     			)
 	    );
@@ -331,7 +333,12 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 	   				ErlangPunctator.DOUBLEARROWBACK,
 	   				expression
 	   			),
-	   			expression
+	   			and(
+	   				primaryExpression,
+	   				ARROWBACK,
+	   				expression
+	   			)/*,
+	   			expression*/
 	   		)
 		);
 	    
@@ -345,7 +352,10 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 					), 
 					opt(
 						ErlangPunctator.DIV, 
-						or(NUMERIC_LITERAL, IDENTIFIER)
+						/*
+						 * Hack for things like: 1024:32/little-float
+						 */
+						or(NUMERIC_LITERAL,and(IDENTIFIER, MINUS, IDENTIFIER), IDENTIFIER)
 					)
 				)
 		   	)
@@ -354,6 +364,7 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 	        or(
 	        	recordLiteral,
 	        	macroLiteral,
+	        	ifExpression,
 	        	funExpression,
 	        	caseExpression,
 	            primaryExpression
@@ -430,6 +441,8 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 		caseExpression.is(
 				CASE, expression, OF, patternStatements, END
 			);
+		
+		ifExpression.is(IF, branchExps, END);
 	}
 
 		/**
@@ -447,7 +460,7 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 			or(
 				sendStatement,
 				expressionStatement,
-				ifStatement,
+				//ifStatement,
 				//caseStatement,
 				receiveStatement,
 				funExpression,
@@ -494,7 +507,6 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 			assignmentExpression
 		);
 		
-		ifStatement.is(IF, branchExps, END);
 		branchExps.is(
 			branchExp,
 			o2n(
