@@ -35,7 +35,7 @@ public class ErlangParserFunctionCallExpressionTest {
 		assertThat(p, parse(code("method(\"hello\",234234)")));
 		assertThat(p, parse(code("haho:method(\"hello\")")));
 	}
-
+	
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);
 	}

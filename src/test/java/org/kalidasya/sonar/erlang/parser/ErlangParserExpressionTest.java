@@ -49,6 +49,12 @@ public class ErlangParserExpressionTest {
 		assertThat(p, parse(code("B={2,3}")));
 
 	}
+	
+	@Test
+	public void relationExpression() {
+		assertThat(p, parse(code("A+5>=12")));
+
+	}
 
 	@Test
 	public void listExpression() {

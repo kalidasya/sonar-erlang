@@ -67,7 +67,7 @@ public class ErlangGrammar2 extends Grammar {
 	public Rule expressionStatement;
 	public Rule statement;
 	public Rule ifStatement;
-	public Rule caseStatement;
+	public Rule caseExpression;
 	public Rule receiveStatement;
 	public Rule tryStatement;
 	public Rule branchPatternExps;
@@ -94,7 +94,7 @@ public class ErlangGrammar2 extends Grammar {
 	public Rule recordLiteral;
 	public Rule recordLiteralHead;
 	public Rule macroLiteral;
-	
+	public Rule otherArithmeticExpression;
 	
 	@Override
 	public Rule getRootRule() {

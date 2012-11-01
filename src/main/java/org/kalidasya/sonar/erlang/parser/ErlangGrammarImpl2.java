@@ -29,6 +29,8 @@ import static org.kalidasya.sonar.erlang.api.ErlangKeyword.ORELSE;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.RECEIVE;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.TRY;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.XOR;
+import static org.kalidasya.sonar.erlang.api.ErlangKeyword.BNOT;
+import static org.kalidasya.sonar.erlang.api.ErlangKeyword.REM;
 import static org.kalidasya.sonar.erlang.api.ErlangPunctator.ARROW;
 import static org.kalidasya.sonar.erlang.api.ErlangPunctator.BINEND;
 import static org.kalidasya.sonar.erlang.api.ErlangPunctator.BINSTART;
@@ -60,6 +62,7 @@ import static org.kalidasya.sonar.erlang.api.ErlangPunctator.RPARENTHESIS;
 import static org.kalidasya.sonar.erlang.api.ErlangPunctator.SEMI;
 import static org.kalidasya.sonar.erlang.api.ErlangPunctator.STAR;
 import static org.kalidasya.sonar.erlang.api.ErlangPunctator.QUESTIONMARK;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctator.DIV;
 import static org.kalidasya.sonar.erlang.api.ErlangTokenType.NUMERIC_LITERAL;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar2;
@@ -67,10 +70,13 @@ import org.kalidasya.sonar.erlang.api.ErlangKeyword;
 import org.kalidasya.sonar.erlang.api.ErlangPunctator;
 import org.kalidasya.sonar.erlang.api.ErlangTokenType;
 
+import com.sonar.sslr.impl.matcher.GrammarFunctions;
+
 public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 
 
 	public ErlangGrammarImpl2() {
+		GrammarFunctions.enableMemoizationOfMatchesForAllRules(this);
 		expressions();
 		statements();
 		module();
@@ -133,7 +139,7 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 			ErlangPunctator.LPARENTHESIS, 
 			or(
 				and(IDENTIFIER, ErlangPunctator.COMMA, IDENTIFIER),
-				and(funcDecl, ErlangPunctator.COMMA, expression)
+				and(funcDecl, ErlangPunctator.COMMA, statement)
 			),
 			ErlangPunctator.RPARENTHESIS, 
 			ErlangPunctator.DOT
@@ -349,6 +355,7 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 	        	recordLiteral,
 	        	macroLiteral,
 	        	funExpression,
+	        	caseExpression,
 	            primaryExpression
 	        )).skipIfOneChild();
 	    /**
@@ -365,8 +372,10 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 	        callExpression,
 	        and(NOT, unaryExpression)
 	        )).skipIfOneChild();
-	    multiplicativeExpression.is(unaryExpression, o2n(or(STAR, ErlangPunctator.DIV), unaryExpression)).skipIfOneChild();
+	    otherArithmeticExpression.is(unaryExpression, o2n(or(BNOT, ErlangKeyword.DIV, REM), unaryExpression)).skipIfOneChild();
+	    multiplicativeExpression.is(otherArithmeticExpression, o2n(or(STAR, DIV), otherArithmeticExpression)).skipIfOneChild();
 	    additiveExpression.is(multiplicativeExpression, o2n(or(PLUS, MINUS), multiplicativeExpression)).skipIfOneChild();
+	    
 	    shiftExpression.is(additiveExpression, o2n(or(BSL, BSR), additiveExpression)).skipIfOneChild();
 
 	    relationalExpression.is(shiftExpression, o2n(or(LT, GT, LE, GE), shiftExpression)).skipIfOneChild();
@@ -417,6 +426,10 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 		functionDeclarationNoName.is(
 			arguments, opt(guardSequenceStart), ARROW, statements
 		);
+		
+		caseExpression.is(
+				CASE, expression, OF, patternStatements, END
+			);
 	}
 
 		/**
@@ -435,7 +448,7 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 				sendStatement,
 				expressionStatement,
 				ifStatement,
-				caseStatement,
+				//caseStatement,
 				receiveStatement,
 				funExpression,
 				tryStatement,
@@ -447,10 +460,6 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 			o2n(COMMA, statement)
 		);
 		expressionStatement.is(expression);
-		
-		caseStatement.is(
-			CASE, expression, OF, patternStatements, END
-		);		
 		
 		patternStatements.is(
 			patternStatement,

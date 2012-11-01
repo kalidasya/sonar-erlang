@@ -24,31 +24,31 @@ public class ErlangParserCaseStatementTest {
 
 	@Before
 	public void init() {
-		p.setRootRule(g.statement);
+		p.setRootRule(g.caseExpression);
 	}
 
 
 	@Test
 	public void caseSimple1() {
-		g.expression.mock();
+		g.assignmentExpression.mock();
 		g.patternStatements.mock();
-		assertThat(p, parse(code("case expression of patternStatements end")));
+		assertThat(p, parse(code("case assignmentExpression of patternStatements end")));
 	}
 
 	@Test
 	public void caseSimple2() {
-		g.expression.mock();
+		g.assignmentExpression.mock();
 		g.patternStatement.mock();
-		assertThat(p, parse(code("case expression of patternStatement end")));
-		assertThat(p, parse(code("case expression of patternStatement; patternStatement end")));
+		assertThat(p, parse(code("case assignmentExpression of patternStatement end")));
+		assertThat(p, parse(code("case assignmentExpression of patternStatement; patternStatement end")));
 	}
 	
 	@Test
 	public void caseSimple3() {
-		g.expression.mock();
+		g.assignmentExpression.mock();
 		g.patternStatement.mock();
-		assertThat(p, parse(code("case expression of patternStatement end")));
-		assertThat(p, parse(code("case expression of patternStatement; patternStatement end")));
+		assertThat(p, parse(code("case assignmentExpression of patternStatement end")));
+		assertThat(p, parse(code("case assignmentExpression of patternStatement; patternStatement end")));
 	}
 	
 	private static String code(String... lines) {

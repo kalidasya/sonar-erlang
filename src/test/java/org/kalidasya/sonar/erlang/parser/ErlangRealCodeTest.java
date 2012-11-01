@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kalidasya.sonar.erlang.ErlangConfiguration;
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
+import org.kalidasya.sonar.erlang.api.ErlangGrammar2;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
@@ -22,10 +23,10 @@ import com.sonar.sslr.impl.events.ExtendedStackTraceStream;
 
 public class ErlangRealCodeTest {
 	ExtendedStackTrace listener = new ExtendedStackTrace();
-	Parser<ErlangGrammar> p = ErlangParser.create(new ErlangConfiguration(
+	Parser<ErlangGrammar2> p = ErlangParser2.create(new ErlangConfiguration(
 			Charsets.UTF_8), listener);
 
-	ErlangGrammar g = p.getGrammar();
+	ErlangGrammar2 g = p.getGrammar();
 
 	@Before
 	public void init() {
