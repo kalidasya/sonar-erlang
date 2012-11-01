@@ -89,6 +89,11 @@ public class ErlangGrammar2 extends Grammar {
 	public Rule catchPatternStatement;
 	public Rule catchPatternStatements;
 	public Rule blockStatement;
+	public Rule recordCreateLiteral;
+	public Rule recordAccLiteral;
+	public Rule recordLiteral;
+	public Rule recordLiteralHead;
+	public Rule macroLiteral;
 	
 	
 	@Override

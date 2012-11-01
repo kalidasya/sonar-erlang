@@ -17,8 +17,8 @@ import com.sonar.sslr.impl.events.ExtendedStackTraceStream;
 
 public class ErlangParserExpressionTest {
 	ExtendedStackTrace listener = new ExtendedStackTrace();
-	Parser<ErlangGrammar2> p = ErlangParser2.create(new ErlangConfiguration(
-			Charsets.UTF_8), listener);
+	Parser<ErlangGrammar2> p = ErlangParser2.create(new ErlangConfiguration(Charsets.UTF_8),
+			listener);
 
 	ErlangGrammar2 g = p.getGrammar();
 
@@ -58,7 +58,9 @@ public class ErlangParserExpressionTest {
 		assertThat(p, parse(code("[c|[]]")));
 		assertThat(p, parse(code("[a|[b|[c|[]]]]")));
 		assertThat(p, parse(code("[a,2,{c,4}]")));
-		assertThat(p, parse(code("[Name,proplists:get_value(description,Spec,[])|proplists:get_value(keywords,Spec,[])]")));
+		assertThat(
+				p,
+				parse(code("[Name,proplists:get_value(description,Spec,[])|proplists:get_value(keywords,Spec,[])]")));
 
 	}
 
@@ -73,10 +75,8 @@ public class ErlangParserExpressionTest {
 		assertThat(p, parse(code("[X*2 || X <- [1,2,3]]")));
 		assertThat(p, parse(code("[X*2 || X <- [1,2,3]] ++ [7,8,9]")));
 		assertThat(p, parse(code("[X*2 || X <- [1,2,3]] -- [7,8,9]")));
-		assertThat(p,
-				parse(code("[10, 23] -- [X*2 || X <- [1,2,3]] ++ [7,8,9]")));
-		assertThat(p,
-				parse(code("[756, 877] ++ [X*2 || X <- [1,2,3]] -- [7,8,9]")));
+		assertThat(p, parse(code("[10, 23] -- [X*2 || X <- [1,2,3]] ++ [7,8,9]")));
+		assertThat(p, parse(code("[756, 877] ++ [X*2 || X <- [1,2,3]] -- [7,8,9]")));
 	}
 
 	@Test
@@ -112,9 +112,7 @@ public class ErlangParserExpressionTest {
 		assertThat(p, parse(code("method(12)")));
 		assertThat(p, parse(code("method(\"hello\",234234)")));
 		assertThat(p, parse(code("haho:method(\"hello\")")));
-		assertThat(
-				p,
-				parse(code("io:format(\"assert error in module ~p on line ~p~n\")")));
+		assertThat(p, parse(code("io:format(\"assert error in module ~p on line ~p~n\")")));
 	}
 
 	@Test
@@ -125,12 +123,46 @@ public class ErlangParserExpressionTest {
 		assertThat(p, parse(code("catch throw(hello)")));
 	}
 
+	@Test
+	public void recordCreate() {
+		assertThat(p, parse(code("#Name{Field1=Expr1,Field2=Expr2,FieldK=ExprK}")));
+		assertThat(p, parse(code("#person{name=Name, _='_'}")));
+		assertThat(p, parse(code("A = #Name{Field1=Expr1,Field2=Expr2,FieldK=ExprK}")));
+		assertThat(p, parse(code("S = #person{name=Name, _='_'}")));
+		assertThat(p, parse(code("User#user{ibuttons = User#user.ibuttons ++ [IButton]}")));
+	}
+
+	@Test
+	public void recordAccess() {
+		assertThat(p, parse(code("#person.name")));
+		assertThat(p, parse(code("Expr#Name.Field")));
+		assertThat(p, parse(code("N2#nrec2.nrec1#nrec1.nrec0.nrec00#nrec0.name.first")));
+		assertThat(p, parse(code("N2#nrec2.nrec1#nrec1.nrec0#nrec0{name = \"nested0a\"}")));
+
+	}
+
+	@Test
+	public void macroUse() {
+		assertThat(p, parse(code("?TIMEOUT")));
+		assertThat(p, parse(code("?MACRO1(a, b)")));
+		assertThat(p, parse(code("?MACRO1(X, 123)")));
+		assertThat(p, parse(code("server:call(refserver, Request, ?TIMEOUT)")));
+		assertThat(p, parse(code("server:call(refserver, Request, ?MACRO1(a, b))")));
+
+	}
+
+	
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);
 	}
 
 	@After
 	public void log() {
-		ExtendedStackTraceStream.print(listener, System.out);
+		try {
+			ExtendedStackTraceStream.print(listener, System.out);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
