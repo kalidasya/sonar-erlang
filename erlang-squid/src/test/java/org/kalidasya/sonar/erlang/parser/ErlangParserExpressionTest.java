@@ -7,7 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.kalidasya.sonar.erlang.ErlangConfiguration;
-import org.kalidasya.sonar.erlang.api.ErlangGrammar2;
+import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
@@ -17,10 +17,10 @@ import com.sonar.sslr.impl.events.ExtendedStackTraceStream;
 
 public class ErlangParserExpressionTest {
 	ExtendedStackTrace listener = new ExtendedStackTrace();
-	Parser<ErlangGrammar2> p = ErlangParser2.create(new ErlangConfiguration(Charsets.UTF_8),
+	Parser<ErlangGrammar> p = ErlangParser.create(new ErlangConfiguration(Charsets.UTF_8),
 			listener);
 
-	ErlangGrammar2 g = p.getGrammar();
+	ErlangGrammar g = p.getGrammar();
 
 	@Before
 	public void init() {
