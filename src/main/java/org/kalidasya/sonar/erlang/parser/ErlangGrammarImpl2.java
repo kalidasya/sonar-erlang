@@ -78,11 +78,11 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 
 
 	public ErlangGrammarImpl2() {
-		GrammarFunctions.enableMemoizationOfMatchesForAllRules(this);
 		expressions();
 		statements();
 		module();
 		functions();
+		GrammarFunctions.enableMemoizationOfMatchesForAllRules(this);
 	}
 	
 	private void module() {
@@ -101,65 +101,108 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 					exportAttr,
 					compileAttr,
 					defineAttr,
+					flowControlAttr,
 					typeOrFunctionSpec,
 					genericAttr
 				)
 			)
 		);
 		
-		moduleAttr.is(
-			ErlangPunctator.MINUS,
-			"module",
-			ErlangPunctator.LPARENTHESIS, 
+		flowControlAttr.is(
+				or(
+					ifdefAttr,
+					ifndefAttr
+				),
+				opt(elseAttr),
+				endifAttr
+			);
+
+		ifdefAttr.is(
+				MINUS,
+				"ifdef",
+				LPARENTHESIS,
+				IDENTIFIER,
+				RPARENTHESIS,
+				DOT,
+				moduleAttributes
+			);
+		
+		ifndefAttr.is(
+			MINUS,
+			"ifndef",
+			LPARENTHESIS,
 			IDENTIFIER,
-			ErlangPunctator.RPARENTHESIS,
-			ErlangPunctator.DOT
+			RPARENTHESIS,
+			DOT,
+			moduleAttributes
+		);
+		
+		elseAttr.is(
+			MINUS,
+			"else",
+			DOT,
+			moduleAttributes
+		);
+		
+		endifAttr.is(
+			MINUS,
+			"endif",
+			DOT
+		);
+		
+		moduleAttr.is(
+			MINUS,
+			"module",
+			LPARENTHESIS, 
+			IDENTIFIER,
+			RPARENTHESIS,
+			DOT
 		);
 		exportAttr.is(
-			ErlangPunctator.MINUS,
+			MINUS,
 			"export",
-			ErlangPunctator.LPARENTHESIS, 
+			LPARENTHESIS, 
 			funcExport,
-			ErlangPunctator.RPARENTHESIS,
-			ErlangPunctator.DOT
+			RPARENTHESIS,
+			DOT
 		);
 		compileAttr.is(
-			ErlangPunctator.MINUS,
+			MINUS,
 			"compile",
-			ErlangPunctator.LPARENTHESIS, 
+			LPARENTHESIS, 
 			or(
 				LITERAL,
 				IDENTIFIER
 			),
-			ErlangPunctator.RPARENTHESIS, 
-			ErlangPunctator.DOT
+			RPARENTHESIS, 
+			DOT
 		);
 		
 		defineAttr.is(
-			ErlangPunctator.MINUS,
+			MINUS,
 			"define",
-			ErlangPunctator.LPARENTHESIS, 
+			LPARENTHESIS, 
 			or(
-				and(IDENTIFIER, ErlangPunctator.COMMA, IDENTIFIER),
-				and(funcDecl, ErlangPunctator.COMMA, statement)
+				and(IDENTIFIER, COMMA, IDENTIFIER),
+				and(funcDecl, COMMA, statement)
 			),
-			ErlangPunctator.RPARENTHESIS, 
-			ErlangPunctator.DOT
+			RPARENTHESIS, 
+			DOT
 		);
 		
 		genericAttr.is(
-				ErlangPunctator.MINUS, 
+				MINUS, 
 				IDENTIFIER, 
-				ErlangPunctator.LPARENTHESIS, 
+				LPARENTHESIS, 
 				or(
 					LITERAL,
 					IDENTIFIER
 				),
-				ErlangPunctator.RPARENTHESIS, 
-			ErlangPunctator.DOT
+				RPARENTHESIS, 
+			DOT
 		);
 		typeOrFunctionSpec.is(
-			ErlangPunctator.MINUS, 
+			MINUS, 
 			or(
 				"type",
 				"spec"
@@ -167,34 +210,34 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 			funcDecl,
 			or(
 				and(
-					ErlangPunctator.COLON,
-					ErlangPunctator.COLON,
+					COLON,
+					COLON,
 					funcDecl,
 					o2n(
-						ErlangPunctator.PIPE,
+						PIPE,
 						funcDecl
 					)
 				),
 				and(
-					ErlangPunctator.ARROW,
+					ARROW,
 					funcDecl
 				)
 			),
-			ErlangPunctator.DOT
+			DOT
 		);
 		//TODO: is it possible to have something like: -export().?
 		funcExport.is(
 			or(
 				and(
-					ErlangPunctator.LBRACKET,
+					LBRACKET,
 					o2n(
 						funcArity,
 						o2n(
-							ErlangPunctator.COMMA,
+							COMMA,
 							funcArity
 						)
 					),
-					ErlangPunctator.RBRACKET
+					RBRACKET
 				), 
 				funcArity
 			)
@@ -206,13 +249,13 @@ public class ErlangGrammarImpl2 extends ErlangGrammar2 {
 		functionDeclaration.is(
 			functionClause, 
 			o2n(
-				ErlangPunctator.SEMI,
+				SEMI,
 				functionClause
 			), 
 			
-			ErlangPunctator.DOT
+			DOT
 		);
-		functionClause.is(clauseHead, ErlangPunctator.ARROW, clauseBody);
+		functionClause.is(clauseHead, ARROW, clauseBody);
 		clauseHead.is(
 			funcDecl,
 			opt(guardSequenceStart)

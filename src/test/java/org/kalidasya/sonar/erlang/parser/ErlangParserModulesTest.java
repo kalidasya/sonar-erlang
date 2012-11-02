@@ -220,6 +220,18 @@ public class ErlangParserModulesTest {
 		assertThat(p, parse(code("-module(m).", "-define(ASSERT_EQ(A, B), if A =:= B -> ok; true -> io:format(\"assert error in module ~p on line ~p~n\", [?MODULE, ?LINE]) end).",
 				"dodo(A) ->","{a, node()}.")));
 	}
+	
+	@Test
+	public void flowControlMacros(){
+		assertThat(p, parse(code(
+			"-module(m).", 
+			"-ifdef(debug).",
+			"-define(LOG(X), io:format(\"{~p,~p}: ~p~n\", [?MODULE,?LINE,X])).",
+			"-else.",
+			"-define(LOG(X), true).",
+			"-endif.",
+			"dodo(A) ->","{a, node()}.")));
+	}
 
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);
