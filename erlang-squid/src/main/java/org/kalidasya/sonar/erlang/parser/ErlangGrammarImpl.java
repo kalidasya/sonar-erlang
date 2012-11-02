@@ -50,51 +50,53 @@ import static org.kalidasya.sonar.erlang.api.ErlangKeyword.TRY;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.XOR;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.BNOT;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.REM;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.ARROW;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.BINEND;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.BINSTART;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.COLON;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.COMMA;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.DOT;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.EQUAL;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.EQUAL2;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.EXCLAMATION;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.GE;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.GT;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.LBRACKET;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.LCURLYBRACE;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.LE;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.LISTCOMP;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.LPARENTHESIS;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.LT;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.MATCHOP;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.MINUS;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.MINUSMINUS;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.NOTEQUAL;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.NOTEQUAL2;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.PIPE;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.PLUS;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.PLUSPLUS;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.RBRACKET;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.RCURLYBRACE;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.RPARENTHESIS;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.SEMI;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.STAR;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.QUESTIONMARK;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.DIV;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.ARROWBACK;
-import static org.kalidasya.sonar.erlang.api.ErlangPunctator.NUMBERSIGN;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.ARROW;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.BINEND;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.BINSTART;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.COLON;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.COMMA;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.DOT;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.EQUAL;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.EQUAL2;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.EXCLAMATION;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.GE;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.GT;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.LBRACKET;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.LCURLYBRACE;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.LE;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.LISTCOMP;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.LPARENTHESIS;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.LT;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.MATCHOP;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.MINUS;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.MINUSMINUS;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.NOTEQUAL;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.NOTEQUAL2;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.PIPE;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.PLUS;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.PLUSPLUS;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.RBRACKET;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.RCURLYBRACE;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.RPARENTHESIS;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.SEMI;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.STAR;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.QUESTIONMARK;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.DIV;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.ARROWBACK;
+import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.NUMBERSIGN;
 import static org.kalidasya.sonar.erlang.api.ErlangTokenType.NUMERIC_LITERAL;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.kalidasya.sonar.erlang.api.ErlangKeyword;
-import org.kalidasya.sonar.erlang.api.ErlangPunctator;
+import org.kalidasya.sonar.erlang.api.ErlangPunctuator;
 import org.kalidasya.sonar.erlang.api.ErlangTokenType;
 
 import com.sonar.sslr.impl.matcher.GrammarFunctions;
 
 public class ErlangGrammarImpl extends ErlangGrammar {
 
+
+	
 
 	public ErlangGrammarImpl() {
 		expressions();
@@ -122,9 +124,35 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 					defineAttr,
 					flowControlAttr,
 					typeOrFunctionSpec,
+					recordAttr,
 					genericAttr
 				)
 			)
+		);
+		
+		recordAttr.is(
+			MINUS,
+			"record",
+			LPARENTHESIS,
+			IDENTIFIER,
+			COMMA,
+			LCURLYBRACE,
+			and(
+				IDENTIFIER,
+				opt(MATCHOP,
+				callExpression)
+			),
+			o2n(
+				COMMA,
+				and(
+					IDENTIFIER,
+					opt(MATCHOP,
+					callExpression)
+				)	
+			),
+			RCURLYBRACE,
+			RPARENTHESIS,
+			DOT
 		);
 		
 		flowControlAttr.is(
@@ -286,10 +314,10 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		funcArity.is(
 			opt(
 				IDENTIFIER,
-				ErlangPunctator.COLON
+				ErlangPunctuator.COLON
 			),
 			IDENTIFIER,
-			ErlangPunctator.DIV,
+			ErlangPunctuator.DIV,
 			ErlangTokenType.NUMERIC_LITERAL
 		);
 
@@ -392,7 +420,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		   	or(
 		   		and(
 	   				binaryLiteral,
-	   				ErlangPunctator.DOUBLEARROWBACK,
+	   				ErlangPunctuator.DOUBLEARROWBACK,
 	   				expression
 	   			),
 	   			and(
@@ -413,7 +441,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 						or(NUMERIC_LITERAL,	IDENTIFIER)
 					), 
 					opt(
-						ErlangPunctator.DIV, 
+						ErlangPunctuator.DIV, 
 						/*
 						 * Hack for things like: 1024:32/little-float
 						 */
@@ -572,14 +600,14 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		branchExps.is(
 			branchExp,
 			o2n(
-				ErlangPunctator.SEMI,
+				ErlangPunctuator.SEMI,
 				branchExp
 			)
 		);
 		
 		branchExp.is(
 			guardSequence,
-			ErlangPunctator.ARROW,
+			ErlangPunctuator.ARROW,
 			statements
 		);
 		
@@ -591,14 +619,14 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		guardSequence.is(
 			guard,
 			o2n(
-				ErlangPunctator.SEMI,
+				ErlangPunctuator.SEMI,
 				guard
 			)
 		);
 		guard.is(
 			guardExpression,
 			o2n(
-				ErlangPunctator.COMMA, 
+				ErlangPunctuator.COMMA, 
 				guardExpression
 			)
 		);

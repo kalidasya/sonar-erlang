@@ -26,7 +26,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.kalidasya.sonar.erlang.ErlangConfiguration;
 import org.kalidasya.sonar.erlang.api.ErlangKeyword;
-import org.kalidasya.sonar.erlang.api.ErlangPunctator;
+import org.kalidasya.sonar.erlang.api.ErlangPunctuator;
 import org.kalidasya.sonar.erlang.api.ErlangTokenType;
 
 import com.sonar.sslr.api.GenericTokenType;
@@ -103,11 +103,11 @@ public class ErlangLexerTest {
 
 	  @Test
 	  public void punctator() {
-	    assertThat(lexer.lex("$"), hasToken("$", ErlangPunctator.DOLLAR));
-	    assertThat(lexer.lex("'"), hasToken("'", ErlangPunctator.APOSTROPHE));
-	    assertThat(lexer.lex("."), hasToken(".", ErlangPunctator.DOT));
-	    assertThat(lexer.lex(","), hasToken(",", ErlangPunctator.COMMA));
-	    assertThat(lexer.lex("("), hasToken("(", ErlangPunctator.LPARENTHESIS));
+	    assertThat(lexer.lex("$"), hasToken("$", ErlangPunctuator.DOLLAR));
+	    assertThat(lexer.lex("'"), hasToken("'", ErlangPunctuator.APOSTROPHE));
+	    assertThat(lexer.lex("."), hasToken(".", ErlangPunctuator.DOT));
+	    assertThat(lexer.lex(","), hasToken(",", ErlangPunctuator.COMMA));
+	    assertThat(lexer.lex("("), hasToken("(", ErlangPunctuator.LPARENTHESIS));
 	  }
 
 	  @Test
@@ -119,7 +119,7 @@ public class ErlangLexerTest {
 		  assertThat(lexer.lex("ASDodule"), hasToken("ASDodule", GenericTokenType.IDENTIFIER));
 		  assertThat(lexer.lex("A"), hasToken("A", GenericTokenType.IDENTIFIER));
 		  assertThat(lexer.lex("Aodule"), hasToken("Aodule", GenericTokenType.IDENTIFIER));
-		  assertThat(lexer.lex("1."), Matchers.allOf(hasToken("1", ErlangTokenType.NUMERIC_LITERAL),hasToken(".", ErlangPunctator.DOT)));
+		  assertThat(lexer.lex("1."), Matchers.allOf(hasToken("1", ErlangTokenType.NUMERIC_LITERAL),hasToken(".", ErlangPunctuator.DOT)));
 		 // assertThat(lexer.lex("io:format(\"~s~n\",[agner_spec:property_to_list(lists:keyfind(list_to_atom(Property), 1, Spec))])"), hasToken("1", ErlangTokenType.NUMERIC_LITERAL));
 		  //assertThat(lexer.lex("-module(m).\ndodo() ->{maci}."), hasToken("1", ErlangTokenType.NUMERIC_LITERAL));
 		  

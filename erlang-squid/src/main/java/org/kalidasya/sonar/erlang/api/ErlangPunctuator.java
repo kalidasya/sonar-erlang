@@ -22,7 +22,7 @@ package org.kalidasya.sonar.erlang.api;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.TokenType;
 
-public enum ErlangPunctator implements TokenType {
+public enum ErlangPunctuator implements TokenType {
 	ARROW("->"),
 	ARROWBACK("<-"),
 	DOUBLEARROWBACK("<="),
@@ -64,7 +64,7 @@ public enum ErlangPunctator implements TokenType {
 	
 	private final String value;
 	
-	private ErlangPunctator(String word){
+	private ErlangPunctuator(String word){
 		this.value = word;
 	}
 	

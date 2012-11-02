@@ -119,6 +119,7 @@ public class ErlangGrammar extends Grammar {
 	public Rule elseAttr;
 	public Rule endifAttr;
 	public Rule flowControlAttr;
+	public Rule recordAttr;
 	
 	@Override
 	public Rule getRootRule() {

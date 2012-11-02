@@ -28,7 +28,7 @@ import static com.sonar.sslr.impl.channel.RegexpChannelBuilder.or;
 
 import org.kalidasya.sonar.erlang.ErlangConfiguration;
 import org.kalidasya.sonar.erlang.api.ErlangKeyword;
-import org.kalidasya.sonar.erlang.api.ErlangPunctator;
+import org.kalidasya.sonar.erlang.api.ErlangPunctuator;
 
 import com.sonar.sslr.impl.Lexer;
 import com.sonar.sslr.impl.channel.BlackHoleChannel;
@@ -53,7 +53,7 @@ public final class ErlangLexer {
 				.withChannel(regexp(NUMERIC_LITERAL, "[0-9]++"))
 				.withChannel(regexp(NUMERIC_LITERAL, "\\$[\\x00-\\x7F]"))
 				.withChannel(new IdentifierAndKeywordChannel(or("('[^'\n\r]+')","^(?!\\$)(\\p{javaJavaIdentifierStart}++\\p{javaJavaIdentifierPart}*+)"), true, ErlangKeyword.values()))
-				.withChannel(new PunctuatorChannel(ErlangPunctator.values()))
+				.withChannel(new PunctuatorChannel(ErlangPunctuator.values()))
 				.withChannel(new UnknownCharacterChannel(true))
 				.build();
 	}
