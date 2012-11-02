@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.kalidasya.sonar.erlang.ErlangConfiguration;
 import org.kalidasya.sonar.erlang.api.ErlangKeyword;
-import org.kalidasya.sonar.erlang.parser.ErlangParser;
+import org.kalidasya.sonar.erlang.parser.ErlangParser2;
 import org.sonar.colorizer.CDocTokenizer;
 import org.sonar.colorizer.CppDocTokenizer;
 import org.sonar.colorizer.JavadocTokenizer;
@@ -22,7 +22,7 @@ public final class ErlangToolkit {
 	
 	public static void main(String[] args) {
 	    System.setProperty("com.apple.mrj.application.apple.menu.about.name", "SSDK");
-	    new Toolkit(ErlangParser.create(new ErlangConfiguration(Charset.defaultCharset())), getTokenizers(), "SSLR JavaScript Toolkit").run();
+	    new Toolkit(ErlangParser2.create(new ErlangConfiguration(Charset.defaultCharset())), getTokenizers(), "SSLR Erlang Toolkit").run();
 	 }
 	
 	public static List<Tokenizer> getTokenizers() {
