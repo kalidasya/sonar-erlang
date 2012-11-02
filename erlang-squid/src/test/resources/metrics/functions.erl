@@ -30,9 +30,9 @@ handle_cast(_Msg, State) ->
 %Comment
 handle_info(start, S = #state{re=Re, ref=Ref}) ->
     {ok, Bin} = file:read_file(S#state.file),
-    Count = erlcount_lib:regex_count(Re, Bin),
+    Count = erlcount_lib:regex_count(Re, Bin), %Comment4
     erlcount_dispatch:complete(S#state.dispatcher, Re, Ref, Count),
-    {stop, normal, S}.
+    {stop, normal, S}. %NOSONAR mizu?
 
 %%Comment2
 %---------------------------------------

@@ -20,7 +20,10 @@ import com.sonar.sslr.squid.SourceCodeBuilderCallback;
 import com.sonar.sslr.squid.SourceCodeBuilderVisitor;
 import com.sonar.sslr.squid.SquidAstVisitor;
 import com.sonar.sslr.squid.SquidAstVisitorContextImpl;
+import com.sonar.sslr.squid.metrics.CommentsVisitor;
 import com.sonar.sslr.squid.metrics.CounterVisitor;
+import com.sonar.sslr.squid.metrics.LinesOfCodeVisitor;
+import com.sonar.sslr.squid.metrics.LinesVisitor;
 
 public final class ErlangAstScanner {
 
@@ -45,7 +48,8 @@ public final class ErlangAstScanner {
 		return (SourceFile) sources.iterator().next();
 	}
 
-	public static AstScanner<ErlangGrammar> create(ErlangConfiguration conf, SquidAstVisitor<ErlangGrammar>... visitors) {
+	public static AstScanner<ErlangGrammar> create(ErlangConfiguration conf,
+			SquidAstVisitor<ErlangGrammar>... visitors) {
 		final SquidAstVisitorContextImpl<ErlangGrammar> context = new SquidAstVisitorContextImpl<ErlangGrammar>(
 				new SourceProject("JavaScript Project"));
 		final Parser<ErlangGrammar> parser = ErlangParser.create(conf);
@@ -82,31 +86,26 @@ public final class ErlangAstScanner {
 				.subscribeTo(parser.getGrammar().functionDeclaration).build());
 
 		/* Metrics */
+
+		builder.withSquidAstVisitor(new LinesVisitor<ErlangGrammar>(
+				ErlangMetric.LINES));
+		builder.withSquidAstVisitor(new LinesOfCodeVisitor<ErlangGrammar>(
+				ErlangMetric.LINES_OF_CODE));
+
+		builder.withSquidAstVisitor(CommentsVisitor.<ErlangGrammar> builder()
+				.withCommentMetric(ErlangMetric.COMMENT_LINES)
+				.withBlankCommentMetric(ErlangMetric.COMMENT_BLANK_LINES)
+				.withNoSonar(true).withIgnoreHeaderComment(false).build());
+		builder.withSquidAstVisitor(CounterVisitor
+				.<ErlangGrammar> builder()
+				.setMetricDef(ErlangMetric.STATEMENTS)
+				.subscribeTo(parser.getGrammar().sendStatement,
+						parser.getGrammar().receiveStatement,
+						parser.getGrammar().expressionStatement,
+						parser.getGrammar().tryStatement,
+						parser.getGrammar().blockStatement).build());
+
 		/*
-		 * builder.withSquidAstVisitor(new
-		 * LinesVisitor<ErlangGrammar>(ErlangMetric.LINES));
-		 * builder.withSquidAstVisitor(new
-		 * LinesOfCodeVisitor<ErlangGrammar>(ErlangMetric.LINES_OF_CODE));
-		 * builder.withSquidAstVisitor(CommentsVisitor.<ErlangGrammar>
-		 * builder().withCommentMetric(ErlangMetric.COMMENT_LINES)
-		 * .withBlankCommentMetric(ErlangMetric.COMMENT_BLANK_LINES)
-		 * .withNoSonar(true)
-		 * .withIgnoreHeaderComment(conf.getIgnoreHeaderComments()) .build());
-		 * builder.withSquidAstVisitor(CounterVisitor.<ErlangGrammar> builder()
-		 * .setMetricDef(ErlangMetric.STATEMENTS) .subscribeTo(
-		 * parser.getGrammar().variableStatement,
-		 * parser.getGrammar().emptyStatement,
-		 * parser.getGrammar().expressionStatement,
-		 * parser.getGrammar().ifStatement,
-		 * parser.getGrammar().iterationStatement,
-		 * parser.getGrammar().continueStatement,
-		 * parser.getGrammar().breakStatement,
-		 * parser.getGrammar().returnStatement,
-		 * parser.getGrammar().withStatement,
-		 * parser.getGrammar().switchStatement,
-		 * parser.getGrammar().throwStatement, parser.getGrammar().tryStatement,
-		 * parser.getGrammar().debuggerStatement) .build());
-		 * 
 		 * AstNodeType[] complexityAstNodeType = new AstNodeType[] { // Entry
 		 * points parser.getGrammar().functionDeclaration,
 		 * parser.getGrammar().functionExpression,
@@ -119,9 +118,9 @@ public final class ErlangAstScanner {
 		 * parser.getGrammar().throwStatement,
 		 * 
 		 * // Expressions ErlangPunctuator.QUERY, ErlangPunctuator.ANDAND,
-		 * ErlangPunctuator.OROR };
-		 * builder.withSquidAstVisitor(ComplexityVisitor.<ErlangGrammar>
-		 * builder() .setMetricDef(ErlangMetric.COMPLEXITY)
+		 * ErlangPunctuator.OROR }; builder
+		 * .withSquidAstVisitor(ComplexityVisitor.<ErlangGrammar > builder()
+		 * .setMetricDef(ErlangMetric.COMPLEXITY)
 		 * .subscribeTo(complexityAstNodeType) .build());
 		 */
 

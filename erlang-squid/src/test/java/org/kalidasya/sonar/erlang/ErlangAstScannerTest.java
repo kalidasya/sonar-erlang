@@ -47,16 +47,16 @@ public class ErlangAstScannerTest {
 
   @Test
   public void comments() {
-    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/comments.js"));
-    assertThat(file.getInt(ErlangMetric.COMMENT_BLANK_LINES)).isEqualTo(4);
-    assertThat(file.getInt(ErlangMetric.COMMENT_LINES)).isEqualTo(3);
-    assertThat(file.getNoSonarTagLines()).contains(10);
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/functions.erl"));
+    assertThat(file.getInt(ErlangMetric.COMMENT_BLANK_LINES)).isEqualTo(6);
+    assertThat(file.getInt(ErlangMetric.COMMENT_LINES)).isEqualTo(5);
+    assertThat(file.getNoSonarTagLines()).contains(35);
     assertThat(file.getNoSonarTagLines().size()).isEqualTo(1);
   }
 
   @Test
   public void lines() {
-    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/lines.js"));
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/lines.erl"));
     assertThat(file.getInt(ErlangMetric.LINES)).isEqualTo(5);
   }
 
@@ -66,10 +66,13 @@ public class ErlangAstScannerTest {
     assertThat(file.getInt(ErlangMetric.LINES_OF_CODE)).isEqualTo(3);
   }
 
+  /**
+   * TODO: create proper test file
+   */
   @Test
   public void statements() {
-    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/statements.js"));
-    assertThat(file.getInt(ErlangMetric.STATEMENTS)).isEqualTo(16);
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/functions.erl"));
+    assertThat(file.getInt(ErlangMetric.STATEMENTS)).isEqualTo(11);
   }
 
   @Test

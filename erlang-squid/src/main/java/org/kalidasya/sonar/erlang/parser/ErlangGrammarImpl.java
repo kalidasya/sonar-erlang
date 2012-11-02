@@ -553,7 +553,6 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				//ifStatement,
 				//caseStatement,
 				receiveStatement,
-				funExpression,
 				tryStatement,
 				blockStatement
 			)
