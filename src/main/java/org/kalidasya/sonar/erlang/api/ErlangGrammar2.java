@@ -95,6 +95,11 @@ public class ErlangGrammar2 extends Grammar {
 	public Rule recordLiteralHead;
 	public Rule macroLiteral;
 	public Rule otherArithmeticExpression;
+	public Rule ifdefAttr;
+	public Rule ifndefAttr;
+	public Rule elseAttr;
+	public Rule endifAttr;
+	public Rule flowControlAttr;
 	
 	@Override
 	public Rule getRootRule() {
