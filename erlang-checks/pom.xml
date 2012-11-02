@@ -5,15 +5,17 @@
 		<artifactId>erlang</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
-	
+
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>erlang-squid</artifactId>
-	<name>SSLR :: Erlang</name>
-	<properties>
-		<sslr.version>1.15</sslr.version>
-	</properties>
+	<artifactId>erlang-checks</artifactId>
+	<name>Erlang Checks</name>
 
 	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>erlang-squid</artifactId>
+			<version>${parent.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.codehaus.sonar.sslr</groupId>
 			<artifactId>sslr-core</artifactId>
@@ -45,6 +47,7 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
+			<version>11.0.1</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
