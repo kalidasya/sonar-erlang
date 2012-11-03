@@ -1,7 +1,7 @@
 /*
- * Sonar JavaScript Plugin
- * Copyright (C) 2011 Eriks Nukis and SonarSource
- * dev@sonar.codehaus.org
+ * Sonar Erlang Plugin
+ * Copyright (C) 2012 Tamas Kende
+ * kende.tamas@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

@@ -14,6 +14,7 @@ import org.sonar.squid.indexer.QueryByType;
 
 import com.google.common.base.Charsets;
 import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.AstNodeType;
 import com.sonar.sslr.impl.Parser;
 import com.sonar.sslr.squid.AstScanner;
 import com.sonar.sslr.squid.SourceCodeBuilderCallback;
@@ -21,6 +22,7 @@ import com.sonar.sslr.squid.SourceCodeBuilderVisitor;
 import com.sonar.sslr.squid.SquidAstVisitor;
 import com.sonar.sslr.squid.SquidAstVisitorContextImpl;
 import com.sonar.sslr.squid.metrics.CommentsVisitor;
+import com.sonar.sslr.squid.metrics.ComplexityVisitor;
 import com.sonar.sslr.squid.metrics.CounterVisitor;
 import com.sonar.sslr.squid.metrics.LinesOfCodeVisitor;
 import com.sonar.sslr.squid.metrics.LinesVisitor;
@@ -51,7 +53,7 @@ public final class ErlangAstScanner {
 	public static AstScanner<ErlangGrammar> create(ErlangConfiguration conf,
 			SquidAstVisitor<ErlangGrammar>... visitors) {
 		final SquidAstVisitorContextImpl<ErlangGrammar> context = new SquidAstVisitorContextImpl<ErlangGrammar>(
-				new SourceProject("JavaScript Project"));
+				new SourceProject("Erlang Project"));
 		final Parser<ErlangGrammar> parser = ErlangParser.create(conf);
 
 		AstScanner.Builder<ErlangGrammar> builder = AstScanner
@@ -99,30 +101,36 @@ public final class ErlangAstScanner {
 		builder.withSquidAstVisitor(CounterVisitor
 				.<ErlangGrammar> builder()
 				.setMetricDef(ErlangMetric.STATEMENTS)
-				.subscribeTo(parser.getGrammar().sendStatement,
+				.subscribeTo(parser.getGrammar().statement/*,
 						parser.getGrammar().receiveStatement,
 						parser.getGrammar().expressionStatement,
-						parser.getGrammar().tryStatement,
-						parser.getGrammar().blockStatement).build());
+						parser.getGrammar().tryStatement*/).build());
 
-		/*
-		 * AstNodeType[] complexityAstNodeType = new AstNodeType[] { // Entry
-		 * points parser.getGrammar().functionDeclaration,
-		 * parser.getGrammar().functionExpression,
-		 * 
-		 * // Branching nodes parser.getGrammar().ifStatement,
-		 * parser.getGrammar().iterationStatement,
-		 * parser.getGrammar().switchStatement, parser.getGrammar().caseClause,
-		 * parser.getGrammar().defaultClause, parser.getGrammar().catch_,
-		 * parser.getGrammar().returnStatement,
-		 * parser.getGrammar().throwStatement,
-		 * 
-		 * // Expressions ErlangPunctuator.QUERY, ErlangPunctuator.ANDAND,
-		 * ErlangPunctuator.OROR }; builder
-		 * .withSquidAstVisitor(ComplexityVisitor.<ErlangGrammar > builder()
-		 * .setMetricDef(ErlangMetric.COMPLEXITY)
-		 * .subscribeTo(complexityAstNodeType) .build());
-		 */
+		
+		  AstNodeType[] complexityAstNodeType = new AstNodeType[] { 
+		 // Entry points 
+				  parser.getGrammar().functionClause,
+				  parser.getGrammar().funExpression,
+		  
+		  // Branching nodes 
+				  parser.getGrammar().caseExpression,
+				  parser.getGrammar().ifExpression,
+				  parser.getGrammar().patternStatement,
+				  parser.getGrammar().patternStatement,
+				  parser.getGrammar().catchPatternStatement,
+		  
+		  // Expressions 
+				  parser.getGrammar().guardExpression
+		  /**
+		   * TODO: boolean expression complexity?
+		   */
+		  };
+		  
+		  builder
+		  .withSquidAstVisitor(ComplexityVisitor.<ErlangGrammar > builder()
+		  .setMetricDef(ErlangMetric.COMPLEXITY)
+		  .subscribeTo(complexityAstNodeType) .build());
+		 
 
 		/* External visitors (typically Check ones) */
 		for (SquidAstVisitor<ErlangGrammar> visitor : visitors) {

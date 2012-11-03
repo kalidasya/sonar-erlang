@@ -19,11 +19,10 @@
  */
 package org.kalidasya.sonar.erlang;
 
-import com.google.common.base.Charsets;
-import com.google.common.collect.ImmutableList;
-import com.sonar.sslr.squid.AstScanner;
+import static org.fest.assertions.Assertions.assertThat;
 
-import org.junit.Ignore;
+import java.io.File;
+
 import org.junit.Test;
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.kalidasya.sonar.erlang.api.ErlangMetric;
@@ -31,9 +30,9 @@ import org.sonar.squid.api.SourceFile;
 import org.sonar.squid.api.SourceProject;
 import org.sonar.squid.indexer.QueryByType;
 
-import java.io.File;
-
-import static org.fest.assertions.Assertions.assertThat;
+import com.google.common.base.Charsets;
+import com.google.common.collect.ImmutableList;
+import com.sonar.sslr.squid.AstScanner;
 
 public class ErlangAstScannerTest {
 
@@ -66,12 +65,9 @@ public class ErlangAstScannerTest {
     assertThat(file.getInt(ErlangMetric.LINES_OF_CODE)).isEqualTo(3);
   }
 
-  /**
-   * TODO: create proper test file
-   */
   @Test
   public void statements() {
-    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/functions.erl"));
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/statements.erl"));
     assertThat(file.getInt(ErlangMetric.STATEMENTS)).isEqualTo(11);
   }
 
@@ -81,10 +77,9 @@ public class ErlangAstScannerTest {
     assertThat(file.getInt(ErlangMetric.FUNCTIONS)).isEqualTo(7);
   }
 
-  @Ignore
   @Test
   public void complexity() {
-    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/complexity.js"));
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/statements.erl"));
     assertThat(file.getInt(ErlangMetric.COMPLEXITY)).isEqualTo(16);
   }
 
