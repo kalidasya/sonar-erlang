@@ -73,8 +73,11 @@ public final class ErlangAstScanner {
 				new SourceCodeBuilderCallback() {
 					public SourceCode createSourceCode(
 							SourceCode parentSourceCode, AstNode astNode) {
-						String functionName = astNode.getChild(1)
+						String functionName = astNode.getChild(0)
 								.getTokenValue();
+						/**
+						 * TODO: use function signature instead? (other constructor. what is the difference?)
+						 */
 						SourceFunction function = new SourceFunction(
 								functionName + ":"
 										+ astNode.getToken().getLine());
