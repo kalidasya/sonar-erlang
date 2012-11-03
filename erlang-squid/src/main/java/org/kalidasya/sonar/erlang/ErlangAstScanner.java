@@ -101,7 +101,9 @@ public final class ErlangAstScanner {
 		builder.withSquidAstVisitor(CounterVisitor
 				.<ErlangGrammar> builder()
 				.setMetricDef(ErlangMetric.STATEMENTS)
-				.subscribeTo(parser.getGrammar().statement/*,
+				.subscribeTo(
+						parser.getGrammar().statement
+						/*,
 						parser.getGrammar().receiveStatement,
 						parser.getGrammar().expressionStatement,
 						parser.getGrammar().tryStatement*/).build());
