@@ -26,8 +26,7 @@ public class CommentRegularExpressionCheckTest {
 		SourceFile file = ErlangAstScanner.scanSingleFile(new File(
 				"src/test/resources/checks/commentcheck.erl"), check);
 		CheckMessagesVerifier.verify(file.getCheckMessages()).next().atLine(2).withMessage(
-				"The regular expression matches this comment").next().atLine(9).withMessage(
-						"The regular expression matches this comment");
+				"The regular expression matches this comment").next().atLine(9);
 	}
 
 	@Test
