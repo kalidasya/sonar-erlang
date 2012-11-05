@@ -235,7 +235,6 @@ public class ErlangParserExpressionTest {
 		try {
 			ExtendedStackTraceStream.print(listener, System.out);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -20,6 +20,7 @@
 package org.kalidasya.sonar.erlang.api;
 
 import org.sonar.squid.measures.CalculatedMetricFormula;
+import org.sonar.squid.measures.Metric;
 import org.sonar.squid.measures.MetricDef;
 
 public enum ErlangMetric implements MetricDef{
@@ -31,8 +32,8 @@ public enum ErlangMetric implements MetricDef{
 	STATEMENTS,
 	COMPLEXITY,
 	FUNCTIONS, 
-	MODULES, 
-	PUBLIC_API;
+	MODULES 
+	;
 
 	public boolean aggregateIfThereIsAlreadyAValue() {
 		return true;

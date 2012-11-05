@@ -75,10 +75,12 @@ public class ErlangAstScannerTest {
     assertThat(file.getInt(ErlangMetric.LINES)).isEqualTo(5);
   }
 
+  
   @Test
   public void publicAPIs() {
     SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/functions.erl"));
-    assertThat(file.getInt(ErlangMetric.PUBLIC_API)).isEqualTo(7);
+    assertThat(file.getInt(Metric.PUBLIC_API)).isEqualTo(7);
+    assertThat(file.getInt(Metric.PUBLIC_DOC_API)).isEqualTo(4);
   }
 
   
