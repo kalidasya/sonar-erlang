@@ -1,8 +1,11 @@
--module(erlcount_counter).
+-module(functions).
 -behaviour(gen_server).
 -export([start_link/4]).
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
         terminate/2, code_change/3]).
+-ifdef(TEST).
+-export([test_call/5]).
+-endif.
 
 -record(state, {dispatcher, ref, file, re}).
 

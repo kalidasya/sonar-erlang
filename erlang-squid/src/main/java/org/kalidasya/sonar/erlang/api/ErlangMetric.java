@@ -30,7 +30,9 @@ public enum ErlangMetric implements MetricDef{
 	COMMENT_BLANK_LINES,
 	STATEMENTS,
 	COMPLEXITY,
-	FUNCTIONS;
+	FUNCTIONS, 
+	MODULES, 
+	PUBLIC_API;
 
 	public boolean aggregateIfThereIsAlreadyAValue() {
 		return true;

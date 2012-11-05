@@ -26,9 +26,14 @@ import java.io.File;
 import org.junit.Test;
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.kalidasya.sonar.erlang.api.ErlangMetric;
+import org.kalidasya.sonar.erlang.metrics.PublicDocumentedApiCounter;
+import org.sonar.api.measures.Metrics;
+import org.sonar.squid.api.SourceClass;
 import org.sonar.squid.api.SourceFile;
 import org.sonar.squid.api.SourceProject;
 import org.sonar.squid.indexer.QueryByType;
+import org.sonar.squid.measures.Metric;
+import org.sonar.squid.measures.MetricDef;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
@@ -49,9 +54,20 @@ public class ErlangAstScannerTest {
     SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/functions.erl"));
     assertThat(file.getInt(ErlangMetric.COMMENT_BLANK_LINES)).isEqualTo(6);
     assertThat(file.getInt(ErlangMetric.COMMENT_LINES)).isEqualTo(5);
-    assertThat(file.getNoSonarTagLines()).contains(35);
+    assertThat(file.getNoSonarTagLines()).contains(38);
     assertThat(file.getNoSonarTagLines().size()).isEqualTo(1);
   }
+  
+  @Test
+  public void modules() {
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/functions.erl"));
+    AstScanner<ErlangGrammar> scanner = ErlangAstScanner.create(new ErlangConfiguration(Charsets.UTF_8));
+    scanner.scanFiles(ImmutableList.of(new File("src/test/resources/metrics/functions.erl")));
+    SourceClass module = (SourceClass) scanner.getIndex().search(new QueryByType(SourceClass.class)).iterator().next();
+    assertThat(module.getKey()).isEqualTo("functions:1");
+    assertThat(file.getInt(ErlangMetric.MODULES)).isEqualTo(1);
+  }
+  
 
   @Test
   public void lines() {
@@ -59,6 +75,13 @@ public class ErlangAstScannerTest {
     assertThat(file.getInt(ErlangMetric.LINES)).isEqualTo(5);
   }
 
+  @Test
+  public void publicAPIs() {
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/functions.erl"));
+    assertThat(file.getInt(ErlangMetric.PUBLIC_API)).isEqualTo(7);
+  }
+
+  
   @Test
   public void lines_of_code() {
     SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/lines_of_code.erl"));

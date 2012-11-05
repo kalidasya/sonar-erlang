@@ -5,7 +5,9 @@ import java.util.Collection;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.kalidasya.sonar.erlang.api.ErlangMetric;
+import org.kalidasya.sonar.erlang.metrics.PublicDocumentedApiCounter;
 import org.kalidasya.sonar.erlang.parser.ErlangParser;
+import org.sonar.squid.api.SourceClass;
 import org.sonar.squid.api.SourceCode;
 import org.sonar.squid.api.SourceFile;
 import org.sonar.squid.api.SourceFunction;
@@ -68,6 +70,20 @@ public final class ErlangAstScanner {
 		/* Files */
 		builder.setFilesMetric(ErlangMetric.FILES);
 
+		/* Classes = modules */
+		builder.withSquidAstVisitor(new SourceCodeBuilderVisitor<ErlangGrammar>(new SourceCodeBuilderCallback() {
+		      public SourceCode createSourceCode(SourceCode parentSourceCode, AstNode astNode) {
+		        String className = astNode.getChild(3).getTokenValue();
+		        SourceClass cls = new SourceClass(className + ":" + astNode.getToken().getLine());
+		        cls.setStartAtLine(astNode.getTokenLine());
+		        return cls;
+		      }
+		    }, parser.getGrammar().moduleAttr));
+		
+		builder.withSquidAstVisitor(CounterVisitor.<ErlangGrammar> builder()
+				.setMetricDef(ErlangMetric.MODULES)
+				.subscribeTo(parser.getGrammar().moduleAttr).build());
+		
 		/* Functions */
 		builder.withSquidAstVisitor(new SourceCodeBuilderVisitor<ErlangGrammar>(
 				new SourceCodeBuilderCallback() {
@@ -118,14 +134,13 @@ public final class ErlangAstScanner {
 				  parser.getGrammar().funExpression,
 		  
 		  // Branching nodes 
-				  parser.getGrammar().caseExpression,
-				  parser.getGrammar().ifExpression,
-				  parser.getGrammar().patternStatement,
+				  parser.getGrammar().branchExp,
 				  parser.getGrammar().patternStatement,
 				  parser.getGrammar().catchPatternStatement,
 		  
-		  // Expressions 
-				  parser.getGrammar().guardExpression
+		  // Expressions
+		  //cannot add guardExpression, it only counts if it is over 1
+				  //parser.getGrammar().guardExpression
 		  /**
 		   * TODO: boolean expression complexity?
 		   */
@@ -135,8 +150,10 @@ public final class ErlangAstScanner {
 		  .withSquidAstVisitor(ComplexityVisitor.<ErlangGrammar > builder()
 		  .setMetricDef(ErlangMetric.COMPLEXITY)
 		  .subscribeTo(complexityAstNodeType) .build());
+		  
+		  /* Public API counter */
+		  builder.withSquidAstVisitor(new PublicDocumentedApiCounter());
 		 
-
 		/* External visitors (typically Check ones) */
 		for (SquidAstVisitor<ErlangGrammar> visitor : visitors) {
 			builder.withSquidAstVisitor(visitor);
