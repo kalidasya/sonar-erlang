@@ -22,6 +22,7 @@ package org.kalidasya.sonar.erlang.metrics;
 import java.util.List;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
+import org.kalidasya.sonar.erlang.api.ErlangMetric;
 import org.kalidasya.sonar.erlang.api.ErlangPunctuator;
 import org.kalidasya.sonar.erlang.api.ErlangTokenType;
 import org.sonar.squid.measures.Metric;
@@ -67,9 +68,9 @@ public class PublicDocumentedApiCounter extends SquidAstVisitor<ErlangGrammar> {
 					if(comments.size()>0){
 						for (Trivia trivia : comments) {
 							/**
-							 * Try to filter out those comments what has only one repeated char (expect X)
+							 * Try to filter out those comments what has only one repeated char 
 							 */
-							if(trivia.isComment() && !trivia.getToken().getOriginalValue().matches("^%%+ *([^Xx])\\1+ *$")){
+							if(trivia.isComment() && !trivia.getToken().getOriginalValue().matches("^%%+ *(.)\\1+ *$")){
 								numOfPublicDocAPIs++;
 								break;
 							}
@@ -88,13 +89,10 @@ public class PublicDocumentedApiCounter extends SquidAstVisitor<ErlangGrammar> {
 
 	@Override
 	public void leaveFile(AstNode astNode) {
-		/**
-		 * TODO: why the get (SourceCode#getInt(Metric metric)) is deprecated?
-		 * do I have to really create my own metrics???
-		 */
-		getContext().peekSourceCode().add(Metric.PUBLIC_API, numOfPublicAPIs);
-		getContext().peekSourceCode().add(Metric.PUBLIC_DOC_API, numOfPublicDocAPIs);
-		//getContext().peekSourceCode().add(Metric.PUBLIC_DOCUMENTED_API_DENSITY.);
+		getContext().peekSourceCode().add(ErlangMetric.PUBLIC_API, numOfPublicAPIs);
+		getContext().peekSourceCode().add(ErlangMetric.PUBLIC_DOC_API, numOfPublicDocAPIs);
+		double density = (numOfPublicAPIs>0)?numOfPublicDocAPIs/numOfPublicAPIs:0;
+		getContext().peekSourceCode().add(ErlangMetric.PUBLIC_DOCUMENTED_API_DENSITY, density);
 		functions = null;
 	}
 

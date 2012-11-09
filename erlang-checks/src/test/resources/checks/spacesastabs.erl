@@ -3,6 +3,7 @@
     %good
 hello(A) -> 
    B  = {world, A}, % not 4
+				C = B, %starts with 4 tabs not spaces
     case A of
         true ->
             no;
