@@ -14,13 +14,15 @@ import com.sonar.sslr.api.Trivia;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
 @Rule(key = "LineLength", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
-public class LineLengthCheck extends SquidCheck<ErlangGrammar> implements AstAndTokenVisitor {
+public class LineLengthCheck extends SquidCheck<ErlangGrammar> implements
+		AstAndTokenVisitor {
 
 	private static final int DEFAULT_MAXIMUM_LINE_LENHGTH = 100;
 
 	private int lastIncorrectLine;
 
-	@RuleProperty(key = "maximumLineLength", defaultValue = "" + DEFAULT_MAXIMUM_LINE_LENHGTH)
+	@RuleProperty(key = "maximumLineLength", defaultValue = ""
+			+ DEFAULT_MAXIMUM_LINE_LENHGTH)
 	public int maximumLineLength = DEFAULT_MAXIMUM_LINE_LENHGTH;
 
 	@Override
@@ -40,31 +42,33 @@ public class LineLengthCheck extends SquidCheck<ErlangGrammar> implements AstAnd
 	@Override
 	public void visitToken(Token token) {
 		if (!token.isGeneratedCode() && lastIncorrectLine != token.getLine()) {
-			boolean violation = false;
-			int lineLength = token.getColumn() + token.getValue().length();
-			int incorrectLine = 0;
-			if (lineLength > maximumLineLength) {
-				violation = true;
-				incorrectLine = token.getLine();
-			} else if (token.getTrivia().size() > 0) {
-				for (Trivia trivia : token.getTrivia()) {
-					if (trivia.isComment()
-							&& trivia.getToken().getColumn()
-									+ trivia.getToken().getValue().length() > maximumLineLength) {
-						violation = true;
-						incorrectLine = trivia.getToken().getLine();
-						break;
-					}
-				}
-			}
+			int incorrectLine = checkLine(token);
 
-			if (violation) {
+			if (incorrectLine > -1) {
 				lastIncorrectLine = token.getLine();
-				getContext().createLineViolation(this,
-						"The line length is greater than {0,number,integer} authorized.",
-						incorrectLine, maximumLineLength);
+				getContext()
+						.createLineViolation(
+								this,
+								"The line length is greater than {0,number,integer} authorized.",
+								incorrectLine, maximumLineLength);
 			}
 		}
+	}
+
+	private int checkLine(Token token) {
+		int lineLength = token.getColumn() + token.getValue().length();
+		if (lineLength > maximumLineLength) {
+			return token.getLine();
+		} else if (token.getTrivia().size() > 0) {
+			for (Trivia trivia : token.getTrivia()) {
+				if (trivia.isComment()
+						&& trivia.getToken().getColumn()
+								+ trivia.getToken().getValue().length() > maximumLineLength) {
+					return trivia.getToken().getLine();
+				}
+			}
+		}
+		return -1;
 	}
 
 }

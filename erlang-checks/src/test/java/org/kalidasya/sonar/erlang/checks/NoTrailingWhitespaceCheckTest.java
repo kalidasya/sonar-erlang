@@ -8,17 +8,18 @@ import org.sonar.squid.api.SourceFile;
 
 import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
 
-public class NoTabsForIndentionCheckTest {
+public class NoTrailingWhitespaceCheckTest {
 
 	@Test
 	public void test() {
-		NoTabsForIndention check = new NoTabsForIndention();
+		NoTrailingWhitespace check = new NoTrailingWhitespace();
 
 		SourceFile file = ErlangAstScanner.scanSingleFile(new File(
-				"src/test/resources/checks/spacesastabs.erl"), check);
+				"src/test/resources/checks/notrailingwhitespace.erl"), check);
 		CheckMessagesVerifier.verify(file.getCheckMessages())
-		.next().atLine(6).withMessage("Line has tabs as indention.")
-		.next().atLine(13)
+		.next().atLine(2).withMessage("No trailing white space.")
+		.next().atLine(6).withMessage("No trailing white space.")
+		.next().atLine(7).withMessage("No trailing white space.")
 		.noMore();
 	}
 }

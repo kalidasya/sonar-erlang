@@ -26,7 +26,8 @@ public class MultipleBlankLinesCheck extends SquidCheck<ErlangGrammar> {
 
 	@Override
 	public void init() {
-		subscribeTo(getContext().getGrammar().primaryExpression, GenericTokenType.IDENTIFIER);
+		subscribeTo(getContext().getGrammar().primaryExpression,
+				GenericTokenType.IDENTIFIER);
 	}
 
 	@Override
@@ -41,38 +42,21 @@ public class MultipleBlankLinesCheck extends SquidCheck<ErlangGrammar> {
 	public void visitNode(AstNode ast) {
 		if (!ast.getToken().isGeneratedCode()) {
 			if (previousToken == null
-					|| (previousToken != null && previousToken.getLine() != ast.getToken()
-							.getLine())) {
-				int previousLine = (previousToken != null) ? previousToken.getLine() : 0;
+					|| (previousToken != null && previousToken.getLine() != ast
+							.getToken().getLine())) {
+				int previousLine = (previousToken != null) ? previousToken
+						.getLine() : 0;
 
-				int compTo = getMaxFor(ast);
-
-				if (compare(ast.getToken().getLine(), previousLine, compTo)) {
-					boolean fail = false;
-					if (ast.getToken().hasTrivia()) {
-						int prevLine = previousLine;
-						for (Trivia trivias : ast.getToken().getTrivia()) {
-							if (compare(trivias.getToken().getLine(), prevLine, compTo)) {
-								fail = true;
-								break;
-							}
-							prevLine = trivias.getToken().getLine();
-						}
-						if (compare(ast.getToken().getLine(), prevLine, compTo)) {
-							fail = true;
-						}
-					} else {
-						fail = true;
-					}
-					if (fail) {
-						getContext().createLineViolation(this,
-								"Too many blank lines found, the threshold is {1}.",
-								ast.getToken().getLine(),
-								ast.getToken().getLine() - previousLine - 1, compTo);
-					}
+				if (checkBlankLines(ast, previousLine)) {
+					getContext()
+							.createLineViolation(
+									this,
+									"Too many blank lines found, the threshold is {0}.",
+									ast.getToken().getLine(),
+									getMaxFor(ast));
 				}
-				previousToken = ast.getToken();
 			}
+			previousToken = ast.getToken();
 		}
 
 	}
@@ -81,12 +65,35 @@ public class MultipleBlankLinesCheck extends SquidCheck<ErlangGrammar> {
 		return (line1 - line2 - 1 > comp);
 	}
 
-	private int getMaxFor(AstNode ast){
+	private int getMaxFor(AstNode ast) {
 		if (ast.findFirstParent(getContext().getGrammar().clauseBody) != null) {
 			return maxBlankLinesInsideFunctions;
 		} else {
 			return maxBlankLinesOutsideFunctions;
 		}
 	}
-	
+
+	private boolean checkTrivias(int previousLine, AstNode ast, int compTo) {
+		int prevLine = previousLine;
+		for (Trivia trivias : ast.getToken().getTrivia()) {
+			if (compare(trivias.getToken().getLine(), prevLine, compTo)) {
+				return true;
+			}
+			prevLine = trivias.getToken().getLine();
+		}
+		return compare(ast.getToken().getLine(), prevLine, compTo);
+	}
+
+	private boolean checkBlankLines(AstNode ast, int previousLine) {
+		int compTo = getMaxFor(ast);
+
+		boolean check = compare(ast.getToken().getLine(), previousLine, compTo);
+		if (check) {
+			if (ast.getToken().hasTrivia()) {
+				return checkTrivias(previousLine, ast, compTo);
+			}
+		}
+		return check;
+	}
+
 }
