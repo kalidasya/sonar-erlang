@@ -16,7 +16,8 @@ import com.sonar.sslr.api.Token;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
 @Rule(key = "NoTrailingWhiteSpace", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
-public class NoTrailingWhitespace extends SquidCheck<ErlangGrammar> implements AstAndTokenVisitor {
+public class NoTrailingWhitespace extends SquidCheck<ErlangGrammar> implements
+		AstAndTokenVisitor {
 
 	@Override
 	public void visitFile(AstNode astNode) {
@@ -37,8 +38,8 @@ public class NoTrailingWhitespace extends SquidCheck<ErlangGrammar> implements A
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
 				if (line.matches(".*\\s+$")) {
-					getContext().createLineViolation(this, "No trailing white space.",
-							lineNumber);
+					getContext().createLineViolation(this,
+							"No trailing white space.", lineNumber);
 				}
 				lineNumber++;
 			}

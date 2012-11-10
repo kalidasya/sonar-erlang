@@ -1,7 +1,6 @@
 package org.kalidasya.sonar.erlang.checks;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
-import org.kalidasya.sonar.erlang.api.ErlangTokenType;
 import org.sonar.check.Cardinality;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;

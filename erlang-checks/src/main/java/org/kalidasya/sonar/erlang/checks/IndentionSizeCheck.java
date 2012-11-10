@@ -49,7 +49,7 @@ public class IndentionSizeCheck extends SquidCheck<ErlangGrammar> implements Ast
 						getContext()
 								.createLineViolation(
 										this,
-										"The line starts with {0, number, integer} characters which is not {1, number, integer} less or more than the previous line, which started at {2, number, integer}.",
+										"The line starts with {0, number, integer} characters which is not {1, number, integer} more than the previous line, which started at {2, number, integer}.",
 										token.getLine(), token.getColumn(), indentionSize,
 										previousCol);
 					} else {
