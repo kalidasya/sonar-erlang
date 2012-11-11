@@ -108,5 +108,11 @@ public class ErlangAstScannerTest {
     SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/statements.erl"));
     assertThat(file.getInt(ErlangMetric.COMPLEXITY)).isEqualTo(16);
   }
+  
+  @Test
+  public void numOfFunExpr() {
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/funexpressions.erl"));
+    assertThat(file.getInt(ErlangMetric.NUM_OF_FUN_EXRP)).isEqualTo(4);
+  }
 
 }

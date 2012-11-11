@@ -34,7 +34,15 @@ public enum ErlangMetric implements MetricDef{
 	MODULES, 
 	PUBLIC_API, 
 	PUBLIC_DOC_API, 
-	PUBLIC_DOCUMENTED_API_DENSITY;
+	PUBLIC_DOCUMENTED_API_DENSITY,
+	
+	//Erlang specific metrics
+	NUM_OF_FUN_EXRP,
+	NUM_OF_FUN_CLAUSES,
+	NUM_OF_MACROS,
+	NUM_OF_RECORDS,
+	INCLUDED_FILES,
+	IMPORTED_MODULES;
 
 	public boolean aggregateIfThereIsAlreadyAValue() {
 		return true;

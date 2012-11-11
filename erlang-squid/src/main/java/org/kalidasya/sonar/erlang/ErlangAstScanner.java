@@ -153,6 +153,12 @@ public final class ErlangAstScanner {
 		  
 		  /* Public API counter */
 		  builder.withSquidAstVisitor(new PublicDocumentedApiCounter());
+		  
+		  /* Number of fun expressions*/
+		  builder
+		  .withSquidAstVisitor(ComplexityVisitor.<ErlangGrammar > builder()
+		  .setMetricDef(ErlangMetric.NUM_OF_FUN_EXRP)
+		  .subscribeTo(parser.getGrammar().funExpression) .build());
 		 
 		/* External visitors (typically Check ones) */
 		for (SquidAstVisitor<ErlangGrammar> visitor : visitors) {
