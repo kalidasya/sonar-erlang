@@ -19,9 +19,6 @@
  */
 package org.kalidasya.sonar.erlang.api;
 
-import static com.sonar.sslr.impl.matcher.GrammarFunctions.Standard.o2n;
-import static com.sonar.sslr.impl.matcher.GrammarFunctions.Standard.or;
-
 import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.api.Rule;
 

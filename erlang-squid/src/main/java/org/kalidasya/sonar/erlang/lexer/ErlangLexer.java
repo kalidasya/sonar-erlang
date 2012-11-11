@@ -20,11 +20,10 @@
 package org.kalidasya.sonar.erlang.lexer;
 
 import static com.sonar.sslr.api.GenericTokenType.LITERAL;
-
 import static com.sonar.sslr.impl.channel.RegexpChannelBuilder.commentRegexp;
+import static com.sonar.sslr.impl.channel.RegexpChannelBuilder.or;
 import static com.sonar.sslr.impl.channel.RegexpChannelBuilder.regexp;
 import static org.kalidasya.sonar.erlang.api.ErlangTokenType.NUMERIC_LITERAL;
-import static com.sonar.sslr.impl.channel.RegexpChannelBuilder.or;
 
 import org.kalidasya.sonar.erlang.ErlangConfiguration;
 import org.kalidasya.sonar.erlang.api.ErlangKeyword;

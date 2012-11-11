@@ -13,7 +13,6 @@ import org.sonar.squid.api.SourceFile;
 import org.sonar.squid.api.SourceFunction;
 import org.sonar.squid.api.SourceProject;
 import org.sonar.squid.indexer.QueryByType;
-import org.sonar.squid.measures.Metric;
 
 import com.google.common.base.Charsets;
 import com.sonar.sslr.api.AstNode;

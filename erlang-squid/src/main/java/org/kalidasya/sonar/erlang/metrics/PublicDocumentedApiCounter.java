@@ -24,13 +24,9 @@ import java.util.List;
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.kalidasya.sonar.erlang.api.ErlangMetric;
 import org.kalidasya.sonar.erlang.api.ErlangPunctuator;
-import org.kalidasya.sonar.erlang.api.ErlangTokenType;
-import org.sonar.squid.measures.Metric;
 
-import com.sonar.sslr.api.AstAndTokenVisitor;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.GenericTokenType;
-import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.Trivia;
 import com.sonar.sslr.squid.SquidAstVisitor;
 
