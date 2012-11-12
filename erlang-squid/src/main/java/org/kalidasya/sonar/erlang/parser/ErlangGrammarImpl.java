@@ -503,13 +503,10 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 
 	    assignmentExpression.is(
 	    	or(
-	    		and(listOperationExpression, assignmentOperator, assignmentExpression),
+	    		and(listOperationExpression, MATCHOP, assignmentExpression),
 	    		listOperationExpression
 	    	)
 	    ).skipIfOneChild();
-
-	    assignmentOperator.is(
-	        MATCHOP);
 
 	    expression.is(opt(CATCH), assignmentExpression);
 	    

@@ -12,7 +12,7 @@ public class ExportOneFunctionPerLineTest {
 
 	@Test
 	public void test() {
-		ExportOneFunctionPerLine check = new ExportOneFunctionPerLine();
+		ExportOneFunctionPerLineCheck check = new ExportOneFunctionPerLineCheck();
 
 		SourceFile file = ErlangAstScanner.scanSingleFile(new File(
 				"src/test/resources/checks/export_one_function_per_line.erl"), check);

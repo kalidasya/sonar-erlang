@@ -15,8 +15,9 @@ import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
-@Rule(key = "NoTabsForIndention", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
-public class NoTabsForIndention extends SquidCheck<ErlangGrammar> implements AstAndTokenVisitor {
+@Rule(key = "NoTrailingWhiteSpace", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
+public class NoTrailingWhitespaceCheck extends SquidCheck<ErlangGrammar> implements
+		AstAndTokenVisitor {
 
 	@Override
 	public void visitFile(AstNode astNode) {
@@ -36,9 +37,9 @@ public class NoTabsForIndention extends SquidCheck<ErlangGrammar> implements Ast
 			int lineNumber = 1;
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
-				if (line.matches("^ *\t+.*")) {
-					getContext().createLineViolation(this, "Line has tabs as indention.",
-							lineNumber);
+				if (line.matches(".*\\s+$")) {
+					getContext().createLineViolation(this,
+							"No trailing white space.", lineNumber);
 				}
 				lineNumber++;
 			}

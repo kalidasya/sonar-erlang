@@ -12,7 +12,7 @@ public class NoTrailingWhitespaceCheckTest {
 
 	@Test
 	public void test() {
-		NoTrailingWhitespace check = new NoTrailingWhitespace();
+		NoTrailingWhitespaceCheck check = new NoTrailingWhitespaceCheck();
 
 		SourceFile file = ErlangAstScanner.scanSingleFile(new File(
 				"src/test/resources/checks/notrailingwhitespace.erl"), check);

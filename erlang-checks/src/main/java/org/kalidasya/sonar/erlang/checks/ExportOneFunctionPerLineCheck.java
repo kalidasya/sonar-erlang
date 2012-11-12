@@ -10,7 +10,7 @@ import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
 @Rule(key = "ExportOneFunctionPerLine", priority = Priority.MINOR)
-public class ExportOneFunctionPerLine extends SquidCheck<ErlangGrammar> {
+public class ExportOneFunctionPerLineCheck extends SquidCheck<ErlangGrammar> {
 
 	private int previousLineNum;
 	private String previousFuncArity;

@@ -63,7 +63,6 @@ public class ErlangGrammar extends Grammar {
 	public Rule logicalAndExpression;
 	public Rule logicalOrExpression;
 	public Rule leftHandSideExpression;
-	public Rule assignmentOperator;
 	public Rule callExpression;
 	public Rule qualifier;
 	public Rule listOperationExpression;
