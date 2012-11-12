@@ -59,9 +59,7 @@ public class SpaceAfterOperatorsCheck extends SquidCheck<ErlangGrammar> implemen
 		int compLength = compTo.getTokenOriginalValue().length();
 		int actCheckPoint = (previous) ? actCol - 1 : actCol + actLength + 1;
 		int compCheckPoint = (previous) ? compCol + compLength : compCol;
-		System.out.println(ast + " -- " + compTo + ": " + actCheckPoint + " == " + compCheckPoint);
 		if (actCheckPoint != compCheckPoint) {
-			System.out.println("FAILED: " + actCol);
 			getContext().createLineViolation(this, "No space after operator in column: {0}.",
 					ast.getToken().getLine(), actCol + 1);
 			return ast.getToken().getLine();

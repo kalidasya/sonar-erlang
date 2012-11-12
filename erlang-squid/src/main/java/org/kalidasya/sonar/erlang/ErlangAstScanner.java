@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.kalidasya.sonar.erlang.api.ErlangMetric;
+import org.kalidasya.sonar.erlang.metrics.NumberOfFunctionArgument;
 import org.kalidasya.sonar.erlang.metrics.PublicDocumentedApiCounter;
 import org.kalidasya.sonar.erlang.parser.ErlangParser;
 import org.sonar.squid.api.SourceClass;
@@ -100,7 +101,7 @@ public final class ErlangAstScanner {
 						function.setStartAtLine(astNode.getTokenLine());
 						return function;
 					}
-				}, parser.getGrammar().functionDeclaration));
+				}, parser.getGrammar().functionClause));
 
 		builder.withSquidAstVisitor(CounterVisitor.<ErlangGrammar> builder()
 				.setMetricDef(ErlangMetric.FUNCTIONS)
@@ -159,6 +160,16 @@ public final class ErlangAstScanner {
 		  .withSquidAstVisitor(ComplexityVisitor.<ErlangGrammar > builder()
 		  .setMetricDef(ErlangMetric.NUM_OF_FUN_EXRP)
 		  .subscribeTo(parser.getGrammar().funExpression) .build());
+		  
+		  /* Number of function arguments*/
+		  builder
+		  .withSquidAstVisitor(new NumberOfFunctionArgument());
+		  
+		  /* Number of function clauses*/
+		  builder
+		  .withSquidAstVisitor(ComplexityVisitor.<ErlangGrammar > builder()
+		  .setMetricDef(ErlangMetric.NUM_OF_FUN_CLAUSES)
+		  .subscribeTo(parser.getGrammar().functionClause) .build());
 		 
 		/* External visitors (typically Check ones) */
 		for (SquidAstVisitor<ErlangGrammar> visitor : visitors) {
