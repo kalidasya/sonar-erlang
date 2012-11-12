@@ -12,15 +12,12 @@ public class SpaceAfterOperatorsCheckTest {
 
 	@Test
 	public void test() {
-		SpaceAfterOperatorsCheck check = new SpaceAfterOperatorsCheck();
+		NumberOfFunctionArgsCheck check = new NumberOfFunctionArgsCheck();
 
 		SourceFile file = ErlangAstScanner.scanSingleFile(new File(
-				"src/test/resources/checks/spaceafteroperator.erl"), check);
+				"src/test/resources/checks/funargs.erl"), check);
 		CheckMessagesVerifier.verify(file.getCheckMessages())
-		.next().atLine(4).withMessage("No space after operator in column: 9.")
-		.next().atLine(5).withMessage("No space after operator in column: 12.")
-		.next().atLine(6).withMessage("No space after operator in column: 5.")
-		.next().atLine(7).withMessage("No space after operator in column: 8.")
+		.next().atLine(4).withMessage("Function has 7 arguments which is greater than 6 authorized.")
 		.noMore();
 	}
 }
