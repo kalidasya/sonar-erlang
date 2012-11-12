@@ -12,7 +12,7 @@ public class NumberOfFunctionArgsCheckTest {
 
 	@Test
 	public void test() {
-		SpaceAfterOperatorsCheck check = new SpaceAfterOperatorsCheck();
+		SpaceAfterBeforeOperatorsCheck check = new SpaceAfterBeforeOperatorsCheck();
 
 		SourceFile file = ErlangAstScanner.scanSingleFile(new File(
 				"src/test/resources/checks/spaceafteroperator.erl"), check);

@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.kalidasya.sonar.erlang.api.ErlangMetric;
+import org.kalidasya.sonar.erlang.metrics.DepthOfCases;
 import org.kalidasya.sonar.erlang.metrics.NumberOfFunctionArgument;
 import org.kalidasya.sonar.erlang.metrics.PublicDocumentedApiCounter;
 import org.kalidasya.sonar.erlang.parser.ErlangParser;
@@ -164,6 +165,10 @@ public final class ErlangAstScanner {
 		  /* Number of function arguments*/
 		  builder
 		  .withSquidAstVisitor(new NumberOfFunctionArgument());
+		  
+		  /* Depth of cases*/
+		  builder
+		  .withSquidAstVisitor(new DepthOfCases());
 		  
 		  /* Number of function clauses*/
 		  builder

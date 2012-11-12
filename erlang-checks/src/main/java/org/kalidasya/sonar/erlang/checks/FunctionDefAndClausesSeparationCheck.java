@@ -10,7 +10,6 @@ import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
 @Rule(key = "FunctionDefAndClausesSeparation", priority = Priority.MAJOR,

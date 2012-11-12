@@ -7,7 +7,7 @@ import org.sonar.check.Rule;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
-@Rule(key = "NoExportAll", priority = Priority.MINOR)
+@Rule(key = "DoNotUseExportAll", priority = Priority.MINOR)
 public class DoNotUseExportAllCheck extends SquidCheck<ErlangGrammar> {
 
 	@Override

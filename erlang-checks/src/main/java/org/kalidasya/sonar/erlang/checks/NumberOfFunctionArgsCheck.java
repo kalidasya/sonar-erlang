@@ -11,7 +11,7 @@ import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
 @Rule(
-  key = "NumberOfFunctionArgsCheck",
+  key = "NumberOfFunctionArgs",
   priority = Priority.MAJOR)
 public class NumberOfFunctionArgsCheck extends SquidCheck<ErlangGrammar> {
 

@@ -43,7 +43,8 @@ public enum ErlangMetric implements MetricDef{
 	NUM_OF_RECORDS,
 	INCLUDED_FILES,
 	IMPORTED_MODULES, 
-	NUM_OF_FUNC_ARGS;
+	NUM_OF_FUNC_ARGS, 
+	DEPTH_OF_CASES;
 
 	public boolean aggregateIfThereIsAlreadyAValue() {
 		return true;

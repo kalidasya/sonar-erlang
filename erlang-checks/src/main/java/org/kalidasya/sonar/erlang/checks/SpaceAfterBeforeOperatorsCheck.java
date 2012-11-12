@@ -15,8 +15,8 @@ import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
-@Rule(key = "NoTrailingWhiteSpace", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
-public class SpaceAfterOperatorsCheck extends SquidCheck<ErlangGrammar> implements
+@Rule(key = "SpaceAfterBeforeOperators", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
+public class SpaceAfterBeforeOperatorsCheck extends SquidCheck<ErlangGrammar> implements
 		AstAndTokenVisitor {
 
 	List<ErlangPunctuator> operators = ImmutableList.of(ErlangPunctuator.MATCHOP,

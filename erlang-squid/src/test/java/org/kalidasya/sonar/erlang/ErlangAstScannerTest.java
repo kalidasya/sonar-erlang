@@ -96,7 +96,7 @@ public class ErlangAstScannerTest {
   @Test
   public void statements() {
     SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/statements.erl"));
-    assertThat(file.getInt(ErlangMetric.STATEMENTS)).isEqualTo(11);
+    assertThat(file.getInt(ErlangMetric.STATEMENTS)).isEqualTo(20);
   }
 
   @Test
@@ -108,7 +108,7 @@ public class ErlangAstScannerTest {
   @Test
   public void complexity() {
     SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/statements.erl"));
-    assertThat(file.getInt(ErlangMetric.COMPLEXITY)).isEqualTo(16);
+    assertThat(file.getInt(ErlangMetric.COMPLEXITY)).isEqualTo(10);
   }
   
   @Test
@@ -132,6 +132,14 @@ public class ErlangAstScannerTest {
   public void numOfFunctionClauses() {
     SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/funargs.erl"));
     assertThat(file.getInt(ErlangMetric.NUM_OF_FUN_CLAUSES)).isEqualTo(4);
+  }
+  
+  @Test
+  public void depthOfCases() {
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/depthofcases.erl"));
+    Set<SourceCode> children = file.getChildren();
+    assertThat(file.getInt(ErlangMetric.DEPTH_OF_CASES)).isEqualTo(18);
+    assertThat(children.toArray(new SourceCode[children.size()])[0].getInt(ErlangMetric.NUM_OF_FUNC_ARGS)).isEqualTo(0);    
   }
   
 }
