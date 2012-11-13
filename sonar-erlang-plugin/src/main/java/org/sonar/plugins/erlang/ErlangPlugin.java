@@ -6,6 +6,10 @@ import org.sonar.api.Extension;
 import org.sonar.api.Properties;
 import org.sonar.api.Property;
 import org.sonar.api.SonarPlugin;
+import org.sonar.plugins.erlang.colorizer.ErlangColorizerFormat;
+import org.sonar.plugins.erlang.core.Erlang;
+import org.sonar.plugins.erlang.core.ErlangSourceImporter;
+import org.sonar.plugins.erlang.cpd.ErlangCpdMapping;
 
 import com.google.common.collect.ImmutableList;
 
@@ -33,6 +37,16 @@ public class ErlangPlugin extends SonarPlugin {
 	
   public List<Class<? extends Extension>> getExtensions() {
     return ImmutableList.of(
+    		Erlang.class,
+    		ErlangSourceImporter.class,
+    		ErlangColorizerFormat.class,
+    		ErlangCpdMapping.class,
+
+    		ErlangSquidSensor.class,
+    		ErlangRuleRepository.class,
+    		ErlangProfile.class,
+
+    		ErlangCommonRulesEngineProvider.class
        );
   }
 
