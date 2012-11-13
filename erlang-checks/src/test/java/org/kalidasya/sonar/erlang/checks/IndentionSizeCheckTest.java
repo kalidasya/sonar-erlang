@@ -22,7 +22,7 @@ public class IndentionSizeCheckTest {
 		.next().atLine(11)
 		.next().atLine(12).withMessage("The line starts with 5 characters which is cannot be divided by 4.")
 		.next().atLine(13).withMessage("The line starts with 1 characters which is cannot be divided by 4.")
-		.next().atLine(16).withMessage("The line starts with 8 characters which is not 4 less or more than the previous line, which started at 0.")
+		.next().atLine(16).withMessage("The line starts with 8 characters which is not 4 more than the previous line, which started at 0.")
 		.noMore();
 	}
 }

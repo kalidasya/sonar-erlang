@@ -44,7 +44,8 @@ public enum ErlangMetric implements MetricDef{
 	INCLUDED_FILES,
 	IMPORTED_MODULES, 
 	NUM_OF_FUNC_ARGS, 
-	DEPTH_OF_CASES;
+	DEPTH_OF_CASES, 
+	BRANCHES_OF_RECURSION;
 
 	public boolean aggregateIfThereIsAlreadyAValue() {
 		return true;

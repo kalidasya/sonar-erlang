@@ -107,7 +107,7 @@ public class ErlangAstScannerTest {
 
   @Test
   public void complexity() {
-    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/statements.erl"));
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/complexity.erl"));
     assertThat(file.getInt(ErlangMetric.COMPLEXITY)).isEqualTo(10);
   }
   
@@ -126,6 +126,16 @@ public class ErlangAstScannerTest {
 	assertThat(children.toArray(new SourceCode[children.size()])[1].getInt(ErlangMetric.NUM_OF_FUNC_ARGS)).isEqualTo(6);
 	assertThat(children.toArray(new SourceCode[children.size()])[2].getInt(ErlangMetric.NUM_OF_FUNC_ARGS)).isEqualTo(1);
 	assertThat(children.toArray(new SourceCode[children.size()])[3].getInt(ErlangMetric.NUM_OF_FUNC_ARGS)).isEqualTo(7);
+  }
+  
+  @Test
+  public void branchesOfRecursion() {
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/branchesofrecursion.erl"));
+    assertThat(file.getInt(ErlangMetric.BRANCHES_OF_RECURSION)).isEqualTo(3);
+    /*Set<SourceCode> children = file.getChildren();
+	assertThat(children.toArray(new SourceCode[children.size()])[0].getInt(ErlangMetric.BRANCHES_OF_RECURSION)).isEqualTo(0);
+	assertThat(children.toArray(new SourceCode[children.size()])[1].getInt(ErlangMetric.BRANCHES_OF_RECURSION)).isEqualTo(1);
+	assertThat(children.toArray(new SourceCode[children.size()])[2].getInt(ErlangMetric.BRANCHES_OF_RECURSION)).isEqualTo(0);*/
   }
   
   @Test

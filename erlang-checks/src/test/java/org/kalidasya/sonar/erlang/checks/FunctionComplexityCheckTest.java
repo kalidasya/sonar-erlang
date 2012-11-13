@@ -8,16 +8,16 @@ import org.sonar.squid.api.SourceFile;
 
 import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
 
-public class NumberOfFunctionArgsCheckTest {
+public class FunctionComplexityCheckTest {
 
 	@Test
 	public void test() {
-		NumberOfFunctionArgsCheck check = new NumberOfFunctionArgsCheck();
+		FunctionComplexityCheck check = new FunctionComplexityCheck();
 
 		SourceFile file = ErlangAstScanner.scanSingleFile(new File(
-				"src/test/resources/checks/funargs.erl"), check);
+				"src/test/resources/checks/complexity.erl"), check);
 		CheckMessagesVerifier.verify(file.getCheckMessages())
-		.next().atLine(4).withMessage("Function has 7 arguments which is greater than 6 authorized.")
+		.next().atLine(2).withMessage("Function has a complexity of 11 which is greater than 10 authorized.")
 		.noMore();
 	}
 }

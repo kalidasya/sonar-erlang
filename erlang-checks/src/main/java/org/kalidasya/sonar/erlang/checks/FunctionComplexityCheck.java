@@ -24,7 +24,7 @@ public class FunctionComplexityCheck extends SquidCheck<ErlangGrammar> {
 
   @Override
   public void init() {
-    subscribeTo(getContext().getGrammar().functionDeclaration);
+    subscribeTo(getContext().getGrammar().functionClause);
   }
 
   @Override

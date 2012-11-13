@@ -1,5 +1,5 @@
-max_depth_of_calling 
-branches_of_recursion 
+max_depth_of_calling +
+branches_of_recursion FAIL -> cannot assign to SourceFunction
 
 
 missing:
@@ -7,5 +7,4 @@ no_space_after_comma +
 is_tail_recursive ?
 cohesion ?
 no_return ?
-max_depth_of_cases +
-max_depth_of_structs +
+max_depth_of_structs ?
