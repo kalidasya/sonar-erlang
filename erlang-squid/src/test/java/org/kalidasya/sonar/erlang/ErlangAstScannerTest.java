@@ -74,7 +74,7 @@ public class ErlangAstScannerTest {
   @Test
   public void lines() {
     SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/lines.erl"));
-    assertThat(file.getInt(ErlangMetric.LINES)).isEqualTo(6);
+    assertThat(file.getInt(ErlangMetric.LINES)).isEqualTo(5);
   }
 
   

@@ -31,6 +31,7 @@ import com.sonar.sslr.squid.metrics.ComplexityVisitor;
 import com.sonar.sslr.squid.metrics.CounterVisitor;
 import com.sonar.sslr.squid.metrics.LinesOfCodeVisitor;
 import com.sonar.sslr.squid.metrics.LinesVisitor;
+import com.sonar.sslr.xpath.api.AstNodeXPathQuery;
 
 public final class ErlangAstScanner {
 
@@ -100,6 +101,8 @@ public final class ErlangAstScanner {
 					private String getArity(AstNode ast) {
 						AstNode args = ast.getChild(0).getChild(0).getChild(1);
 						int num = args.getNumberOfChildren()>3?args.findChildren(ErlangPunctuator.COMMA).size()+1:args.getNumberOfChildren()-2;
+						//TODO for some reason this does not work:
+						//AstNodeXPathQuery.create("//clauseHead/funcDecl/arguments/*[node()!='COMMA' or node()!='LPARENTHESIS' or node()!='RPARENTHESIS']//IDENTIFIER").selectNodes(ast).size();
 						return String.valueOf(num);
 					}
 				}, parser.getGrammar().functionClause));
