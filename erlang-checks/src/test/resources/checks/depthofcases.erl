@@ -26,7 +26,10 @@ sayHello(A) -> 				%+1 complexity (function clause)
            1 -> true;
            2 -> case A of 
                1 -> true;
-               2 -> false
+               2 -> case A of 
+                   1 -> true;
+                   2 -> false
+               end
            end
        end
     end.
