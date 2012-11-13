@@ -10,13 +10,11 @@ import org.sonar.check.Cardinality;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
-import com.sonar.sslr.api.AstAndTokenVisitor;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
 @Rule(key = "NoTabsForIndention", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
-public class NoTabsForIndentionCheck extends SquidCheck<ErlangGrammar> implements AstAndTokenVisitor {
+public class NoTabsForIndentionCheck extends SquidCheck<ErlangGrammar> {
 
 	@Override
 	public void visitFile(AstNode astNode) {
@@ -45,10 +43,6 @@ public class NoTabsForIndentionCheck extends SquidCheck<ErlangGrammar> implement
 		} finally {
 			scanner.close();
 		}
-	}
-
-	@Override
-	public void visitToken(Token token) {
 	}
 
 }

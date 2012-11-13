@@ -10,14 +10,11 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
 import com.google.common.collect.ImmutableList;
-import com.sonar.sslr.api.AstAndTokenVisitor;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
 @Rule(key = "NumberOfFunctionArgument", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
-public class NumberOfFunctionArgument extends SquidCheck<ErlangGrammar> implements
-		AstAndTokenVisitor {
+public class NumberOfFunctionArgument extends SquidCheck<ErlangGrammar> {
 
 	List<ErlangPunctuator> nonArg = ImmutableList.of(ErlangPunctuator.LPARENTHESIS, ErlangPunctuator.RPARENTHESIS, ErlangPunctuator.COMMA); 
 	private ErlangGrammar grammar;
@@ -50,9 +47,4 @@ public class NumberOfFunctionArgument extends SquidCheck<ErlangGrammar> implemen
 		getContext().peekSourceCode().add(ErlangMetric.NUM_OF_FUNC_ARGS, numOfArgs);
 
 	}
-
-	@Override
-	public void visitToken(Token token) {
-	}
-
 }

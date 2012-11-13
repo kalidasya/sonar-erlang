@@ -10,15 +10,13 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
 import com.google.common.collect.ImmutableList;
-import com.sonar.sslr.api.AstAndTokenVisitor;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
 @Rule(key = "NoSpaceAfterBeforeBrackets", priority = Priority.MAJOR,
 		cardinality = Cardinality.SINGLE)
-public class NoSpaceAfterBeforeBracketsCheck extends SquidCheck<ErlangGrammar> implements
-		AstAndTokenVisitor {
+public class NoSpaceAfterBeforeBracketsCheck extends SquidCheck<ErlangGrammar> {
 
 	List<ErlangPunctuator> noSpaceBefore = ImmutableList.of(ErlangPunctuator.RBRACKET,
 			ErlangPunctuator.RCURLYBRACE, ErlangPunctuator.RPARENTHESIS);
@@ -70,10 +68,6 @@ public class NoSpaceAfterBeforeBracketsCheck extends SquidCheck<ErlangGrammar> i
 			return ast.getToken().getLine();
 		}
 		return -1;
-	}
-
-	@Override
-	public void visitToken(Token token) {
 	}
 
 }

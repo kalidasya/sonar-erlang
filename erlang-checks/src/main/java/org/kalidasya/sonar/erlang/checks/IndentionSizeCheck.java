@@ -32,7 +32,6 @@ public class IndentionSizeCheck extends SquidCheck<ErlangGrammar> implements Ast
 		previousCol = 0;
 	}
 
-	@Override
 	public void visitToken(Token token) {
 		if (!token.isGeneratedCode()) {
 			if (previousToken == null

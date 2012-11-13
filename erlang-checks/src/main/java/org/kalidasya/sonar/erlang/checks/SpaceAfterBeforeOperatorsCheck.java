@@ -10,14 +10,11 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
 import com.google.common.collect.ImmutableList;
-import com.sonar.sslr.api.AstAndTokenVisitor;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
 @Rule(key = "SpaceAfterBeforeOperators", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
-public class SpaceAfterBeforeOperatorsCheck extends SquidCheck<ErlangGrammar> implements
-		AstAndTokenVisitor {
+public class SpaceAfterBeforeOperatorsCheck extends SquidCheck<ErlangGrammar> {
 
 	List<ErlangPunctuator> operators = ImmutableList.of(ErlangPunctuator.MATCHOP,
 			ErlangPunctuator.STAR, ErlangPunctuator.DIV, ErlangPunctuator.PLUS,
@@ -66,9 +63,4 @@ public class SpaceAfterBeforeOperatorsCheck extends SquidCheck<ErlangGrammar> im
 		}
 		return -1;
 	}
-
-	@Override
-	public void visitToken(Token token) {
-	}
-
 }

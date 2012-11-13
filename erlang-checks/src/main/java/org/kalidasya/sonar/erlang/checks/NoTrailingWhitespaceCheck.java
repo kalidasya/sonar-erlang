@@ -10,14 +10,11 @@ import org.sonar.check.Cardinality;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
-import com.sonar.sslr.api.AstAndTokenVisitor;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
 @Rule(key = "NoTrailingWhiteSpace", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
-public class NoTrailingWhitespaceCheck extends SquidCheck<ErlangGrammar> implements
-		AstAndTokenVisitor {
+public class NoTrailingWhitespaceCheck extends SquidCheck<ErlangGrammar> {
 
 	@Override
 	public void visitFile(AstNode astNode) {
@@ -47,9 +44,4 @@ public class NoTrailingWhitespaceCheck extends SquidCheck<ErlangGrammar> impleme
 			scanner.close();
 		}
 	}
-
-	@Override
-	public void visitToken(Token token) {
-	}
-
 }

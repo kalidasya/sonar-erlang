@@ -39,7 +39,6 @@ public class LineLengthCheck extends SquidCheck<ErlangGrammar> implements
 		lastIncorrectLine = -1;
 	}
 
-	@Override
 	public void visitToken(Token token) {
 		if (!token.isGeneratedCode() && lastIncorrectLine != token.getLine()) {
 			int incorrectLine = checkLine(token);
