@@ -39,6 +39,7 @@
 		<module>erlang-squid</module>
 		<module>sslr-erlang-toolkit</module>
 		<module>erlang-checks</module>
+		<module>sonar-erlang-plugin</module>
 	</modules>
 
 	<scm>
@@ -175,9 +176,14 @@
 					<header>src/main/resources/license.txt</header>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
 		</plugins>
-
-
 	</build>
 </project>
 
