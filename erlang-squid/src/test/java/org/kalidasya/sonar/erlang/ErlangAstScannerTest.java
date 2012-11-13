@@ -74,7 +74,7 @@ public class ErlangAstScannerTest {
   @Test
   public void lines() {
     SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/lines.erl"));
-    assertThat(file.getInt(ErlangMetric.LINES)).isEqualTo(5);
+    assertThat(file.getInt(ErlangMetric.LINES)).isEqualTo(6);
   }
 
   
@@ -92,7 +92,19 @@ public class ErlangAstScannerTest {
     SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/lines_of_code.erl"));
     assertThat(file.getInt(ErlangMetric.LINES_OF_CODE)).isEqualTo(3);
   }
+  
+  @Test
+  public void lines_of_code2() {
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/lines_of_code2.erl"));
+    assertThat(file.getInt(ErlangMetric.LINES_OF_CODE)).isEqualTo(14);
+  }
 
+  @Test
+  public void lines2() {
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/lines_of_code2.erl"));
+    assertThat(file.getInt(ErlangMetric.LINES)).isEqualTo(18);
+  }
+  
   @Test
   public void statements() {
     SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/statements.erl"));
