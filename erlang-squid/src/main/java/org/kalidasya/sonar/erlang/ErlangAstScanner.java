@@ -1,6 +1,7 @@
 package org.kalidasya.sonar.erlang;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.Collection;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
@@ -18,7 +19,6 @@ import org.sonar.squid.api.SourceFunction;
 import org.sonar.squid.api.SourceProject;
 import org.sonar.squid.indexer.QueryByType;
 
-import com.google.common.base.Charsets;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.impl.Parser;
 import com.sonar.sslr.squid.AstScanner;
@@ -41,7 +41,7 @@ public final class ErlangAstScanner {
 		if (!file.isFile()) {
 			throw new IllegalArgumentException("File '" + file + "' not found.");
 		}
-		AstScanner<ErlangGrammar> scanner = create(new ErlangConfiguration(Charsets.UTF_8),
+		AstScanner<ErlangGrammar> scanner = create(new ErlangConfiguration(Charset.forName("UTF-8")),
 				visitors);
 		scanner.scanFile(file);
 		Collection<SourceCode> sources = scanner.getIndex().search(

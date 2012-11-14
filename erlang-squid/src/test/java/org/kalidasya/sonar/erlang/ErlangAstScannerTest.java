@@ -27,15 +27,11 @@ import java.util.Set;
 import org.junit.Test;
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.kalidasya.sonar.erlang.api.ErlangMetric;
-import org.kalidasya.sonar.erlang.metrics.PublicDocumentedApiCounter;
-import org.sonar.api.measures.Metrics;
 import org.sonar.squid.api.SourceClass;
 import org.sonar.squid.api.SourceCode;
 import org.sonar.squid.api.SourceFile;
 import org.sonar.squid.api.SourceProject;
 import org.sonar.squid.indexer.QueryByType;
-import org.sonar.squid.measures.Metric;
-import org.sonar.squid.measures.MetricDef;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;

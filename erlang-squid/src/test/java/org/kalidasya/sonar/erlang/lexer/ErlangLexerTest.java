@@ -19,6 +19,11 @@
  */
 package org.kalidasya.sonar.erlang.lexer;
 
+import static com.sonar.sslr.test.lexer.LexerMatchers.hasComment;
+import static com.sonar.sslr.test.lexer.LexerMatchers.hasToken;
+import static com.sonar.sslr.test.lexer.LexerMatchers.hasTokens;
+import static org.junit.Assert.assertThat;
+
 import java.nio.charset.Charset;
 
 import org.hamcrest.Matchers;
@@ -32,11 +37,6 @@ import org.kalidasya.sonar.erlang.api.ErlangTokenType;
 import com.sonar.sslr.api.GenericTokenType;
 import com.sonar.sslr.impl.Lexer;
 import com.sonar.sslr.impl.channel.UnknownCharacterChannel;
-
-import static com.sonar.sslr.test.lexer.LexerMatchers.hasComment;
-import static com.sonar.sslr.test.lexer.LexerMatchers.hasToken;
-import static com.sonar.sslr.test.lexer.LexerMatchers.hasTokens;
-import static org.junit.Assert.assertThat;
 
 public class ErlangLexerTest {
 

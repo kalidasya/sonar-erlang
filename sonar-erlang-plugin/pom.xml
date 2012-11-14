@@ -91,6 +91,9 @@
 				<groupId>org.codehaus.sonar</groupId>
 				<artifactId>sonar-packaging-maven-plugin</artifactId>
 				<extensions>true</extensions>
+				<configuration>
+					<pluginClass>org.sonar.plugins.erlang.ErlangPlugin</pluginClass>
+				</configuration>
 				<executions>
 					<execution>
 						<id>default-sonar-plugin</id>
