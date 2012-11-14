@@ -106,6 +106,12 @@ public class ErlangAstScannerTest {
   }
   
   @Test
+  public void functions2() {
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/lines_of_code2.erl"));
+    assertThat(file.getInt(ErlangMetric.FUNCTIONS)).isEqualTo(4);
+  }
+  
+  @Test
   public void statements() {
     SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/statements.erl"));
     assertThat(file.getInt(ErlangMetric.STATEMENTS)).isEqualTo(20);
@@ -120,7 +126,7 @@ public class ErlangAstScannerTest {
   @Test
   public void complexity() {
     SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/complexity.erl"));
-    assertThat(file.getInt(ErlangMetric.COMPLEXITY)).isEqualTo(10);
+    assertThat(file.getInt(ErlangMetric.COMPLEXITY)).isEqualTo(9);
   }
   
   @Test

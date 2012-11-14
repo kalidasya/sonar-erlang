@@ -7,6 +7,7 @@ import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.kalidasya.sonar.erlang.api.ErlangMetric;
 import org.kalidasya.sonar.erlang.api.ErlangPunctuator;
 import org.kalidasya.sonar.erlang.metrics.BranchesOfRecursion;
+import org.kalidasya.sonar.erlang.metrics.ErlangComplexityVisitor;
 import org.kalidasya.sonar.erlang.metrics.NumberOfFunctionArgument;
 import org.kalidasya.sonar.erlang.metrics.PublicDocumentedApiCounter;
 import org.kalidasya.sonar.erlang.parser.ErlangParser;
@@ -92,9 +93,8 @@ public final class ErlangAstScanner {
 				new SourceCodeBuilderCallback() {
 					public SourceCode createSourceCode(SourceCode parentSourceCode, AstNode astNode) {
 						String functionName = astNode.getChild(0).getTokenValue();
-						SourceFunction function = new SourceFunction((SourceFile) parentSourceCode,
-								functionName + "/" + getArity(astNode), astNode
-										.getTokenLine());
+						SourceFunction function = new SourceFunction(functionName + "/" + getArity(astNode)+":"+astNode.getTokenLine());
+						function.setStartAtLine(astNode.getTokenLine());
 						return function;
 					}
 
@@ -108,7 +108,7 @@ public final class ErlangAstScanner {
 				}, parser.getGrammar().functionClause));
 
 		builder.withSquidAstVisitor(CounterVisitor.<ErlangGrammar> builder().setMetricDef(
-				ErlangMetric.FUNCTIONS).subscribeTo(parser.getGrammar().functionDeclaration)
+				ErlangMetric.FUNCTIONS).subscribeTo(parser.getGrammar().functionClause)
 				.build());
 
 		/* Metrics */
@@ -129,24 +129,9 @@ public final class ErlangAstScanner {
 		 * parser.getGrammar().tryStatement
 		 */).build());
 
-		AstNodeType[] complexityAstNodeType = new AstNodeType[] {
-				// Entry points
-				parser.getGrammar().functionClause, parser.getGrammar().funExpression,
+		
 
-				// Branching nodes
-				parser.getGrammar().branchExp, parser.getGrammar().patternStatement,
-				parser.getGrammar().catchPatternStatement,
-
-		// Expressions
-		// cannot add guardExpression, it only counts if it is over 1
-		// parser.getGrammar().guardExpression
-		/**
-		 * TODO: boolean expression complexity?
-		 */
-		};
-
-		builder.withSquidAstVisitor(ComplexityVisitor.<ErlangGrammar> builder().setMetricDef(
-				ErlangMetric.COMPLEXITY).subscribeTo(complexityAstNodeType).build());
+		builder.withSquidAstVisitor(new ErlangComplexityVisitor());
 
 		/* Public API counter */
 		builder.withSquidAstVisitor(new PublicDocumentedApiCounter());

@@ -63,17 +63,19 @@ public class ErlangSquidSensorTest {
 		verify(context).saveMeasure(Mockito.any(Resource.class), Mockito.eq(CoreMetrics.FILES),
 				Mockito.eq(1.0));
 		verify(context).saveMeasure(Mockito.any(Resource.class), Mockito.eq(CoreMetrics.LINES),
-				Mockito.eq(19.0));
+				Mockito.eq(18.0));
+		//TODO it should be 14 not 13
 		verify(context).saveMeasure(Mockito.any(Resource.class), Mockito.eq(CoreMetrics.NCLOC),
 				Mockito.eq(14.0));
 		verify(context).saveMeasure(Mockito.any(Resource.class), Mockito.eq(CoreMetrics.FUNCTIONS),
 				Mockito.eq(4.0));
 		verify(context).saveMeasure(Mockito.any(Resource.class),
-				Mockito.eq(CoreMetrics.STATEMENTS), Mockito.eq(6.0));
+				Mockito.eq(CoreMetrics.STATEMENTS), Mockito.eq(8.0));
 		verify(context).saveMeasure(Mockito.any(Resource.class),
 				Mockito.eq(CoreMetrics.COMPLEXITY), Mockito.eq(4.0));
 		verify(context).saveMeasure(Mockito.any(Resource.class),
-				Mockito.eq(CoreMetrics.COMMENT_LINES), Mockito.eq(2.0));
+				Mockito.eq(CoreMetrics.COMMENT_LINES), Mockito.eq(1.0));
+		
 	}
 
 }
