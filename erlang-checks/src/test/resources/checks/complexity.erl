@@ -23,7 +23,9 @@ sayHello(A) -> 				%+1 complexity (function clause)
 			    Store = R#retainer.store 
 		    end;
 		false -> 		%+1 complexity pattern statement
-		    ignore 
+		    ignore;
+		false -> 		%+1 complexity pattern statement
+		    ignore  
 	    end,
 
 	try beam_disasm:file(Name) of 

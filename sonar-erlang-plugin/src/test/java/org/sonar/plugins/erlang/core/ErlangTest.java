@@ -1,4 +1,4 @@
-package org.sonar.plugins.erlang;
+package org.sonar.plugins.erlang.core;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertSame;
@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import org.apache.commons.configuration.Configuration;
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.plugins.erlang.ErlangPlugin;
 import org.sonar.plugins.erlang.core.Erlang;
 
 public class ErlangTest {

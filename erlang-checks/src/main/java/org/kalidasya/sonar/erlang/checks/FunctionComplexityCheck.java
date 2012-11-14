@@ -2,6 +2,7 @@ package org.kalidasya.sonar.erlang.checks;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.kalidasya.sonar.erlang.api.ErlangMetric;
+import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -13,6 +14,7 @@ import com.sonar.sslr.squid.checks.SquidCheck;
 @Rule(
   key = "FunctionComplexity",
   priority = Priority.MAJOR)
+@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class FunctionComplexityCheck extends SquidCheck<ErlangGrammar> {
 
   private static final int DEFAULT_MAXIMUM_FUNCTION_COMPLEXITY_THRESHOLD = 10;

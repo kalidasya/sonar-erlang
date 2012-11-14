@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.kalidasya.sonar.erlang.api.ErlangMetric;
-import org.sonar.squid.api.SourceFunction;
 
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.GenericTokenType;

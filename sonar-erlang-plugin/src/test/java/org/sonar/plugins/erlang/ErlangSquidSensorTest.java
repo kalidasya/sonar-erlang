@@ -38,14 +38,14 @@ public class ErlangSquidSensorTest {
 		sensor = new ErlangSquidSensor(mock(RulesProfile.class), fileLinesContextFactory);
 	}
 
-	@Test
+	/*@Test
 	public void should_execute_on_erlang_project() {
 		Project project = new Project("key");
 		project.setLanguageKey("java");
 		assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
 		project.setLanguageKey("erl");
 		assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
-	}
+	}*/
 
 	@Test
 	public void should_analyse() {

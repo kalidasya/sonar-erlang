@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
+import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Cardinality;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -14,6 +15,7 @@ import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
 @Rule(key = "NoTrailingWhiteSpace", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
+@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class NoTrailingWhitespaceCheck extends SquidCheck<ErlangGrammar> {
 
 	@Override

@@ -1,6 +1,7 @@
 package org.kalidasya.sonar.erlang.checks;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
+import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Cardinality;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -9,6 +10,7 @@ import org.sonar.check.RuleProperty;
 import com.sonar.sslr.squid.checks.AbstractCommentRegularExpressionCheck;
 
 @Rule(key = "BlockSeparatorCharacter", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
+@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class BlockSeparatorCharacterCheck extends
 		AbstractCommentRegularExpressionCheck<ErlangGrammar> {
 

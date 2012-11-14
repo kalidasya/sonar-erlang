@@ -1,8 +1,8 @@
 package org.kalidasya.sonar.erlang.checks;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.List;
+
+import com.google.common.collect.ImmutableList;
 
 public final class CheckList {
 
@@ -30,6 +30,7 @@ public final class CheckList {
         NoTabsForIndentionCheck.class,
         NoTrailingWhitespaceCheck.class,
         NumberFormatException.class,
+        NumberOfFunctionArgsCheck.class,
         SpaceAfterBeforeOperatorsCheck.class,
         XPathCheck.class);
   }

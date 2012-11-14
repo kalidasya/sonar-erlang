@@ -1,6 +1,7 @@
 package org.kalidasya.sonar.erlang.checks;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
+import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Cardinality;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -12,6 +13,7 @@ import com.sonar.sslr.squid.checks.AbstractXPathCheck;
   key = "XPath",
   priority = Priority.MAJOR,
   cardinality = Cardinality.MULTIPLE)
+@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class XPathCheck extends AbstractXPathCheck<ErlangGrammar> {
 
   private static final String DEFAULT_XPATH_QUERY = "";

@@ -1,6 +1,7 @@
 package org.kalidasya.sonar.erlang.checks;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
+import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Cardinality;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -13,6 +14,7 @@ import com.sonar.sslr.api.Trivia;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
 @Rule(key = "MultipleBlankLines", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
+@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class MultipleBlankLinesCheck extends SquidCheck<ErlangGrammar> {
 
 	@RuleProperty(key = "maxBlankLinesInsideFunctions", defaultValue = "1")

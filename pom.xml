@@ -55,7 +55,7 @@
 		<email>kende.tamas@gmail.com</email>
 		<owner>Tamas Kende</owner>
 		<maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
-		<sonar.version>3.0</sonar.version>
+		<sonar.version>3.3.1</sonar.version>
 		<sslr.version>1.15</sslr.version>
 	</properties>
 
@@ -71,11 +71,20 @@
 				<artifactId>sonar-testing-harness</artifactId>
 				<version>${sonar.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.codehaus.sonar.sslr</groupId>
 				<artifactId>sslr-core</artifactId>
 				<version>${sslr.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.sonar</groupId>
+				<artifactId>sonar-squid</artifactId>
+				<version>${sonar.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.sonar</groupId>
+				<artifactId>sonar-check-api</artifactId>
+				<version>${sonar.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.codehaus.sonar.sslr</groupId>
@@ -96,6 +105,11 @@
 				<groupId>org.codehaus.sonar.sslr-squid-bridge</groupId>
 				<artifactId>sslr-squid-bridge</artifactId>
 				<version>2.2</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.collections</groupId>
+				<artifactId>google-collections</artifactId>
+				<version>1.0</version>
 			</dependency>
 			<dependency>
 				<groupId>junit</groupId>
@@ -144,6 +158,19 @@
 							<pluginExecutions>
 								<pluginExecution>
 									<pluginExecutionFilter>
+										<groupId>org.codehaus.sonar</groupId>
+										<artifactId>sonar-packaging-maven-plugin</artifactId>
+										<versionRange>[1.1,)</versionRange>
+										<goals>
+											<goal>check-dependencies</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
 										<groupId>
 											com.mycila.maven-license-plugin
 										</groupId>
@@ -181,6 +208,13 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>animal-sniffer-maven-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
 				</configuration>
 			</plugin>
 		</plugins>

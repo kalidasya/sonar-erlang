@@ -87,6 +87,31 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.sonar</groupId>
+				<artifactId>sonar-packaging-maven-plugin</artifactId>
+				<extensions>true</extensions>
+				<executions>
+					<execution>
+						<id>default-sonar-plugin</id>
+						<phase>package</phase>
+						<goals>
+							<goal>sonar-plugin</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>default-check-dependencies</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>check-dependencies</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.sonar</groupId>
+				<artifactId>sonar-dev-maven-plugin</artifactId>
+			</plugin>
 		</plugins>
 	</build>
 

@@ -1,6 +1,7 @@
 package org.kalidasya.sonar.erlang.checks;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
+import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
@@ -8,6 +9,7 @@ import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
 @Rule(key = "DoNotUseExportAll", priority = Priority.MINOR)
+@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class DoNotUseExportAllCheck extends SquidCheck<ErlangGrammar> {
 
 	@Override

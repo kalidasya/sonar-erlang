@@ -20,7 +20,6 @@ import org.sonar.squid.indexer.QueryByType;
 
 import com.google.common.base.Charsets;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.AstNodeType;
 import com.sonar.sslr.impl.Parser;
 import com.sonar.sslr.squid.AstScanner;
 import com.sonar.sslr.squid.SourceCodeBuilderCallback;
@@ -32,7 +31,6 @@ import com.sonar.sslr.squid.metrics.ComplexityVisitor;
 import com.sonar.sslr.squid.metrics.CounterVisitor;
 import com.sonar.sslr.squid.metrics.LinesOfCodeVisitor;
 import com.sonar.sslr.squid.metrics.LinesVisitor;
-import com.sonar.sslr.xpath.api.AstNodeXPathQuery;
 
 public final class ErlangAstScanner {
 

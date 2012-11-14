@@ -2,6 +2,7 @@ package org.kalidasya.sonar.erlang.checks;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.sonar.api.utils.SonarException;
+import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Cardinality;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -14,6 +15,7 @@ import com.sonar.sslr.api.Trivia;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
 @Rule(key = "LineLength", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
+@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class LineLengthCheck extends SquidCheck<ErlangGrammar> implements
 		AstAndTokenVisitor {
 

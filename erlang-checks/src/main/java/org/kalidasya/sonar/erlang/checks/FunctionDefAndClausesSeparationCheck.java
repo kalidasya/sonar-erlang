@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
+import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Cardinality;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -16,6 +17,7 @@ import com.sonar.sslr.squid.checks.SquidCheck;
 
 @Rule(key = "FunctionDefAndClausesSeparation", priority = Priority.MAJOR,
 		cardinality = Cardinality.SINGLE)
+@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class FunctionDefAndClausesSeparationCheck extends SquidCheck<ErlangGrammar> {
 
 	@RuleProperty(key = "allowedBlankLinesBetweenClauses", defaultValue = "0")
