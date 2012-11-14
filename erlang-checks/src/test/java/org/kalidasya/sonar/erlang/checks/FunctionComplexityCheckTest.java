@@ -4,7 +4,6 @@ import java.io.File;
 
 import org.junit.Test;
 import org.kalidasya.sonar.erlang.ErlangAstScanner;
-import org.kalidasya.sonar.erlang.api.ErlangMetric;
 import org.sonar.squid.api.SourceFile;
 
 import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
