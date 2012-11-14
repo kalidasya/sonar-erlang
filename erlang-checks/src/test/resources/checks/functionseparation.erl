@@ -2,60 +2,25 @@
 -export(hello/0).
 
 hello()->
-	Code,
-	SomeList = [
-            Element1
-            , Element2 %first issue
-            , Element3 %second issue
-        ],
- 	%comment
-	DifferentBlock,
-	%comment
-	Whatever1 = [
-            Element1,
-            Element2
-            ,Element3 %third issue
-        ],
-	%comment
-	Whatever2= [
-            Element1,
-            Element2,
-            Element3
-        ];
+	Code;
 hello(A) ->
     Code.
-bello()->
+bello()-> %issue
     code;
 bello(A) ->
     {A, code}.
 
+%not issue
+%not issue
 hello2()->
-	Code,
-	SomeList = [
-            Element1
-            , Element2 %first issue
-            , Element3 %second issue
-        ],
- 	%comment
-	DifferentBlock,
-	%comment
-	Whatever1 = [
-            Element1,
-            Element2
-            ,Element3 %third issue
-        ],
-	%comment
-	Whatever2= [
-            Element1,
-            Element2,
-            Element3
-        ];
+	Code;
 
-hello2(A) ->
+hello2(A) -> %issue
     Code.
 
 
-bello2()->
+bello2()-> %issue
     code;
+%not issue
 bello2(A) ->
     {A, code}.

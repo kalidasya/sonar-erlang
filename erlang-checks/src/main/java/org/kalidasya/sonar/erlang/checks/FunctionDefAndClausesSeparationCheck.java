@@ -10,6 +10,8 @@ import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 
 import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.Token;
+import com.sonar.sslr.api.Trivia;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
 @Rule(key = "FunctionDefAndClausesSeparation", priority = Priority.MAJOR,
@@ -40,6 +42,9 @@ public class FunctionDefAndClausesSeparationCheck extends SquidCheck<ErlangGramm
 	@Override
 	public void visitNode(AstNode ast) {
 		if (!ast.getToken().isGeneratedCode()) {
+			/**
+			 * Check the definition first
+			 */
 			if (ast.getType().equals(getContext().getGrammar().functionDeclaration)) {
 				if (previousDefinition == null) {
 					previousDefinition = ast;
@@ -48,6 +53,9 @@ public class FunctionDefAndClausesSeparationCheck extends SquidCheck<ErlangGramm
 					previousDefinition = ast;
 				}
 			}
+			/**
+			 * Check the clauses
+			 */
 			if (ast.findDirectChildren(getContext().getGrammar().functionClause).size() > 1) {
 				List<AstNode> funcClauses = ast
 						.findDirectChildren(getContext().getGrammar().functionClause);
@@ -64,12 +72,34 @@ public class FunctionDefAndClausesSeparationCheck extends SquidCheck<ErlangGramm
 	}
 
 	private void check(AstNode ast, AstNode previous, int threshold) {
-		int difference = ast.getTokenLine() - previous.getLastToken().getLine() - 1;
-		if (difference != threshold) {
-			getContext().createLineViolation(this,
-					"The line has {0} precending blank line, the thresold is: {1}.",
-					ast.getTokenLine(), difference, threshold);
+		if (diff(ast.getTokenLine(), previous.getLastToken().getLine(), threshold)) {
+			boolean hasTrivias = ast.getToken().hasTrivia();
+			if ((hasTrivias && checkTrivias(ast.getToken(), previous.getToken(), threshold))
+					|| !hasTrivias) {
+				getContext().createLineViolation(this,
+						"The line has {0} precending blank line and it should be: {1}.",
+						ast.getTokenLine(),
+						(ast.getTokenLine() - previous.getLastToken().getLine() - 1), threshold);
+			}
 		}
+	}
+
+	private boolean diff(int a, int b, int threshold) {
+		if (a - b - 1 != threshold) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean checkTrivias(Token token, Token token2, int threshold) {
+		int actLine = token2.getLine();
+		for (Trivia trivia : token.getTrivia()) {
+			if (actLine - trivia.getToken().getLine() - 1 > threshold) {
+				return true;
+			}
+			actLine = trivia.getToken().getLine();
+		}
+		return false;
 	}
 
 }

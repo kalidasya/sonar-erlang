@@ -17,9 +17,9 @@ public class FunctionDefAndClausesSeparationCheckTest {
 		SourceFile file = ErlangAstScanner.scanSingleFile(new File(
 				"src/test/resources/checks/functionseparation.erl"), check);
 		CheckMessagesVerifier.verify(file.getCheckMessages())
-		.next().atLine(27).withMessage("The line has 0 precending blank line, the thresold is: 1.")
-		.next().atLine(54).withMessage("The line has 1 precending blank line, the thresold is: 0.")
-		.next().atLine(58).withMessage("The line has 2 precending blank line, the thresold is: 1.")
+		.next().atLine(8).withMessage("The line has 0 precending blank line and it should be: 1.")
+		.next().atLine(18).withMessage("The line has 1 precending blank line and it should be: 0.")
+		.next().atLine(22).withMessage("The line has 2 precending blank line and it should be: 1.")
 		.noMore();
 	}
 }
