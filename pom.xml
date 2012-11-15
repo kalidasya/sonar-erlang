@@ -195,26 +195,19 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
-			<plugin>
+			<!-- <plugin>
 				<groupId>com.mycila.maven-license-plugin</groupId>
 				<artifactId>maven-license-plugin</artifactId>
 				<configuration>
 					<skip>true</skip>
 					<header>src/main/resources/license.txt</header>
 				</configuration>
-			</plugin>
+			</plugin> -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>animal-sniffer-maven-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
 				</configuration>
 			</plugin>
 		</plugins>
