@@ -23,13 +23,16 @@ import java.util.List;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.sonar.check.BelongsToProfile;
+import org.sonar.check.Cardinality;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
-@Rule(key = "ExportOneFunctionPerLine", priority = Priority.MINOR)
+@Rule(key = "ExportOneFunctionPerLine", priority = Priority.MINOR,
+		cardinality = Cardinality.SINGLE, name = "ExportOneFunctionPerLine",
+		description = "Export each method in separate line.")
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class ExportOneFunctionPerLineCheck extends SquidCheck<ErlangGrammar> {
 

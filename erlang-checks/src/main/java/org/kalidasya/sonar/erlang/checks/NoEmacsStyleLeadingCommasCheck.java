@@ -31,12 +31,14 @@ import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
-@Rule(key = "NoEmacsStyleLeadingComma", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
+@Rule(key = "NoEmacsStyleLeadingComma", priority = Priority.MAJOR,
+		cardinality = Cardinality.SINGLE, name = "NoEmacsStyleLeadingComma",
+		description = "No Emacs style leading comma")
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
-public class NoEmacsStyleLeadingCommasCheck extends SquidCheck<ErlangGrammar> implements AstAndTokenVisitor {
+public class NoEmacsStyleLeadingCommasCheck extends SquidCheck<ErlangGrammar> implements
+		AstAndTokenVisitor {
 
 	private Token previousToken;
-
 
 	@Override
 	public void visitFile(AstNode astNode) {
@@ -47,17 +49,14 @@ public class NoEmacsStyleLeadingCommasCheck extends SquidCheck<ErlangGrammar> im
 	}
 
 	public void visitToken(Token token) {
-		if(previousToken==null || (previousToken.getLine()!=token.getLine())){
-			if(token.getType().equals(ErlangPunctuator.COMMA)){
-				getContext()
-				.createLineViolation(
-						this,
-						"No Emacs-style leading commas.",
+		if (previousToken == null || (previousToken.getLine() != token.getLine())) {
+			if (token.getType().equals(ErlangPunctuator.COMMA)) {
+				getContext().createLineViolation(this, "No Emacs-style leading commas.",
 						token.getLine());
 			}
 			previousToken = token;
 		}
-		
+
 	}
 
 }

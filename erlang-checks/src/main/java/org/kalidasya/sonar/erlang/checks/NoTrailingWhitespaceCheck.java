@@ -33,7 +33,8 @@ import org.sonar.check.Rule;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
-@Rule(key = "NoTrailingWhiteSpace", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
+@Rule(key = "NoTrailingWhiteSpace", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE,
+		name = "NoTrailingWhiteSpace", description="No trailing white space is allowed")
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class NoTrailingWhitespaceCheck extends SquidCheck<ErlangGrammar> {
 
@@ -56,8 +57,7 @@ public class NoTrailingWhitespaceCheck extends SquidCheck<ErlangGrammar> {
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
 				if (line.matches(".*\\s+$")) {
-					getContext().createLineViolation(this,
-							"No trailing white space.", lineNumber);
+					getContext().createLineViolation(this, "No trailing white space.", lineNumber);
 				}
 				lineNumber++;
 			}

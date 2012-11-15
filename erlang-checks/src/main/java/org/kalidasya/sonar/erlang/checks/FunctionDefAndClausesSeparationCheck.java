@@ -35,7 +35,8 @@ import com.sonar.sslr.api.Trivia;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
 @Rule(key = "FunctionDefAndClausesSeparation", priority = Priority.MAJOR,
-		cardinality = Cardinality.SINGLE)
+		cardinality = Cardinality.SINGLE, name = "FunctionDefAndClausesSeparation",
+		description = "Rule for function declaration and clause separation")
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class FunctionDefAndClausesSeparationCheck extends SquidCheck<ErlangGrammar> {
 

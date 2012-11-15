@@ -28,34 +28,30 @@ import org.sonar.check.RuleProperty;
 
 import com.sonar.sslr.squid.checks.AbstractCommentRegularExpressionCheck;
 
-@Rule(
-  key = "CommentRegularExpression",
-  priority = Priority.MAJOR,
-  cardinality = Cardinality.MULTIPLE)
+@Rule(key = "CommentRegularExpression", priority = Priority.MAJOR,
+		cardinality = Cardinality.MULTIPLE, name = "CommentRegularExpression",
+		description = "Create regular expression based check on comments")
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
-public class CommentRegularExpressionCheck extends AbstractCommentRegularExpressionCheck<ErlangGrammar> {
+public class CommentRegularExpressionCheck extends
+		AbstractCommentRegularExpressionCheck<ErlangGrammar> {
 
-  private static final String DEFAULT_REGULAR_EXPRESSION = "";
-  private static final String DEFAULT_MESSAGE = "The regular expression matches this comment";
+	private static final String DEFAULT_REGULAR_EXPRESSION = "";
+	private static final String DEFAULT_MESSAGE = "The regular expression matches this comment";
 
-  @RuleProperty(
-    key = "regularExpression",
-    defaultValue = "" + DEFAULT_REGULAR_EXPRESSION)
-  public String regularExpression = DEFAULT_REGULAR_EXPRESSION;
+	@RuleProperty(key = "regularExpression", defaultValue = "" + DEFAULT_REGULAR_EXPRESSION)
+	public String regularExpression = DEFAULT_REGULAR_EXPRESSION;
 
-  @RuleProperty(
-    key = "message",
-    defaultValue = "" + DEFAULT_MESSAGE)
-  public String message = DEFAULT_MESSAGE;
+	@RuleProperty(key = "message", defaultValue = "" + DEFAULT_MESSAGE)
+	public String message = DEFAULT_MESSAGE;
 
-  @Override
-  public String getRegularExpression() {
-    return regularExpression;
-  }
+	@Override
+	public String getRegularExpression() {
+		return regularExpression;
+	}
 
-  @Override
-  public String getMessage() {
-    return message;
-  }
+	@Override
+	public String getMessage() {
+		return message;
+	}
 
 }

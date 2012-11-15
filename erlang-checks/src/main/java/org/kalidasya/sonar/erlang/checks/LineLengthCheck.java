@@ -33,17 +33,16 @@ import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.Trivia;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
-@Rule(key = "LineLength", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
+@Rule(key = "LineLength", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE,
+		name = "LineLength", description="Allowed line length")
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
-public class LineLengthCheck extends SquidCheck<ErlangGrammar> implements
-		AstAndTokenVisitor {
+public class LineLengthCheck extends SquidCheck<ErlangGrammar> implements AstAndTokenVisitor {
 
 	private static final int DEFAULT_MAXIMUM_LINE_LENHGTH = 100;
 
 	private int lastIncorrectLine;
 
-	@RuleProperty(key = "maximumLineLength", defaultValue = ""
-			+ DEFAULT_MAXIMUM_LINE_LENHGTH)
+	@RuleProperty(key = "maximumLineLength", defaultValue = "" + DEFAULT_MAXIMUM_LINE_LENHGTH)
 	public int maximumLineLength = DEFAULT_MAXIMUM_LINE_LENHGTH;
 
 	@Override
@@ -66,11 +65,9 @@ public class LineLengthCheck extends SquidCheck<ErlangGrammar> implements
 
 			if (incorrectLine > -1) {
 				lastIncorrectLine = token.getLine();
-				getContext()
-						.createLineViolation(
-								this,
-								"The line length is greater than {0,number,integer} authorized.",
-								incorrectLine, maximumLineLength);
+				getContext().createLineViolation(this,
+						"The line length is greater than {0,number,integer} authorized.",
+						incorrectLine, maximumLineLength);
 			}
 		}
 	}
@@ -82,8 +79,7 @@ public class LineLengthCheck extends SquidCheck<ErlangGrammar> implements
 		} else if (token.getTrivia().size() > 0) {
 			for (Trivia trivia : token.getTrivia()) {
 				if (trivia.isComment()
-						&& trivia.getToken().getColumn()
-								+ trivia.getToken().getValue().length() > maximumLineLength) {
+						&& trivia.getToken().getColumn() + trivia.getToken().getValue().length() > maximumLineLength) {
 					return trivia.getToken().getLine();
 				}
 			}

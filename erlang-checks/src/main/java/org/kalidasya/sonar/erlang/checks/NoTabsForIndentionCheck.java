@@ -33,7 +33,8 @@ import org.sonar.check.Rule;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
-@Rule(key = "NoTabsForIndention", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
+@Rule(key = "NoTabsForIndention", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE,
+		name = "NoTabsForIndention", description="Do not use tabs for indention")
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class NoTabsForIndentionCheck extends SquidCheck<ErlangGrammar> {
 

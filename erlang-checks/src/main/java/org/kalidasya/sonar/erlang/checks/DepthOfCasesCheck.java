@@ -29,7 +29,8 @@ import org.sonar.check.RuleProperty;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
-@Rule(key = "DepthOfCases", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
+@Rule(key = "DepthOfCases", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE,
+		name = "DepthOfCases", description="Allowed maximum number of nested case statements")
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class DepthOfCasesCheck extends SquidCheck<ErlangGrammar> {
 
@@ -65,7 +66,7 @@ public class DepthOfCasesCheck extends SquidCheck<ErlangGrammar> {
 	}
 
 	private int countChild(AstNode astNode) {
-		return astNode.findChildren(g.caseExpression).size()-1;
+		return astNode.findChildren(g.caseExpression).size() - 1;
 	}
 
 }

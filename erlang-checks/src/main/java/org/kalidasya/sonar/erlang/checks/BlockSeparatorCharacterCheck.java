@@ -28,7 +28,9 @@ import org.sonar.check.RuleProperty;
 
 import com.sonar.sslr.squid.checks.AbstractCommentRegularExpressionCheck;
 
-@Rule(key = "BlockSeparatorCharacter", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
+@Rule(key = "BlockSeparatorCharacter", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE,
+		name = "BlockSeparatorCharacter",
+		description = "Only the specified character is allowed as block separator")
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class BlockSeparatorCharacterCheck extends
 		AbstractCommentRegularExpressionCheck<ErlangGrammar> {
@@ -36,8 +38,7 @@ public class BlockSeparatorCharacterCheck extends
 	private static final String REGULAR_EXPRESSION = "^%%+ *([^%s])\\1+ *$";
 	private static final String DEFAULT_MESSAGE = "only use '%s' sign(s) for block separators in comments (case sensitive)";
 
-	@RuleProperty(	key = "allowedChars", 
-					defaultValue = "=")
+	@RuleProperty(key = "allowedChars", defaultValue = "=")
 	public String allowedChars = "=";
 
 	@Override

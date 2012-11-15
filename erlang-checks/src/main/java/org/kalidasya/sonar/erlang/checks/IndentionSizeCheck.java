@@ -31,7 +31,8 @@ import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
-@Rule(key = "IndentionSize", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
+@Rule(key = "IndentionSize", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE,
+		name = "IndentionSize", description="Allowed indention size")
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class IndentionSizeCheck extends SquidCheck<ErlangGrammar> implements AstAndTokenVisitor {
 

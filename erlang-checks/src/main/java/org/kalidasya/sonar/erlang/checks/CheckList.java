@@ -48,7 +48,6 @@ public final class CheckList {
         NoSpaceAfterBeforeBracketsCheck.class,
         NoTabsForIndentionCheck.class,
         NoTrailingWhitespaceCheck.class,
-        NumberFormatException.class,
         NumberOfFunctionArgsCheck.class,
         SpaceAfterBeforeOperatorsCheck.class,
         XPathCheck.class);

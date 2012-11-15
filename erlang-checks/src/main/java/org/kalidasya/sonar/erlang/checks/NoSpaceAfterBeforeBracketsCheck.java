@@ -35,7 +35,8 @@ import com.sonar.sslr.api.Token;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
 @Rule(key = "NoSpaceAfterBeforeBrackets", priority = Priority.MAJOR,
-		cardinality = Cardinality.SINGLE)
+		cardinality = Cardinality.SINGLE, name = "NoSpaceAfterBeforeBrackets",
+		description = "No space after and before bracklets")
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class NoSpaceAfterBeforeBracketsCheck extends SquidCheck<ErlangGrammar> {
 

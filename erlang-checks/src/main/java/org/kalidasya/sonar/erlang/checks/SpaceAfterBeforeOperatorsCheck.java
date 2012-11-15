@@ -33,7 +33,9 @@ import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
-@Rule(key = "SpaceAfterBeforeOperators", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
+@Rule(key = "SpaceAfterBeforeOperators", priority = Priority.MAJOR,
+		cardinality = Cardinality.SINGLE, name = "SpaceAfterBeforeOperators",
+		description = "Space after and before operators")
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class SpaceAfterBeforeOperatorsCheck extends SquidCheck<ErlangGrammar> {
 

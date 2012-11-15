@@ -32,7 +32,8 @@ import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.Trivia;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
-@Rule(key = "MultipleBlankLines", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
+@Rule(key = "MultipleBlankLines", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE,
+		name = "MultipleBlankLines", description="No more blank lines than specified")
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class MultipleBlankLinesCheck extends SquidCheck<ErlangGrammar> {
 
@@ -46,8 +47,7 @@ public class MultipleBlankLinesCheck extends SquidCheck<ErlangGrammar> {
 
 	@Override
 	public void init() {
-		subscribeTo(getContext().getGrammar().primaryExpression,
-				GenericTokenType.IDENTIFIER);
+		subscribeTo(getContext().getGrammar().primaryExpression, GenericTokenType.IDENTIFIER);
 	}
 
 	@Override
@@ -62,18 +62,14 @@ public class MultipleBlankLinesCheck extends SquidCheck<ErlangGrammar> {
 	public void visitNode(AstNode ast) {
 		if (!ast.getToken().isGeneratedCode()) {
 			if (previousToken == null
-					|| (previousToken != null && previousToken.getLine() != ast
-							.getToken().getLine())) {
-				int previousLine = (previousToken != null) ? previousToken
-						.getLine() : 0;
+					|| (previousToken != null && previousToken.getLine() != ast.getToken()
+							.getLine())) {
+				int previousLine = (previousToken != null) ? previousToken.getLine() : 0;
 
 				if (checkBlankLines(ast, previousLine)) {
-					getContext()
-							.createLineViolation(
-									this,
-									"Too many blank lines found, the threshold is {0}.",
-									ast.getToken().getLine(),
-									getMaxFor(ast));
+					getContext().createLineViolation(this,
+							"Too many blank lines found, the threshold is {0}.",
+							ast.getToken().getLine(), getMaxFor(ast));
 				}
 			}
 			previousToken = ast.getToken();
