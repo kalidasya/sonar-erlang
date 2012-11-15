@@ -230,7 +230,10 @@ public class ErlangParserModulesTest {
 	public void specs() throws IOException, URISyntaxException {
 
 		assertThat(p, parse(code("-module(m).", "-type my_type() :: atom() | integer().",
-				"-spec my_function(integer()) -> integer().", "-export(dodo/1).", "dodo(A) ->",
+				"-export(dodo/1).", 
+				"-spec my_function(integer()) -> integer().",
+				"dodo(A) ->",
+				
 				"{a, node()}.")));
 	}
 	
@@ -252,6 +255,14 @@ public class ErlangParserModulesTest {
 			"dodo(A) ->","{a, node()}.")));
 	}
 
+	@Test
+	public void specTest(){
+		assertThat(p, parse(code(
+			"-module(m).", 
+			"-spec test_fun(any(), fun(() -> ok), pos_integer(), pos_integer()) -> {float()}.",
+			"dodo(A) ->","{a, node()}.")));
+	}
+	
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);
 	}

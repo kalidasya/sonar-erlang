@@ -92,7 +92,7 @@ public class ErlangParserExpressionTest {
 	@Test
 	public void tupleExpression() {
 		assertThat(p, parse(code("{asd,ore,{ow,[2,23,as],3},[hello,{23,as}]}")));
-
+		assertThat(p, parse(code("{float(), float()}")));
 	}
 
 	@Test

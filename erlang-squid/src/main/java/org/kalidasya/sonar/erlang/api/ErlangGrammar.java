@@ -31,7 +31,7 @@ public class ErlangGrammar extends Grammar {
 	public Rule exportAttr;
 	public Rule compileAttr;
 	public Rule defineAttr;
-	public Rule typeOrFunctionSpec;
+	public Rule typeSpec;
 	public Rule genericAttr;
 	public Rule funcExport;
 	public Rule expression;
@@ -107,6 +107,11 @@ public class ErlangGrammar extends Grammar {
 	public Rule endifAttr;
 	public Rule flowControlAttr;
 	public Rule recordAttr;
+	public Rule spec;
+	public Rule specType;
+	public Rule funcSpec;
+	public Rule specFun;
+
 	
 	@Override
 	public Rule getRootRule() {

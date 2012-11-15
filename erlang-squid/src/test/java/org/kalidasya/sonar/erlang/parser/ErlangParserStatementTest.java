@@ -73,7 +73,9 @@ public class ErlangParserStatementTest {
 						"(Name, 23) when Name>=2 ->",
 						"Spec = agner:spec(Name),",
 						"Searchable = string:to_lower(\"hElO\")", "end")));
+	
 	}
+	
 
 	@Test
 	public void caseStatements() {

@@ -112,6 +112,11 @@
 				<version>1.0</version>
 			</dependency>
 			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>11.0.1</version>
+			</dependency>
+			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>4.10</version>
@@ -195,14 +200,9 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
-			<!-- <plugin>
-				<groupId>com.mycila.maven-license-plugin</groupId>
-				<artifactId>maven-license-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-					<header>src/main/resources/license.txt</header>
-				</configuration>
-			</plugin> -->
+			<!-- <plugin> <groupId>com.mycila.maven-license-plugin</groupId> <artifactId>maven-license-plugin</artifactId> 
+				<configuration> <skip>true</skip> <header>src/main/resources/license.txt</header> 
+				</configuration> </plugin> -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>

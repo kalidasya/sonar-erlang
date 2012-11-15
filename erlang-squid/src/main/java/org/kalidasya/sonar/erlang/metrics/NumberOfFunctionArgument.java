@@ -32,7 +32,6 @@ import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.squid.checks.SquidCheck;
 
-@Rule(key = "NumberOfFunctionArgument", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE)
 public class NumberOfFunctionArgument extends SquidCheck<ErlangGrammar> {
 
 	List<ErlangPunctuator> nonArg = ImmutableList.of(ErlangPunctuator.LPARENTHESIS, ErlangPunctuator.RPARENTHESIS, ErlangPunctuator.COMMA); 

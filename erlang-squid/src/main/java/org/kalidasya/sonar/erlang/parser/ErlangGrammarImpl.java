@@ -43,12 +43,14 @@ import static org.kalidasya.sonar.erlang.api.ErlangKeyword.CATCH;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.END;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.IF;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.NOT;
+import static org.kalidasya.sonar.erlang.api.ErlangKeyword.FUN;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.OF;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.OR;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.ORELSE;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.RECEIVE;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.REM;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.TRY;
+import static org.kalidasya.sonar.erlang.api.ErlangKeyword.WHEN;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.XOR;
 import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.ARROW;
 import static org.kalidasya.sonar.erlang.api.ErlangPunctuator.ARROWBACK;
@@ -95,9 +97,6 @@ import com.sonar.sslr.impl.matcher.GrammarFunctions;
 
 public class ErlangGrammarImpl extends ErlangGrammar {
 
-
-	
-
 	public ErlangGrammarImpl() {
 		expressions();
 		statements();
@@ -110,6 +109,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		module.is(
 			moduleAttributes, 
 			one2n(
+				opt(spec),
 				functionDeclaration
 			), 
 			EOF
@@ -123,7 +123,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 					compileAttr,
 					defineAttr,
 					flowControlAttr,
-					typeOrFunctionSpec,
+					typeSpec,
 					recordAttr,
 					genericAttr
 				)
@@ -248,12 +248,9 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				RPARENTHESIS, 
 			DOT
 		);
-		typeOrFunctionSpec.is(
+		typeSpec.is(
 			MINUS, 
-			or(
-				"type",
-				"spec"
-			),
+			"type",
 			funcDecl,
 			or(
 				and(
@@ -293,6 +290,51 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	
 	
 	private void functions() {
+		spec.is(
+			ErlangPunctuator.MINUS,
+			"spec",
+			opt(
+				IDENTIFIER,
+				COLON
+			),
+			IDENTIFIER,
+			funcSpec,
+			o2n(
+				SEMI,
+				funcSpec
+			),
+			DOT
+		);
+		
+		funcSpec.is(
+			LPARENTHESIS,
+			opt(
+				specType,
+				o2n(COMMA, specType)
+			),
+			RPARENTHESIS,
+			ARROW,
+			specType,
+			opt(
+				WHEN,
+				or(specType)
+			)
+		);
+		
+		specType.is(
+			or(specFun, callExpression),
+			opt(COLON,COLON,callExpression)
+		);
+		
+		specFun.is(
+			FUN,
+			LPARENTHESIS,
+			arguments,
+			ARROW,
+			specType,
+			RPARENTHESIS
+		);
+		
 		functionDeclaration.is(
 			functionClause, 
 			o2n(
@@ -468,6 +510,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	    		memberExpression
 	    	)
 	     ).skipIfOneChild();
+	    
 	    arguments.is(LPARENTHESIS, opt(assignmentExpression, o2n(COMMA, assignmentExpression)), RPARENTHESIS);
 	    unaryExpression.is(or(
 	        callExpression,
