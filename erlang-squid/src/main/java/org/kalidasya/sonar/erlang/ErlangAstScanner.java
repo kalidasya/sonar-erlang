@@ -153,20 +153,25 @@ public final class ErlangAstScanner {
 		/* Public API counter */
 		builder.withSquidAstVisitor(new PublicDocumentedApiCounter());
 
-		/* Number of fun expressions */
-		builder.withSquidAstVisitor(ComplexityVisitor.<ErlangGrammar> builder().setMetricDef(
-				ErlangMetric.NUM_OF_FUN_EXRP).subscribeTo(parser.getGrammar().funExpression)
-				.build());
-
 		/* Number of function arguments */
 		builder.withSquidAstVisitor(new NumberOfFunctionArgument());
 
 		/* Branches of recursion */
 		builder.withSquidAstVisitor(new BranchesOfRecursion());
 
+		/* Number of fun expressions */
+		builder.withSquidAstVisitor(ComplexityVisitor.<ErlangGrammar> builder().setMetricDef(
+				ErlangMetric.NUM_OF_FUN_EXRP).subscribeTo(parser.getGrammar().funExpression)
+				.build());
+		
 		/* Number of function clauses */
 		builder.withSquidAstVisitor(ComplexityVisitor.<ErlangGrammar> builder().setMetricDef(
 				ErlangMetric.NUM_OF_FUN_CLAUSES).subscribeTo(parser.getGrammar().functionClause)
+				.build());
+		
+		/* Number of macro definitions */
+		builder.withSquidAstVisitor(ComplexityVisitor.<ErlangGrammar> builder().setMetricDef(
+				ErlangMetric.NUM_OF_MACROS).subscribeTo(parser.getGrammar().defineAttr)
 				.build());
 
 		/* External visitors (typically Check ones) */

@@ -158,4 +158,10 @@ public class ErlangAstScannerTest {
     assertThat(file.getInt(ErlangMetric.NUM_OF_FUN_CLAUSES)).isEqualTo(4);
   }
   
+  @Test
+  public void numOfMacros() {
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/macros.erl"));
+    assertThat(file.getInt(ErlangMetric.NUM_OF_MACROS)).isEqualTo(2);
+  }
+  
 }

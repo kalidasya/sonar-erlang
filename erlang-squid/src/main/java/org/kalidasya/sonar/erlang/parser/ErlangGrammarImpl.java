@@ -230,7 +230,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			"define",
 			LPARENTHESIS, 
 			or(
-				and(IDENTIFIER, COMMA, IDENTIFIER),
+				and(IDENTIFIER, COMMA, primaryExpression),
 				and(funcDecl, COMMA, statement)
 			),
 			RPARENTHESIS, 
