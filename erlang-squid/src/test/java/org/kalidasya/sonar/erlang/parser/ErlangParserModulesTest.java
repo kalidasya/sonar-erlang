@@ -236,9 +236,15 @@ public class ErlangParserModulesTest {
 		assertThat(p, parse(code("-module(m).", "-export(dodo/1).",
 				"-type my_type() :: atom() | integer().",
 				"dodo(A) ->",
-				
 				"{a, node()}.")));
+		
+		assertThat(p, parse(code("-module(m).", "-export(dodo/1).",
+				"-type my_type() :: {non_reg_integer(), non_reg_integer(), non_reg_integer()}.",
+				"dodo(A) ->",
+				"{a, node()}.")));
+
 	}
+	
 	
 	@Test
 	public void macroDefine(){
@@ -295,6 +301,10 @@ public class ErlangParserModulesTest {
 				"-spec now_ms({MegaSecs::pos_integer(),Secs::pos_integer(),MicroSecs::pos_integer()}) -> pos_integer().",
 				"dodo(A) ->","{a, node()}.")));
 		
+		assertThat(p, parse(code(
+				"-module(m).", 
+				"-spec trace_named([atom()], pos_integer()) -> {ok, timer:tref()}.",
+				"dodo(A) ->","{a, node()}.")));
 
 	}
 	
