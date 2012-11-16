@@ -262,7 +262,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		
 		genericAttr.is(
 				MINUS, 
-				or("behaviour", "import", "vsn", "on_load", "include", "file", "ignore_xref", "include_lib"), 
+				or("behaviour", "import", "vsn", "on_load", "include", "file", "ignore_xref", "include_lib", "author"), 
 				LPARENTHESIS, 
 				or(
 					primaryExpression
