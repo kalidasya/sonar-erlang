@@ -111,6 +111,8 @@ public class ErlangGrammar extends Grammar {
 	public Rule specType;
 	public Rule funcSpec;
 	public Rule specFun;
+	public Rule specTypes;
+	public Rule specTypeDef;
 
 	
 	@Override

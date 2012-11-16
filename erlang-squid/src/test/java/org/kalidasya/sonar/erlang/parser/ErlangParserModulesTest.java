@@ -163,7 +163,6 @@ public class ErlangParserModulesTest {
 		assertThat(p, parse(code("-module(m).",
 				"hexstring(<< X:128/big-unsigned-integer >>) -> ",
 				"lists:flatten(io_lib:format(\"~32.16.0b\", [X])).")));
-
 	}
 
 	@Test
@@ -232,11 +231,10 @@ public class ErlangParserModulesTest {
 	}
 
 	@Test
-	public void specs() throws IOException, URISyntaxException {
+	public void typeTest() throws IOException, URISyntaxException {
 
 		assertThat(p, parse(code("-module(m).", "-export(dodo/1).",
 				"-type my_type() :: atom() | integer().",
-				"-spec my_function(integer()) -> integer().",
 				"dodo(A) ->",
 				
 				"{a, node()}.")));
@@ -286,6 +284,17 @@ public class ErlangParserModulesTest {
 				"-module(m).", 
 				"-spec hexstring(binary()) -> string().",
 				"dodo(A) ->","{a, node()}.")));
+		
+		assertThat(p, parse(code(
+				"-module(m).", 
+				"-spec join(list(I), Sep) -> list(I | Sep) when Sep :: term(), I :: term().",
+				"dodo(A) ->","{a, node()}.")));
+		
+		assertThat(p, parse(code(
+				"-module(m).", 
+				"-spec now_ms({MegaSecs::pos_integer(),Secs::pos_integer(),MicroSecs::pos_integer()}) -> pos_integer().",
+				"dodo(A) ->","{a, node()}.")));
+		
 
 	}
 	

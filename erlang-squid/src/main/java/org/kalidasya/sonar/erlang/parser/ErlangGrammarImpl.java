@@ -93,9 +93,12 @@ import org.kalidasya.sonar.erlang.api.ErlangKeyword;
 import org.kalidasya.sonar.erlang.api.ErlangPunctuator;
 import org.kalidasya.sonar.erlang.api.ErlangTokenType;
 
+import com.sonar.sslr.api.Rule;
 import com.sonar.sslr.impl.matcher.GrammarFunctions;
 
 public class ErlangGrammarImpl extends ErlangGrammar {
+
+	
 
 	public ErlangGrammarImpl() {
 		expressions();
@@ -321,26 +324,39 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		funcSpec.is(
 			LPARENTHESIS,
 			opt(
-				specType,
-				o2n(COMMA, specType)
+				specType
 			),
 			RPARENTHESIS,
 			ARROW,
 			specType,
 			opt(
 				WHEN,
-				or(specType)
+				specTypes
 			)
 		);
 		
+		specTypes.is(
+			specType,
+			o2n(COMMA, specType)
+		);
+		
 		specType.is(
-			opt(LBRACKET),
+			opt(or(LBRACKET, LCURLYBRACE)),
 			opt(
-				or(specFun, callExpression),
-				o2n(PIPE, or(specFun, callExpression)),
-				opt(COLON,COLON,callExpression)
+				specTypeDef,
+				o2n(or(PIPE, COMMA), specTypeDef)
 			),
-			opt(RBRACKET)
+			opt(or(RBRACKET, RCURLYBRACE))
+		);
+		
+		specTypeDef.is(
+			//Matching to specFun, something like: list(A | B), and: Mega::giga(), and simple function call
+			or(
+				specFun, 
+				and(IDENTIFIER, LPARENTHESIS, IDENTIFIER, one2n(PIPE, IDENTIFIER), RPARENTHESIS),
+				and(IDENTIFIER, COLON,COLON,callExpression),
+				callExpression
+			)
 		);
 		
 		specFun.is(
