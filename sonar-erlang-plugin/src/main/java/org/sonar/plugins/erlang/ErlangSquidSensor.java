@@ -71,8 +71,6 @@ public class ErlangSquidSensor implements Sensor {
 	}
 
 	public boolean shouldExecuteOnProject(Project project) {
-		System.out.println(Erlang.KEY);
-		System.out.println(project.getLanguage());
 		return Erlang.KEY.equals(project.getLanguage().getKey());
 	}
 

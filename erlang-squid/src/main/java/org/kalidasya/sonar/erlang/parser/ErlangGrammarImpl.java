@@ -143,29 +143,23 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			IDENTIFIER,
 			COMMA,
 			LCURLYBRACE,
-			or(
-				and(
+			and(
+				opt(
 					IDENTIFIER,
-					COLON, COLON,
-					callExpression
+					COLON, COLON
 				),
-				and(
-					IDENTIFIER,
-					opt(MATCHOP,callExpression)
-				)
+				callExpression,
+				opt(MATCHOP,callExpression)
 			),
 			o2n(
-				COMMA,
-				or(
-					and(
+				or(COMMA,PIPE),
+				and(
+					opt(
 						IDENTIFIER,
-						COLON, COLON,
-						callExpression
+						COLON, COLON
 					),
-					and(
-						IDENTIFIER,
-						opt(MATCHOP,callExpression)
-					)
+					callExpression,
+					opt(MATCHOP,callExpression)
 				)	
 			),
 			RCURLYBRACE,

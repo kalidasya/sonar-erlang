@@ -68,10 +68,13 @@ public class ModuleAttributesTest {
 	@Test
 	public void recordDefTest() {
 		assertThat(p, parse(code("-record(state, {last::calendar:datetime(), tref::timer:tref()}).")));
+		assertThat(p, parse(code("-record(auth, { token :: string() | binary()}).")));
+		
 	}
 	
 	
 	
+
 	
 
 	
