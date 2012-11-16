@@ -109,7 +109,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		module.is(
 			moduleAttributes, 
 			one2n(
-				opt(spec),
+				o2n(or(typeSpec,spec)),
 				functionDeclaration
 			), 
 			EOF
@@ -123,7 +123,6 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 					compileAttr,
 					defineAttr,
 					flowControlAttr,
-					typeSpec,
 					recordAttr,
 					genericAttr
 				)
@@ -242,31 +241,9 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				IDENTIFIER, 
 				LPARENTHESIS, 
 				or(
-					LITERAL,
-					IDENTIFIER
+					primaryExpression
 				),
 				RPARENTHESIS, 
-			DOT
-		);
-		typeSpec.is(
-			MINUS, 
-			"type",
-			funcDecl,
-			or(
-				and(
-					COLON,
-					COLON,
-					funcDecl,
-					o2n(
-						PIPE,
-						funcDecl
-					)
-				),
-				and(
-					ARROW,
-					funcDecl
-				)
-			),
 			DOT
 		);
 		//TODO: is it possible to have something like: -export().?
@@ -305,6 +282,28 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			),
 			DOT
 		);
+		
+		typeSpec.is(
+				MINUS, 
+				"type",
+				funcDecl,
+				or(
+					and(
+						COLON,
+						COLON,
+						funcDecl,
+						o2n(
+							PIPE,
+							funcDecl
+						)
+					),
+					and(
+						ARROW,
+						funcDecl
+					)
+				),
+				DOT
+			);
 		
 		funcSpec.is(
 			LPARENTHESIS,

@@ -229,8 +229,8 @@ public class ErlangParserModulesTest {
 	@Test
 	public void specs() throws IOException, URISyntaxException {
 
-		assertThat(p, parse(code("-module(m).", "-type my_type() :: atom() | integer().",
-				"-export(dodo/1).", 
+		assertThat(p, parse(code("-module(m).", "-export(dodo/1).",
+				"-type my_type() :: atom() | integer().",
 				"-spec my_function(integer()) -> integer().",
 				"dodo(A) ->",
 				
@@ -260,6 +260,14 @@ public class ErlangParserModulesTest {
 		assertThat(p, parse(code(
 			"-module(m).", 
 			"-spec test_fun(any(), fun(() -> ok), pos_integer(), pos_integer()) -> {float()}.",
+			"dodo(A) ->","{a, node()}.")));
+	}
+	
+	@Test
+	public void moduleAttrTest(){
+		assertThat(p, parse(code(
+			"-module(m).", 
+			"-ignore_xref([{json, decode, 1}]).",
 			"dodo(A) ->","{a, node()}.")));
 	}
 	
