@@ -242,7 +242,11 @@ public class ErlangParserModulesTest {
 				"-type my_type() :: {non_reg_integer(), non_reg_integer(), non_reg_integer()}.",
 				"dodo(A) ->",
 				"{a, node()}.")));
-
+		
+		assertThat(p, parse(code("-module(m).", "-export(dodo/1).",
+				"-type(gid_record() :: #gid_record{}).",
+				"dodo(A) ->",
+				"{a, node()}.")));
 	}
 	
 	
@@ -262,6 +266,7 @@ public class ErlangParserModulesTest {
 			"-define(LOG(X), true).",
 			"-endif.",
 			"dodo(A) ->","{a, node()}.")));
+		
 	}
 
 	@Test
@@ -305,7 +310,15 @@ public class ErlangParserModulesTest {
 				"-module(m).", 
 				"-spec trace_named([atom()], pos_integer()) -> {ok, timer:tref()}.",
 				"dodo(A) ->","{a, node()}.")));
+		
+		assertThat(p, parse(code(
+				"-module(m).", 
+				"-spec str(value(), Default::term(), Length::minmax()) -> {ok, ConvertedValue::term()} |",
+				"{error, {overflow|underflow, term()}} | {default, term()}.",
+				"dodo(A) ->","{a, node()}.")));
 
+		
+		
 	}
 	
 	@Test

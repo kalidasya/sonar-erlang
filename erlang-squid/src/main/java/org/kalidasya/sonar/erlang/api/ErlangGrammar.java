@@ -112,7 +112,10 @@ public class ErlangGrammar extends Grammar {
 	public Rule funcSpec;
 	public Rule specFun;
 	public Rule specTypeDef;
-
+	public Rule specSub;
+	public Rule moduleBodyAttr;
+	public Rule moduleHeadAttr;
+	
 	
 	@Override
 	public Rule getRootRule() {

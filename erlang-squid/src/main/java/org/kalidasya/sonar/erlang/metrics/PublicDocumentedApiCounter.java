@@ -53,8 +53,8 @@ public class PublicDocumentedApiCounter extends SquidAstVisitor<ErlangGrammar> {
 		/*
 		 * Ignore test exports
 		 */
-		if (!(astNode.findFirstParent(g.ifdefAttr) != null && "TEST".equalsIgnoreCase(astNode
-				.findFirstParent(g.ifdefAttr).getChild(3).getTokenOriginalValue()))) {
+		if (!(astNode.findFirstParent(g.flowControlAttr) != null && "TEST".equalsIgnoreCase(astNode
+				.findFirstParent(g.flowControlAttr).findFirstDirectChild(g.ifdefAttr).getChild(3).getTokenOriginalValue()))) {
 			List<AstNode> exports = astNode.findChildren(getContext().getGrammar().funcArity);
 			numOfPublicAPIs += exports.size();
 			for (AstNode export : exports) {

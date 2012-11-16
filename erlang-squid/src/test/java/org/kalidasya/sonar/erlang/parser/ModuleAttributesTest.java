@@ -68,8 +68,11 @@ public class ModuleAttributesTest {
 	
 	@Test
 	public void recordDefTest() {
+		p.setRootRule(g.moduleBodyAttr);
 		assertThat(p, parse(code("-record(state, {last::calendar:datetime(), tref::timer:tref()}).")));
 	}
+	
+	
 	
 	
 

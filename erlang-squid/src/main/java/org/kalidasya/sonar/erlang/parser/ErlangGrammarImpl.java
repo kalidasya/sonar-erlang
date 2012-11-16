@@ -93,6 +93,7 @@ import org.kalidasya.sonar.erlang.api.ErlangKeyword;
 import org.kalidasya.sonar.erlang.api.ErlangPunctuator;
 import org.kalidasya.sonar.erlang.api.ErlangTokenType;
 
+import com.sonar.sslr.api.Rule;
 import com.sonar.sslr.impl.matcher.GrammarFunctions;
 
 public class ErlangGrammarImpl extends ErlangGrammar {
@@ -111,7 +112,9 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		module.is(
 			moduleAttributes, 
 			one2n(
-				o2n(or(typeSpec,spec)),
+				o2n(
+					moduleBodyAttr
+				),
 				functionDeclaration
 			), 
 			EOF
@@ -120,15 +123,24 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		moduleAttributes.is(
 			one2n(
 				or(
-					moduleAttr,
-					exportAttr,
-					compileAttr,
-					defineAttr,
 					flowControlAttr,
-					recordAttr,
-					genericAttr
+					moduleHeadAttr
 				)
 			)
+		);
+		
+		moduleHeadAttr.is(
+			or(
+				moduleAttr,
+				exportAttr,
+				compileAttr,
+				defineAttr,
+				genericAttr
+			)
+		);
+		
+		moduleBodyAttr.is(
+			or(typeSpec, spec, defineAttr, recordAttr, flowControlAttr)
 		);
 		
 		recordAttr.is(
@@ -148,8 +160,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 					IDENTIFIER,
 					opt(MATCHOP,callExpression)
 				)
-			)
-			,
+			),
 			o2n(
 				COMMA,
 				or(
@@ -174,7 +185,15 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 					ifdefAttr,
 					ifndefAttr
 				),
-				opt(elseAttr),
+				one2n(
+					or(moduleBodyAttr, moduleHeadAttr)
+				),
+				opt(
+					elseAttr,
+					one2n(
+						or(moduleBodyAttr, moduleHeadAttr)
+					)
+				),
 				endifAttr
 			);
 
@@ -184,8 +203,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				LPARENTHESIS,
 				IDENTIFIER,
 				RPARENTHESIS,
-				DOT,
-				moduleAttributes
+				DOT
 			);
 		
 		ifndefAttr.is(
@@ -194,15 +212,13 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			LPARENTHESIS,
 			IDENTIFIER,
 			RPARENTHESIS,
-			DOT,
-			moduleAttributes
+			DOT
 		);
 		
 		elseAttr.is(
 			MINUS,
 			"else",
-			DOT,
-			moduleAttributes
+			DOT
 		);
 		
 		endifAttr.is(
@@ -301,6 +317,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		typeSpec.is(
 				MINUS, 
 				"type",
+				opt(LPARENTHESIS),
 				funcDecl,
 				or(
 					and(
@@ -313,6 +330,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 						funcDecl
 					)
 				),
+				opt(RPARENTHESIS),
 				DOT
 			);
 		
@@ -331,24 +349,34 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		);
 		
 		specType.is(
-			opt(or(LBRACKET, LCURLYBRACE)),
-			opt(
+			one2n(
 				specTypeDef,
 				o2n(or(PIPE, COMMA), specTypeDef)
-			),
-			opt(or(RBRACKET, RCURLYBRACE))
+			)
 		);
 		
 		specTypeDef.is(
-			opt(or(LBRACKET, LCURLYBRACE)),
+			or(
+				and(or(LCURLYBRACE, LBRACKET), specTypeDef, or(RCURLYBRACE, RBRACKET)),
+				specSub
+			),
+			o2n(
+				or(COMMA,PIPE),
+				or(
+					and(or(LCURLYBRACE, LBRACKET), specTypeDef, or(RCURLYBRACE, RBRACKET)),
+					specSub
+				)
+			)
+		);
+		
+		specSub.is(
 			//Matching to specFun, something like: list(A | B), and: Mega::giga(), and simple function call
 			or(
 				specFun, 
 				and(IDENTIFIER, LPARENTHESIS, IDENTIFIER, one2n(PIPE, IDENTIFIER), RPARENTHESIS),
 				and(IDENTIFIER, COLON,COLON,callExpression),
 				callExpression
-			),
-			opt(or(RBRACKET, RCURLYBRACE))
+			)
 		);
 		
 		specFun.is(
