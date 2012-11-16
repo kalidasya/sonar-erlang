@@ -1,6 +1,10 @@
--module(noemacsstyle).
--export(hello/0).
+-module(a).
+-export(int/0).
 
+-spec int(value()) -> ConvertedValue::term().
+int(Var) -> to_type(int, Var).
+
+-spec hello() -> atom().
 hello()->
 	Code;
 hello(A) ->

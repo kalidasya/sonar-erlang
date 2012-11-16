@@ -98,10 +98,17 @@ public class FunctionDefAndClausesSeparationCheck extends SquidCheck<ErlangGramm
 			boolean hasTrivias = ast.getToken().hasTrivia();
 			if ((hasTrivias && checkTrivias(ast.getToken(), previous.getToken(), threshold))
 					|| !hasTrivias) {
-				getContext().createLineViolation(this,
-						"The line has {0} precending blank line and it should be: {1}.",
-						ast.getTokenLine(),
-						(ast.getTokenLine() - previous.getLastToken().getLine() - 1), threshold);
+				if (ast.getTokenLine() - previous.getLastToken().getLine() - 1 >= 0) {
+					if (!ast.previousAstNode().equals(previous)) {
+						check(ast, ast.previousAstNode(), 0);
+					} else {
+						getContext().createLineViolation(this,
+								"The line has {0} precending blank line and it should be: {1}.",
+								ast.getTokenLine(),
+								(ast.getTokenLine() - previous.getLastToken().getLine() - 1),
+								threshold);
+					}
+				}
 			}
 		}
 	}
