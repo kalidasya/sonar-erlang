@@ -259,8 +259,13 @@ public class ErlangParserModulesTest {
 	public void specTest(){
 		assertThat(p, parse(code(
 			"-module(m).", 
-			"-spec test_fun(any(), fun(() -> ok), pos_integer(), pos_integer()) -> {float()}.",
+			"-spec split_nodename(atom() | string()) -> {atom(), nonempty_string()}.",
 			"dodo(A) ->","{a, node()}.")));
+		
+		assertThat(p, parse(code(
+				"-module(m).", 
+				"-spec test_fun(any(), fun(() -> ok), pos_integer(), pos_integer()) -> {float()}.",
+				"dodo(A) ->","{a, node()}.")));
 	}
 	
 	@Test

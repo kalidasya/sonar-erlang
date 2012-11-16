@@ -66,6 +66,14 @@ public class ModuleAttributesTest {
 		assertThat(p, parse(code("-ignore_xref([{json, decode, 1}]).")));
 	}
 	
+	@Test
+	public void recordDefTest() {
+		assertThat(p, parse(code("-record(state, {last::calendar:datetime(), tref::timer:tref()}).")));
+	}
+	
+	
+
+	
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);
 	}
