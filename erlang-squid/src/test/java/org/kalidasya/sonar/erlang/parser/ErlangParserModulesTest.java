@@ -326,6 +326,12 @@ public class ErlangParserModulesTest {
 				"-spec str(value(), Default::term(), Length::minmax()) -> {ok, ConvertedValue::term()} |",
 				"{error, {overflow|underflow, term()}} | {default, term()}.",
 				"dodo(A) ->","{a, node()}.")));
+		
+		assertThat(p, parse(code(
+				"-module(m).", 
+				"-spec i_parse_qs(String::string(), Acc::[{Key::string(), Value::string()}], Option::utf8) -> [{Key::string(), Value::string()}].",
+				"dodo(A) ->","{a, node()}.")));
+		
 
 		
 		
@@ -337,6 +343,18 @@ public class ErlangParserModulesTest {
 			"-module(m).", 
 			"-ignore_xref([{json, decode, 1}]).",
 			"dodo(A) ->","{a, node()}.")));
+	}
+	
+	@Test
+	public void moduleEverythingInIfTest(){
+		assertThat(p, parse(code(
+			"-module(m).", 
+			"-ifdef(A).",
+			"dodo(A) ->","{a, node()}.",
+			"-else.",
+			"dodo(A) ->","{a, node()}.",
+			"-endif."
+			)));
 	}
 	
 	private static String code(String... lines) {

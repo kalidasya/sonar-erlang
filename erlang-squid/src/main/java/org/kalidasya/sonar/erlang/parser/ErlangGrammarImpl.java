@@ -41,9 +41,9 @@ import static org.kalidasya.sonar.erlang.api.ErlangKeyword.BXOR;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.CASE;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.CATCH;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.END;
+import static org.kalidasya.sonar.erlang.api.ErlangKeyword.FUN;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.IF;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.NOT;
-import static org.kalidasya.sonar.erlang.api.ErlangKeyword.FUN;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.OF;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.OR;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.ORELSE;
@@ -93,7 +93,6 @@ import org.kalidasya.sonar.erlang.api.ErlangKeyword;
 import org.kalidasya.sonar.erlang.api.ErlangPunctuator;
 import org.kalidasya.sonar.erlang.api.ErlangTokenType;
 
-import com.sonar.sslr.api.Rule;
 import com.sonar.sslr.impl.matcher.GrammarFunctions;
 
 public class ErlangGrammarImpl extends ErlangGrammar {
@@ -110,12 +109,11 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	
 	private void module() {
 		module.is(
-			one2n(moduleHeadAttr), 
 			one2n(
-				o2n(
-					moduleBodyAttr
-				),
-				functionDeclaration
+				or(
+					moduleHeadAttr,
+					functionDeclaration
+				)
 			), 
 			EOF
 		);
@@ -126,14 +124,17 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				exportAttr,
 				compileAttr,
 				defineAttr,
+				typeSpec, 
+				spec, 
+				recordAttr,
 				flowControlAttr,
 				genericAttr
 			)
 		);
 		
-		moduleBodyAttr.is(
+		/*moduleBodyAttr.is(
 			or(flowControlAttr, typeSpec, spec, defineAttr, recordAttr)
-		);
+		);*/
 		
 		recordAttr.is(
 			MINUS,
@@ -178,12 +179,12 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 					ifndefAttr
 				),
 				one2n(
-					or(moduleBodyAttr, moduleHeadAttr, functionDeclaration)
+					or(moduleHeadAttr, functionDeclaration)
 				),
 				opt(
 					elseAttr,
 					one2n(
-						or(moduleBodyAttr, moduleHeadAttr, functionDeclaration)
+						or(moduleHeadAttr, functionDeclaration)
 					)
 				),
 				endifAttr
@@ -366,7 +367,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			or(
 				specFun, 
 				and(IDENTIFIER, LPARENTHESIS, IDENTIFIER, one2n(PIPE, IDENTIFIER), RPARENTHESIS),
-				and(IDENTIFIER, COLON,COLON,callExpression),
+				and(IDENTIFIER, COLON,COLON,specTypeDef),
 				callExpression
 			)
 		);

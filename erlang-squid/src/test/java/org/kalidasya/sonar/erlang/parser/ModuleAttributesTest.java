@@ -22,9 +22,6 @@ package org.kalidasya.sonar.erlang.parser;
 import static com.sonar.sslr.test.parser.ParserMatchers.parse;
 import static org.junit.Assert.assertThat;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,7 +53,6 @@ public class ModuleAttributesTest {
 
 	@Test
 	public void flowControlMacros() {
-		p.setRootRule(g.moduleBodyAttr);
 		assertThat(p, parse(code("-ifdef(debug).",
 				"-define(LOG(X), io:format(\"{~p,~p}: ~p~n\", [?MODULE,?LINE,X])).", 
 				"-else.",
@@ -71,7 +67,6 @@ public class ModuleAttributesTest {
 	
 	@Test
 	public void recordDefTest() {
-		p.setRootRule(g.moduleBodyAttr);
 		assertThat(p, parse(code("-record(state, {last::calendar:datetime(), tref::timer:tref()}).")));
 	}
 	
