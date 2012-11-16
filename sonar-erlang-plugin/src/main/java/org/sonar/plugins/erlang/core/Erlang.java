@@ -31,7 +31,7 @@ public class Erlang extends AbstractLanguage{
 	  private Configuration configuration;
 
 	  public Erlang(Configuration configuration) {
-	    super(KEY, "Erlang");
+	    super(KEY, "erl");
 	    this.configuration = configuration;
 	  }
 
