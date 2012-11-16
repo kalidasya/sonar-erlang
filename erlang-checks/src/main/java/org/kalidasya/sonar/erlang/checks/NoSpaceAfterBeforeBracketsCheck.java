@@ -78,6 +78,12 @@ public class NoSpaceAfterBeforeBracketsCheck extends SquidCheck<ErlangGrammar> {
 	}
 
 	private int check(AstNode ast, Token compTo, boolean previous) {
+		/**
+		 * Ignore linebreaks
+		 */
+		if(ast.getToken().getLine()!=compTo.getLine()){
+			return -1;
+		}
 		int actCol = ast.getToken().getColumn();
 		int actLength = ast.getTokenOriginalValue().length();
 		int compCol = compTo.getColumn();

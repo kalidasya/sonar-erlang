@@ -13,4 +13,4 @@ hello(A) ->
 	{error}. % this starts with a tab
 
 hallo() ->
-        {hallo}. %starts with 8
+        {hallo}. %starts with 8 is fine

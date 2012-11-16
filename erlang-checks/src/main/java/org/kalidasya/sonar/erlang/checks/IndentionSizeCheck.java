@@ -64,19 +64,7 @@ public class IndentionSizeCheck extends SquidCheck<ErlangGrammar> implements Ast
 									this,
 									"The line starts with {0, number, integer} characters which is cannot be divided by {1, number, integer}.",
 									token.getLine(), token.getColumn(), indentionSize);
-				} else {
-					int colDifference = (previousCol - token.getColumn()) * -1;
-					if (colDifference > 0 && colDifference != indentionSize && colDifference != 0) {
-						getContext()
-								.createLineViolation(
-										this,
-										"The line starts with {0, number, integer} characters which is not {1, number, integer} more than the previous line, which started at {2, number, integer}.",
-										token.getLine(), token.getColumn(), indentionSize,
-										previousCol);
-					} else {
-						previousCol = token.getColumn();
-					}
-				}
+				} 
 				previousToken = token;
 			}
 		}

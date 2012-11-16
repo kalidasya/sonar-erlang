@@ -89,15 +89,15 @@ public class MultipleBlankLinesCheck extends SquidCheck<ErlangGrammar> {
 		}
 	}
 
-	private boolean checkTrivias(int previousLine, AstNode ast, int compTo) {
+	private boolean checkTrivias(int previousLine, Token token, int compTo) {
 		int prevLine = previousLine;
-		for (Trivia trivias : ast.getToken().getTrivia()) {
+		for (Trivia trivias : token.getTrivia()) {
 			if (compare(trivias.getToken().getLine(), prevLine, compTo)) {
 				return true;
 			}
 			prevLine = trivias.getToken().getLine();
 		}
-		return compare(ast.getToken().getLine(), prevLine, compTo);
+		return compare(token.getLine(), prevLine, compTo);
 	}
 
 	private boolean checkBlankLines(AstNode ast, int previousLine) {
@@ -105,8 +105,9 @@ public class MultipleBlankLinesCheck extends SquidCheck<ErlangGrammar> {
 
 		boolean check = compare(ast.getToken().getLine(), previousLine, compTo);
 		if (check) {
-			if (ast.getToken().hasTrivia()) {
-				return checkTrivias(previousLine, ast, compTo);
+			Token tokenWithTrivias = (ast.getToken().hasTrivia())? ast.getToken() : ast.previousAstNode().getToken() ;
+			if (tokenWithTrivias.hasTrivia()) {
+				return checkTrivias(previousLine, tokenWithTrivias, compTo);
 			}
 		}
 		return check;

@@ -73,7 +73,7 @@ public class SpaceAfterBeforeOperatorsCheck extends SquidCheck<ErlangGrammar> {
 	}
 
 	private int check(AstNode ast, AstNode compTo, boolean previous) {
-		int actCol = ast.getToken().getColumn();
+		int actCol = ast.getLastToken().getColumn();
 		int actLength = ast.getTokenOriginalValue().length();
 		int compCol = compTo.getToken().getColumn();
 		int compLength = compTo.getTokenOriginalValue().length();

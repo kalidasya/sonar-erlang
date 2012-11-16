@@ -40,6 +40,7 @@ public class SpaceAfterBeforeOperatorsCheckTest {
 		.next().atLine(5).withMessage("No space after operator in column: 12.")
 		.next().atLine(6).withMessage("No space after operator in column: 5.")
 		.next().atLine(7).withMessage("No space after operator in column: 8.")
+		.next().atLine(9).withMessage("No space after operator in column: 13.")
 		.noMore();
 	}
 }
