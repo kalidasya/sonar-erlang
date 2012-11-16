@@ -505,9 +505,9 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 					opt(
 						ErlangPunctuator.DIV, 
 						/*
-						 * Hack for things like: 1024:32/little-float
+						 * Hack for things like: 1024:32/little-float-dafaq
 						 */
-						or(NUMERIC_LITERAL,and(IDENTIFIER, MINUS, IDENTIFIER), IDENTIFIER)
+						or(NUMERIC_LITERAL,and(IDENTIFIER, one2n(MINUS, IDENTIFIER)), IDENTIFIER)
 					)
 				)
 		   	)

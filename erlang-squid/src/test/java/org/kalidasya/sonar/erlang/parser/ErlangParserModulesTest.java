@@ -155,9 +155,14 @@ public class ErlangParserModulesTest {
 						"Fragment = << 16#10400000:32, 16#0b030000:32, Size:32/little, Current:32/little, Chunk/binary >>,",
 						"Transport:send(Socket, Fragment),",
 						"packet_fragment_send(Client, Rest, Size, Current + 16#4000).")));
+		
 		assertThat(p, parse(code("-module(m).","packet_prepare(Packet) ->", "Size = 4 + byte_size(Packet),",
 				"case Size rem 4 of", "0 -> {ok, Size, <<>>};", "2 -> {ok, Size + 2, << 0:16 >>};",
 				"_ -> {error, badarg}", "end.")));
+		
+		assertThat(p, parse(code("-module(m).",
+				"hexstring(<< X:128/big-unsigned-integer >>) -> ",
+				"lists:flatten(io_lib:format(\"~32.16.0b\", [X])).")));
 
 	}
 
@@ -274,7 +279,12 @@ public class ErlangParserModulesTest {
 
 		assertThat(p, parse(code(
 				"-module(m).", 
-				"		-spec init([]) -> {ok, record(state)}.",
+				"-spec init([]) -> {ok, record(state)}.",
+				"dodo(A) ->","{a, node()}.")));
+		
+		assertThat(p, parse(code(
+				"-module(m).", 
+				"-spec hexstring(binary()) -> string().",
 				"dodo(A) ->","{a, node()}.")));
 
 	}
