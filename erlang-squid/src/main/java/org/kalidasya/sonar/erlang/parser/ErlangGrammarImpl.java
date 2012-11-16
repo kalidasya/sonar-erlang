@@ -247,7 +247,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			"define",
 			LPARENTHESIS, 
 			or(
-				and(IDENTIFIER, COMMA, primaryExpression),
+				and(IDENTIFIER, COMMA, assignmentExpression),
 				and(funcDecl, COMMA, statement)
 			),
 			RPARENTHESIS, 
@@ -362,6 +362,8 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				specFun, 
 				and(IDENTIFIER, LPARENTHESIS, IDENTIFIER, one2n(PIPE, IDENTIFIER), RPARENTHESIS),
 				and(IDENTIFIER, COLON,COLON,specTypeDef),
+				//workaround for fun like expression
+				and("fun", LPARENTHESIS, RPARENTHESIS),
 				callExpression
 			)
 		);

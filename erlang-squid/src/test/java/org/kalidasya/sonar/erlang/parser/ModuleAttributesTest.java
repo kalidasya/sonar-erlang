@@ -72,6 +72,11 @@ public class ModuleAttributesTest {
 		
 	}
 	
+	@Test
+	public void defineTest() {
+		assertThat(p, parse(code("-define(PARAM_TOKEN_TIMEOUT,                    60*15).")));
+	}
+	
 	
 	
 

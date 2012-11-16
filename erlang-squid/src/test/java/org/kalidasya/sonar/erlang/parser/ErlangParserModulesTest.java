@@ -332,8 +332,10 @@ public class ErlangParserModulesTest {
 				"-spec i_parse_qs(String::string(), Acc::[{Key::string(), Value::string()}], Option::utf8) -> [{Key::string(), Value::string()}].",
 				"dodo(A) ->","{a, node()}.")));
 		
-
-		
+		assertThat(p, parse(code(
+				"-module(m).", 
+				"-spec check_access_pt(fun(), any(), {access_checks(), atom(), atom() | tuple(), atom() | string()}) -> any().",
+				"dodo(A) ->","{a, node()}.")));
 		
 	}
 	
