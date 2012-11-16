@@ -266,6 +266,17 @@ public class ErlangParserModulesTest {
 				"-module(m).", 
 				"-spec test_fun(any(), fun(() -> ok), pos_integer(), pos_integer()) -> {float()}.",
 				"dodo(A) ->","{a, node()}.")));
+		
+		assertThat(p, parse(code(
+				"-module(m).", 
+				"-spec doit(calendar:datetime(), calendar:datetime()) -> [reload | error | unmodified | gone].",
+				"dodo(A) ->","{a, node()}.")));
+
+		assertThat(p, parse(code(
+				"-module(m).", 
+				"		-spec init([]) -> {ok, record(state)}.",
+				"dodo(A) ->","{a, node()}.")));
+
 	}
 	
 	@Test

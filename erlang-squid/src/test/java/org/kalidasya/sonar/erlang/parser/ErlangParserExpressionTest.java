@@ -98,10 +98,13 @@ public class ErlangParserExpressionTest {
 	@Test
 	public void listComprehensionExpressin() {
 		assertThat(p, parse(code("[X*2 || X <- [1,2,3]]")));
+		assertThat(p, parse(code("[X*2 || X <- method()]")));
+		assertThat(p, parse(code("[X*2 || X <- method(), method2()]")));
 		assertThat(p, parse(code("[X*2 || X <- [1,2,3]] ++ [7,8,9]")));
 		assertThat(p, parse(code("[X*2 || X <- [1,2,3]] -- [7,8,9]")));
 		assertThat(p, parse(code("[10, 23] -- [X*2 || X <- [1,2,3]] ++ [7,8,9]")));
 		assertThat(p, parse(code("[756, 877] ++ [X*2 || X <- [1,2,3]] -- [7,8,9]")));
+		assertThat(p, parse(code("[{A,B} || {A, B} <- method(), method2(File)]")));
 	}
 
 	@Test

@@ -334,9 +334,13 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		);
 		
 		specType.is(
-			or(specFun, callExpression),
-			o2n(PIPE, or(specFun, callExpression)),
-			opt(COLON,COLON,callExpression)
+			opt(LBRACKET),
+			opt(
+				or(specFun, callExpression),
+				o2n(PIPE, or(specFun, callExpression)),
+				opt(COLON,COLON,callExpression)
+			),
+			opt(RBRACKET)
 		);
 		
 		specFun.is(
@@ -420,7 +424,8 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	    		and(
    					primaryExpression,
    					ARROWBACK,
-   					expression
+   					expression,
+   					o2n(COMMA,expression)
    				)/*,
    				expression*/
    			)
