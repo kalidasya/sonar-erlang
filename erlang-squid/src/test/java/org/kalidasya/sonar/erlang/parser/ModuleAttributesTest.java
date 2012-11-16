@@ -46,7 +46,7 @@ public class ModuleAttributesTest {
 
 	@Before
 	public void init() {
-		p.setRootRule(g.moduleAttributes);
+		p.setRootRule(g.moduleHeadAttr);
 	}
 
 	@Test
@@ -56,9 +56,12 @@ public class ModuleAttributesTest {
 
 	@Test
 	public void flowControlMacros() {
-		assertThat(p, parse(code("-module(m).", "-ifdef(debug).",
-				"-define(LOG(X), io:format(\"{~p,~p}: ~p~n\", [?MODULE,?LINE,X])).", "-else.",
-				"-define(LOG(X), true).", "-endif.")));
+		p.setRootRule(g.moduleBodyAttr);
+		assertThat(p, parse(code("-ifdef(debug).",
+				"-define(LOG(X), io:format(\"{~p,~p}: ~p~n\", [?MODULE,?LINE,X])).", 
+				"-else.",
+				"-define(LOG(X), true).", 
+				"-endif.")));
 	}
 
 	@Test
@@ -83,6 +86,10 @@ public class ModuleAttributesTest {
 
 	@After
 	public void log() {
-		ExtendedStackTraceStream.print(listener, System.out);
+		try {
+			ExtendedStackTraceStream.print(listener, System.out);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

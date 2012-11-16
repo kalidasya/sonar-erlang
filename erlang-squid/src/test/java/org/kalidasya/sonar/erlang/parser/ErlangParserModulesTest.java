@@ -259,13 +259,23 @@ public class ErlangParserModulesTest {
 	@Test
 	public void flowControlMacros(){
 		assertThat(p, parse(code(
-			"-module(m).", 
+			"-module(m).",
+			"-spec dodo(integer()) -> atom().",
 			"-ifdef(debug).",
 			"-define(LOG(X), io:format(\"{~p,~p}: ~p~n\", [?MODULE,?LINE,X])).",
 			"-else.",
 			"-define(LOG(X), true).",
 			"-endif.",
 			"dodo(A) ->","{a, node()}.")));
+		
+		assertThat(p, parse(code(
+				"-module(m).", 
+				"-ifdef(debug).",
+				"dodo(A) ->","{a, node()}.",
+				"-else.",
+				"dodo(A) ->","{a, node2()}.",
+				"-endif.",
+				"dodo(A, B) ->","{a, node()}.")));
 		
 	}
 

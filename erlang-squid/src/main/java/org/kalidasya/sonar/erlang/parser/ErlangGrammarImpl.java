@@ -110,7 +110,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	
 	private void module() {
 		module.is(
-			moduleAttributes, 
+			one2n(moduleHeadAttr), 
 			one2n(
 				o2n(
 					moduleBodyAttr
@@ -120,27 +120,19 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			EOF
 		);
 		
-		moduleAttributes.is(
-			one2n(
-				or(
-					flowControlAttr,
-					moduleHeadAttr
-				)
-			)
-		);
-		
 		moduleHeadAttr.is(
 			or(
 				moduleAttr,
 				exportAttr,
 				compileAttr,
 				defineAttr,
+				flowControlAttr,
 				genericAttr
 			)
 		);
 		
 		moduleBodyAttr.is(
-			or(typeSpec, spec, defineAttr, recordAttr, flowControlAttr)
+			or(flowControlAttr, typeSpec, spec, defineAttr, recordAttr)
 		);
 		
 		recordAttr.is(
@@ -186,12 +178,12 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 					ifndefAttr
 				),
 				one2n(
-					or(moduleBodyAttr, moduleHeadAttr)
+					or(moduleBodyAttr, moduleHeadAttr, functionDeclaration)
 				),
 				opt(
 					elseAttr,
 					one2n(
-						or(moduleBodyAttr, moduleHeadAttr)
+						or(moduleBodyAttr, moduleHeadAttr, functionDeclaration)
 					)
 				),
 				endifAttr
@@ -269,7 +261,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		
 		genericAttr.is(
 				MINUS, 
-				IDENTIFIER, 
+				or("behaviour", "import", "vsn", "on_load", "include", "file", "ignore_xref", "include_lib"), 
 				LPARENTHESIS, 
 				or(
 					primaryExpression

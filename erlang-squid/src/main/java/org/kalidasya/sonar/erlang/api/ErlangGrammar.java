@@ -25,7 +25,6 @@ import com.sonar.sslr.api.Rule;
 public class ErlangGrammar extends Grammar {
 
 	public Rule module;
-	public Rule moduleAttributes;
 	public Rule functionDeclaration;
 	public Rule moduleAttr;
 	public Rule exportAttr;
