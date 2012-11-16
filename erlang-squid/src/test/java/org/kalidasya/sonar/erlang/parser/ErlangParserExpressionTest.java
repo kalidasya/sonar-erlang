@@ -132,6 +132,8 @@ public class ErlangParserExpressionTest {
 		assertThat(p, parse(code("<<G,H/binary>> = <<1,17,42:16>>")));
 		assertThat(p, parse(code("<<G,H/bitstring>> = <<1,17,42:12>>")));
 		assertThat(p, parse(code("<< << (X*2) >> || <<X>> <= << 1,2,3 >> >>")));
+		assertThat(p, parse(code("<< << (X*2) >> || <<X>> <= method1() >>")));
+		assertThat(p, parse(code("<< << (X*2) >> || <<X>> <= method1(), method2() >>")));
 	}
 
 	@Test
