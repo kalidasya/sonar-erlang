@@ -486,7 +486,8 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	   			and(
 	   				primaryExpression,
 	   				ARROWBACK,
-	   				expression
+	   				expression,
+	   				o2n(COMMA, expression)
 	   			  
 	   			)/*,
 	   			expression*/
