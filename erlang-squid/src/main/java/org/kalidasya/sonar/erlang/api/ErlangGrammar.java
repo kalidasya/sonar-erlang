@@ -75,8 +75,8 @@ public class ErlangGrammar extends Grammar {
 	public Rule statement;
 	public Rule ifExpression;
 	public Rule caseExpression;
-	public Rule receiveStatement;
-	public Rule tryStatement;
+	public Rule receiveExpression;
+	public Rule tryExpression;
 	public Rule branchExps;
 	public Rule branchExp;
 	public Rule guardSequence;
@@ -94,7 +94,7 @@ public class ErlangGrammar extends Grammar {
 	public Rule catchPattern;
 	public Rule catchPatternStatement;
 	public Rule catchPatternStatements;
-	public Rule blockStatement;
+	public Rule blockExpression;
 	public Rule recordCreateLiteral;
 	public Rule recordAccLiteral;
 	public Rule recordLiteral;

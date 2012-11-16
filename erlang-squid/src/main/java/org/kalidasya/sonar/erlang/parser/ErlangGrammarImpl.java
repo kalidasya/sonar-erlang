@@ -469,6 +469,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	   				primaryExpression,
 	   				ARROWBACK,
 	   				expression
+	   			  
 	   			)/*,
 	   			expression*/
 	   		)
@@ -499,6 +500,9 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	        	ifExpression,
 	        	funExpression,
 	        	caseExpression,
+	        	tryExpression,
+	        	receiveExpression,
+	        	blockExpression,
 	            primaryExpression
 	        )).skipIfOneChild();
 	    /**
@@ -573,6 +577,35 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			);
 		
 		ifExpression.is(IF, branchExps, END);
+		
+		tryExpression.is(
+			TRY, 
+			statements, 
+			opt(OF, patternStatements), 
+			or(
+				and(catchExpression, afterExpression),
+				catchExpression,
+				afterExpression
+			), 
+			END
+		);
+		
+		afterExpression.is(
+			AFTER, statements
+		);
+		
+		catchExpression.is(
+			CATCH,
+			catchPatternStatements
+		);
+		
+		receiveExpression.is(
+			RECEIVE, patternStatements, opt(AFTER, expression, ARROW, statements), END
+		);
+			
+		blockExpression.is(
+			BEGIN, statements, END
+		);
 	}
 
 		/**
@@ -590,11 +623,8 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			or(
 				sendStatement,
 				expressionStatement,
-				//ifStatement,
-				//caseStatement,
-				receiveStatement,
-				tryStatement,
-				blockStatement
+				receiveExpression,
+				blockExpression
 			)
 		);
 		statements.is(
@@ -677,33 +707,5 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			expression, EXCLAMATION, expression
 		);
 		
-		receiveStatement.is(
-			RECEIVE, patternStatements, opt(AFTER, expression, ARROW, statements), END
-		);
-		
-		tryStatement.is(
-			TRY, 
-			statements, 
-			opt(OF, patternStatements), 
-			or(
-				and(catchExpression, afterExpression),
-				catchExpression,
-				afterExpression
-			), 
-			END
-		);
-		
-		afterExpression.is(
-			AFTER, statements
-		);
-		
-		catchExpression.is(
-			CATCH,
-			catchPatternStatements
-		);
-		
-		blockStatement.is(
-			BEGIN, statements, END
-		);
 	  }
 }
