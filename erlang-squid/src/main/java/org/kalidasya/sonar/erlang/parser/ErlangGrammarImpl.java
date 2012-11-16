@@ -259,7 +259,8 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				or("behaviour", "import", "vsn", "on_load", "include", "file", "ignore_xref", "include_lib", "author"), 
 				LPARENTHESIS, 
 				or(
-					primaryExpression
+					primaryExpression,
+					funcArity
 				),
 				RPARENTHESIS, 
 			DOT
