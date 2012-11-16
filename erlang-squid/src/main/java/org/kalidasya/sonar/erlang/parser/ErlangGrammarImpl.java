@@ -525,7 +525,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 					expression, 
 					opt(
 						COLON, 
-						or(NUMERIC_LITERAL,	IDENTIFIER)
+						or(NUMERIC_LITERAL,	IDENTIFIER, macroLiteral)
 					), 
 					opt(
 						ErlangPunctuator.DIV, 

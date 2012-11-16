@@ -59,6 +59,13 @@ public class ErlangParserBinaryExpressionTest {
 		assertThat(p, parse(code("<<G,H/binary>>")));
 		assertThat(p, parse(code("<<G,H:16/bitstring>>")));
 		assertThat(p, parse(code("<< << X:8, 0:8/utf8 >> || << X >> <= << 1, A, 3 >> >>")));
+		
+		assertThat(p, parse(code(
+				"<<",
+				"?MAGIC,",
+				"Version:?BYTE,",
+				"Type:?BYTE,",
+				">>")));
 	}
 	
 	private static String code(String... lines) {
