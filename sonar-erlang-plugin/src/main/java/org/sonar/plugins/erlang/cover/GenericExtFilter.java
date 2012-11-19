@@ -17,33 +17,20 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.erlang.eunit;
+package org.sonar.plugins.erlang.cover;
 
 import java.io.File;
+import java.io.FilenameFilter;
 
-import org.sonar.api.batch.SensorContext;
-import org.sonar.api.resources.Project;
-import org.sonar.plugins.erlang.ErlangPlugin;
-import org.sonar.plugins.erlang.core.Erlang;
+public class GenericExtFilter implements FilenameFilter {
 
-public class EunitSensor extends EunitXmlSensor {
+	private String ext;
 
-  public EunitSensor(Erlang erlang) {
-    super(erlang);
-  }
+	public GenericExtFilter(String ext) {
+		this.ext = ext;
+	}
 
-  public boolean shouldExecuteOnProject(Project project) {
-    return (erlang.equals(project.getLanguage()));
-  }
-
-  public void analyse(Project project, SensorContext context) {
-    String eunitFolder = erlang.getConfiguration().getString(ErlangPlugin.EUNIT_FOLDER_KEY, ErlangPlugin.EUNIT_DEFAULT_FOLDER);
-    collect(project, context, new File(project.getFileSystem().getBasedir(), eunitFolder));
-  }
-
-
-  @Override
-  public String toString() {
-    return getClass().getSimpleName();
-  }
+	public boolean accept(File dir, String name) {
+		return (name.endsWith(ext));
+	}
 }
