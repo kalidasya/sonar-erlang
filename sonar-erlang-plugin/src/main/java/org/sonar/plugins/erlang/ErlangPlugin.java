@@ -29,6 +29,7 @@ import org.sonar.plugins.erlang.colorizer.ErlangColorizerFormat;
 import org.sonar.plugins.erlang.core.Erlang;
 import org.sonar.plugins.erlang.core.ErlangSourceImporter;
 import org.sonar.plugins.erlang.cpd.ErlangCpdMapping;
+import org.sonar.plugins.erlang.eunit.EunitSensor;
 
 import com.google.common.collect.ImmutableList;
 
@@ -65,7 +66,9 @@ public class ErlangPlugin extends SonarPlugin {
     		ErlangRuleRepository.class,
     		ErlangProfile.class,
 
-    		ErlangCommonRulesEngineProvider.class
+    		ErlangCommonRulesEngineProvider.class,
+    		
+    		EunitSensor.class
        );
   }
 

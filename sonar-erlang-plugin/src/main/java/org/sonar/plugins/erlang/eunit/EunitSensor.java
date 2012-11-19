@@ -17,25 +17,33 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.erlang;
+package org.sonar.plugins.erlang.eunit;
 
-import static org.fest.assertions.Assertions.assertThat;
+import java.io.File;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.sonar.api.batch.SensorContext;
+import org.sonar.api.resources.Project;
+import org.sonar.plugins.erlang.ErlangPlugin;
+import org.sonar.plugins.erlang.core.Erlang;
 
-public class ErlangPluginTest {
+public class EunitSensor extends EunitXmlSensor {
 
-  private ErlangPlugin plugin;
-
-  @Before
-  public void setUp() throws Exception {
-    plugin = new ErlangPlugin();
+  public EunitSensor(Erlang erlang) {
+    super(erlang);
   }
 
-  @Test
-  public void testGetExtensions() throws Exception {
-    assertThat(plugin.getExtensions().size()).isEqualTo(9);
+  public boolean shouldExecuteOnProject(Project project) {
+    return (erlang.equals(project.getLanguage()));
   }
 
+  public void analyse(Project project, SensorContext context) {
+    String jsTestDriverFolder = erlang.getConfiguration().getString(ErlangPlugin.EUNIT_FOLDER_KEY, ErlangPlugin.EUNIT_DEFAULT_FOLDER);
+    collect(project, context, new File(project.getFileSystem().getBasedir(), jsTestDriverFolder));
+  }
+
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
 }
