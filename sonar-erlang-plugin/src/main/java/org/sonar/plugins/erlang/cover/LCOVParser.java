@@ -48,14 +48,14 @@ public final class LCOVParser {
 		boolean started = false;
 		int lineNumber = 1;
 		for (String line : lines) {
+			if(!started && line.matches("File generated from .*")){
+				String fileName = line.replaceFirst("(File generated from )(.*?)( by .*)", "$2");
+				fileName = fileName.substring(fileName.lastIndexOf("/")+1);
+				fileCoverage.setFilePath(fileName);
+			}
 			if (line.indexOf("**************") > -1) {
 				fileCoverage = new ErlangFileCoverage();
 				started = true;
-			}
-			if(started && line.matches("File generated from .*")){
-				String fileName = line.replaceFirst("(File generated from )(.*?)( by .*)", "$2");
-				fileName = fileName.substring(fileName.lastIndexOf("/"));
-				fileCoverage.setFilePath(fileName);
 			}
 			if (started && line.matches(".*?\\|.*")) {
 				String[] lineData = line.split("\\|", 2);
