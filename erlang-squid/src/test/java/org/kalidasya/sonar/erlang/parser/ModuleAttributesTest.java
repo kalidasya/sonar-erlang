@@ -94,7 +94,13 @@ public class ModuleAttributesTest {
 		assertThat(p, parse(code("-spec nif_now/0 :: ( ) -> timestamp().")));
 		assertThat(p, parse(code("-spec nif_rot13/1 :: ( ascii_string() ) -> ascii_string().")));
 		
-		
+		assertThat(p, parse(code("-spec init([",
+		          					"non_neg_integer() | callback_module()]) ->",
+		          						"{'ok', #state{	nodes::[],",
+		          									   "table::atom() | ets:tid(),",
+		          									   "host_names::maybe_improper_list()",
+		          									 "}",
+										"}.")));
 	}
 	
 	
