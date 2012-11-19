@@ -82,13 +82,21 @@ public class ModuleAttributesTest {
 		assertThat(p, parse(code("-on_load(init/0).")));
 	}
 	
-	
-	
+	@Test
+	public void typeTest() {
+		assertThat(p, parse(code("-type ascii_string() :: [1..255].")));
+		
+		assertThat(p, parse(code("-type timestamp() :: {MegaSecs::non_neg_integer(), Secs::non_neg_integer(), MicroSecs::non_neg_integer()}.")));
+	}
 
+	@Test
+	public void specTest(){
+		assertThat(p, parse(code("-spec nif_now/0 :: ( ) -> timestamp().")));
+		assertThat(p, parse(code("-spec nif_rot13/1 :: ( ascii_string() ) -> ascii_string().")));
+		
+		
+	}
 	
-
-	
-
 	
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);

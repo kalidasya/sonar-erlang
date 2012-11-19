@@ -294,6 +294,11 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				COLON
 			),
 			IDENTIFIER,
+			opt(
+				DIV,
+				NUMERIC_LITERAL
+			),
+			opt(COLON, COLON),
 			funcSpec,
 			o2n(
 				SEMI,
@@ -358,13 +363,18 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		);
 		
 		specSub.is(
-			//Matching to specFun, something like: list(A | B), and: Mega::giga(), and simple function call
 			or(
+				// Matching to specFun
 				specFun, 
+				// something like: list(A | B)
 				and(IDENTIFIER, LPARENTHESIS, IDENTIFIER, one2n(PIPE, IDENTIFIER), RPARENTHESIS),
+				// and: Mega::giga()
 				and(IDENTIFIER, COLON,COLON,specTypeDef),
-				//workaround for fun like expression
+				// and things like: 1..255
+				and(primaryExpression, DOT,DOT,primaryExpression),
+				// workaround for fun like expression:fun() 
 				and("fun", LPARENTHESIS, RPARENTHESIS),
+				// and simple function call
 				callExpression
 			)
 		);
