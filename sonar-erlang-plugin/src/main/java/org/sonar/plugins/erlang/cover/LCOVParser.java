@@ -51,10 +51,10 @@ public final class LCOVParser {
 			if(!started && line.matches("File generated from .*")){
 				String fileName = line.replaceFirst("(File generated from )(.*?)( by .*)", "$2");
 				fileName = fileName.substring(fileName.lastIndexOf("/")+1);
+				fileCoverage = new ErlangFileCoverage();
 				fileCoverage.setFilePath(fileName);
 			}
 			if (line.indexOf("**************") > -1) {
-				fileCoverage = new ErlangFileCoverage();
 				started = true;
 			}
 			if (started && line.matches(".*?\\|.*")) {
