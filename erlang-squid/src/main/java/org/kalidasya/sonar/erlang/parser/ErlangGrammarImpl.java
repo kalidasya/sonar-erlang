@@ -370,6 +370,8 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				and(IDENTIFIER, LPARENTHESIS, IDENTIFIER, one2n(PIPE, IDENTIFIER), RPARENTHESIS),
 				// and: Mega::giga()
 				and(IDENTIFIER, COLON,COLON,specTypeDef),
+				// and for records
+				and(NUMBERSIGN, IDENTIFIER, specTypeDef),
 				// and things like: 1..255
 				and(primaryExpression, DOT,DOT,primaryExpression),
 				// workaround for fun like expression:fun() 
