@@ -101,6 +101,7 @@ public class ModuleAttributesTest {
 		          									   "host_names::maybe_improper_list()",
 		          									 "}",
 										"}.")));
+		assertThat(p, parse(code("-spec in_neighbours(mfa_or_funlbl(), callgraph()) -> 'none' | [mfa_or_funlbl(),...].")));
 	}
 	
 	@Test

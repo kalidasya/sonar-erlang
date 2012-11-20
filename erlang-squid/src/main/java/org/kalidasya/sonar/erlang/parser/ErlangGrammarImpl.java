@@ -374,6 +374,8 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				and(NUMBERSIGN, IDENTIFIER, specTypeDef),
 				// and things like: 1..255
 				and(primaryExpression, DOT,DOT,primaryExpression),
+				// or just simple ...
+				and(DOT, DOT, DOT),
 				// workaround for fun like expression:fun() 
 				and("fun", LPARENTHESIS, RPARENTHESIS),
 				// and simple function call
