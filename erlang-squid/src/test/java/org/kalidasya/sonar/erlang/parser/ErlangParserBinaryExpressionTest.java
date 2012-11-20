@@ -20,7 +20,7 @@
 package org.kalidasya.sonar.erlang.parser;
 
 import static com.sonar.sslr.test.parser.ParserMatchers.parse;
-import static org.junit.Assert.assertThat;
+import static org.sonar.sslr.tests.Assertions.assertThat;
 
 import org.junit.After;
 import org.junit.Before;
@@ -40,7 +40,7 @@ public class ErlangParserBinaryExpressionTest {
 			Charsets.UTF_8), listener);
 
 	ErlangGrammar g = p.getGrammar();
-
+	
 	@Before
 	public void init() {
 		p.setRootRule(g.binaryLiteral);
@@ -49,23 +49,21 @@ public class ErlangParserBinaryExpressionTest {
 
 	@Test
 	public void binaryExpressions() {
-		assertThat(p, parse(code("<<1,17,42>>")));
-		assertThat(p, parse(code("<<1,17,42:16>>")));
-		assertThat(p, parse(code("<<1024/utf8>>")));
-		assertThat(p, parse(code("<<1024:16/utf8>>")));
-		assertThat(p, parse(code("<<$a,$b,$c>>")));
-		assertThat(p, parse(code("<<\"hello\">>")));
-		assertThat(p, parse(code("<<A,B,C:16>>")));
-		assertThat(p, parse(code("<<G,H/binary>>")));
-		assertThat(p, parse(code("<<G,H:16/bitstring>>")));
-		assertThat(p, parse(code("<< << X:8, 0:8/utf8 >> || << X >> <= << 1, A, 3 >> >>")));
-		
-		assertThat(p, parse(code(
-				"<<",
+		assertThat(p).matches(code("<<1,17,42>>"));
+		assertThat(p).matches(code("<<1,17,42:16>>"));
+		assertThat(p).matches(code("<<1024/utf8>>"));
+		assertThat(p).matches(code("<<1024:16/utf8>>"));
+		assertThat(p).matches(code("<<$a,$b,$c>>"));
+		assertThat(p).matches(code("<<\"hello\">>"));
+		assertThat(p).matches(code("<<A,B,C:16>>"));
+		assertThat(p).matches(code("<<G,H/binary>>"));
+		assertThat(p).matches(code("<<G,H:16/bitstring>>"));
+		assertThat(p).matches(code("<< << X:8, 0:8/utf8 >> || << X >> <= << 1, A, 3 >> >>"));
+		assertThat(p).matches(code("<<",
 				"?MAGIC,",
 				"Version:?BYTE,",
 				"Type:?BYTE,",
-				">>")));
+				">>"));
 	}
 	
 	private static String code(String... lines) {
