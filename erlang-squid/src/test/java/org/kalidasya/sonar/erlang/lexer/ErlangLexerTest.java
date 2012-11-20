@@ -57,7 +57,7 @@ public class ErlangLexerTest {
 	  public void decimalLiteral() {
 	    assertThat(lexer.lex("0"), hasToken("0", ErlangTokenType.NUMERIC_LITERAL));
 	    assertThat(lexer.lex("123"), hasToken("123", ErlangTokenType.NUMERIC_LITERAL));
-
+	    
 	    assertThat(lexer.lex("123.456"), hasToken("123.456", ErlangTokenType.NUMERIC_LITERAL));
 
 	    assertThat(lexer.lex("123.456e10"), hasToken("123.456e10", ErlangTokenType.NUMERIC_LITERAL));

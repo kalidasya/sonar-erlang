@@ -64,6 +64,9 @@ public class ErlangParserExpressionTest {
 	@Test
 	public void varMatch() {
 		assertThat(p, parse(code("A=2")));
+		assertThat(p, parse(code("A=-2")));
+		assertThat(p, parse(code("A=N-2")));
+		assertThat(p, parse(code("A=N--2")));
 		assertThat(p, parse(code("B=[2,3]")));
 		assertThat(p, parse(code("B={2,3}")));
 
