@@ -24,9 +24,6 @@ import java.util.List;
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.kalidasya.sonar.erlang.api.ErlangMetric;
 import org.kalidasya.sonar.erlang.api.ErlangPunctuator;
-import org.sonar.check.Cardinality;
-import org.sonar.check.Priority;
-import org.sonar.check.Rule;
 
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.AstNode;

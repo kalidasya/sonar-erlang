@@ -37,7 +37,6 @@ import com.sonar.sslr.squid.checks.SquidCheck;
 public class IndentionSizeCheck extends SquidCheck<ErlangGrammar> implements AstAndTokenVisitor {
 
 	private Token previousToken;
-	private int previousCol;
 
 	@RuleProperty(key = "regularExpression", defaultValue = "4")
 	public int indentionSize = 4;
@@ -45,13 +44,11 @@ public class IndentionSizeCheck extends SquidCheck<ErlangGrammar> implements Ast
 	@Override
 	public void visitFile(AstNode astNode) {
 		previousToken = null;
-		previousCol = 0;
 	}
 
 	@Override
 	public void leaveFile(AstNode astNode) {
 		previousToken = null;
-		previousCol = 0;
 	}
 
 	public void visitToken(Token token) {

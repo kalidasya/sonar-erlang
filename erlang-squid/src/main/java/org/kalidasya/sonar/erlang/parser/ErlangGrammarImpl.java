@@ -27,7 +27,7 @@ import static com.sonar.sslr.impl.matcher.GrammarFunctions.Standard.and;
 import static com.sonar.sslr.impl.matcher.GrammarFunctions.Standard.o2n;
 import static com.sonar.sslr.impl.matcher.GrammarFunctions.Standard.one2n;
 import static com.sonar.sslr.impl.matcher.GrammarFunctions.Standard.opt;
-import static com.sonar.sslr.impl.matcher.GrammarFunctions.Standard.or;
+import static com.sonar.sslr.impl.matcher.GrammarFunctions.Standard.firstOf;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.AFTER;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.AND;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.ANDALSO;
@@ -110,7 +110,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	private void module() {
 		module.is(
 			one2n(
-				or(
+				firstOf(
 					moduleHeadAttr,
 					functionDeclaration
 				)
@@ -119,7 +119,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		);
 		
 		moduleHeadAttr.is(
-			or(
+			firstOf(
 				moduleAttr,
 				exportAttr,
 				compileAttr,
@@ -133,7 +133,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		);
 		
 		/*moduleBodyAttr.is(
-			or(flowControlAttr, typeSpec, spec, defineAttr, recordAttr)
+			firstOf(flowControlAttr, typeSpec, spec, defineAttr, recordAttr)
 		);*/
 		
 		recordAttr.is(
@@ -152,7 +152,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				opt(MATCHOP,callExpression)
 			),
 			o2n(
-				or(COMMA,PIPE),
+				firstOf(COMMA,PIPE),
 				and(
 					opt(
 						IDENTIFIER,
@@ -168,17 +168,17 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		);
 		
 		flowControlAttr.is(
-				or(
+				firstOf(
 					ifdefAttr,
 					ifndefAttr
 				),
 				one2n(
-					or(moduleHeadAttr, functionDeclaration)
+					firstOf(moduleHeadAttr, functionDeclaration)
 				),
 				opt(
 					elseAttr,
 					one2n(
-						or(moduleHeadAttr, functionDeclaration)
+						firstOf(moduleHeadAttr, functionDeclaration)
 					)
 				),
 				endifAttr
@@ -234,7 +234,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			MINUS,
 			"compile",
 			LPARENTHESIS, 
-			or(
+			firstOf(
 				LITERAL,
 				IDENTIFIER
 			),
@@ -246,7 +246,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			MINUS,
 			"define",
 			LPARENTHESIS, 
-			or(
+			firstOf(
 				and(IDENTIFIER, COMMA, assignmentExpression),
 				and(funcDecl, COMMA, statement)
 			),
@@ -256,9 +256,9 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		
 		genericAttr.is(
 				MINUS, 
-				or("behaviour", "import", "vsn", "on_load", "include", "file", "ignore_xref", "include_lib", "author"), 
+				firstOf("behaviour", "import", "vsn", "on_load", "include", "file", "ignore_xref", "include_lib", "author"), 
 				LPARENTHESIS, 
-				or(
+				firstOf(
 					funcArity,
 					primaryExpression
 				),
@@ -267,7 +267,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		);
 		//TODO: is it possible to have something like: -export().?
 		funcExport.is(
-			or(
+			firstOf(
 				and(
 					LBRACKET,
 					o2n(
@@ -312,7 +312,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				"type",
 				opt(LPARENTHESIS),
 				funcDecl,
-				or(
+				firstOf(
 					and(
 						COLON,
 						COLON,
@@ -344,26 +344,26 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		specType.is(
 			one2n(
 				specTypeDef,
-				o2n(or(PIPE, COMMA), specTypeDef)
+				o2n(firstOf(PIPE, COMMA), specTypeDef)
 			)
 		);
 		
 		specTypeDef.is(
-			or(
-				and(or(LCURLYBRACE, LBRACKET), specTypeDef, or(RCURLYBRACE, RBRACKET)),
+			firstOf(
+				and(firstOf(LCURLYBRACE, LBRACKET), specTypeDef, firstOf(RCURLYBRACE, RBRACKET)),
 				specSub
 			),
 			o2n(
-				or(COMMA,PIPE),
-				or(
-					and(or(LCURLYBRACE, LBRACKET), specTypeDef, or(RCURLYBRACE, RBRACKET)),
+				firstOf(COMMA,PIPE),
+				firstOf(
+					and(firstOf(LCURLYBRACE, LBRACKET), specTypeDef, firstOf(RCURLYBRACE, RBRACKET)),
 					specSub
 				)
 			)
 		);
 		
 		specSub.is(
-			or(
+			firstOf(
 				// Matching to specFun
 				specFun, 
 				// something like: list(A | B)
@@ -426,12 +426,12 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	
 	private void expressions() {
 		literal.is(
-				or(
+				firstOf(
 					NUMERIC_LITERAL,
 					LITERAL
 				)
 			);
-	    primaryExpression.is(or(
+	    primaryExpression.is(firstOf(
 	        IDENTIFIER,
 	        literal,
 	        listLiteral,
@@ -442,7 +442,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	    listLiteral.is(
 	    	LBRACKET,
 	    	opt(
-	    		or(
+	    		firstOf(
 		    		and(
 		    			assignmentExpression,
 		    			LISTCOMP,
@@ -450,7 +450,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		    		),
 		    		and(
 		    			assignmentExpression,
-		    			o2n(or(COMMA, assignmentExpression)),
+		    			o2n(firstOf(COMMA, assignmentExpression)),
 		    			opt(PIPE, assignmentExpression)
 		    		)
 	    		)
@@ -458,7 +458,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	    	RBRACKET
 	    );
 	    qualifier.is(
-	    	or(
+	    	firstOf(
 	    		and(
    					primaryExpression,
    					ARROWBACK,
@@ -498,24 +498,24 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	    	IDENTIFIER,
 	    	opt(arguments)
 	    );
-	    tupleLiteral.is(LCURLYBRACE, o2n(or(COMMA, assignmentExpression)), RCURLYBRACE);
+	    tupleLiteral.is(LCURLYBRACE, o2n(firstOf(COMMA, assignmentExpression)), RCURLYBRACE);
 	    binaryLiteral.is(
 	    	BINSTART,
-	    	or(
+	    	firstOf(
 	    		and(
     				and(
    		    			assignmentExpression,
   		    			LISTCOMP,
    		    			one2n(binaryQualifier)
    		    		),
-   		    		o2n(or(COMMA, assignmentExpression))
+   		    		o2n(firstOf(COMMA, assignmentExpression))
 	    		),
-	    		o2n(or(COMMA, binaryElement))
+	    		o2n(firstOf(COMMA, binaryElement))
 	    	),
 	    	BINEND
 	    );
 	    binaryQualifier.is(
-		   	or(
+		   	firstOf(
 		   		and(
 	   				binaryLiteral,
 	   				ErlangPunctuator.DOUBLEARROWBACK,
@@ -533,25 +533,25 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		);
 	    
 	    binaryElement.is(
-		   	or(
+		   	firstOf(
 		   		and(
 					expression, 
 					opt(
 						COLON, 
-						or(NUMERIC_LITERAL,	IDENTIFIER, macroLiteral)
+						firstOf(NUMERIC_LITERAL,	IDENTIFIER, macroLiteral)
 					), 
 					opt(
 						ErlangPunctuator.DIV, 
 						/*
 						 * Hack for things like: 1024:32/little-float-dafaq
 						 */
-						or(NUMERIC_LITERAL,and(IDENTIFIER, one2n(MINUS, IDENTIFIER)), IDENTIFIER)
+						firstOf(NUMERIC_LITERAL,and(IDENTIFIER, one2n(MINUS, IDENTIFIER)), IDENTIFIER)
 					)
 				)
 		   	)
 		);
 	    memberExpression.is(
-	        or(
+	        firstOf(
 	        	recordLiteral,
 	        	macroLiteral,
 	        	ifExpression,
@@ -566,26 +566,26 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	     * It can be a record ref (originaly a.b['a']) as well
 	     */
 	    callExpression.is(
-	    	or(
+	    	firstOf(
 	    		and(opt(IDENTIFIER, COLON), memberExpression, arguments),
 	    		memberExpression
 	    	)
 	     ).skipIfOneChild();
 	    
 	    arguments.is(LPARENTHESIS, opt(assignmentExpression, o2n(COMMA, assignmentExpression)), RPARENTHESIS);
-	    unaryExpression.is(or(
+	    unaryExpression.is(firstOf(
 	        callExpression,
 	        and(NOT, unaryExpression)
 	        )).skipIfOneChild();
-	    otherArithmeticExpression.is(unaryExpression, o2n(or(BNOT, ErlangKeyword.DIV, REM), unaryExpression)).skipIfOneChild();
-	    multiplicativeExpression.is(otherArithmeticExpression, o2n(or(STAR, DIV), otherArithmeticExpression)).skipIfOneChild();
-	    additiveExpression.is(multiplicativeExpression, o2n(or(PLUS, MINUS), multiplicativeExpression)).skipIfOneChild();
+	    otherArithmeticExpression.is(unaryExpression, o2n(firstOf(BNOT, ErlangKeyword.DIV, REM), unaryExpression)).skipIfOneChild();
+	    multiplicativeExpression.is(otherArithmeticExpression, o2n(firstOf(STAR, DIV), otherArithmeticExpression)).skipIfOneChild();
+	    additiveExpression.is(multiplicativeExpression, o2n(firstOf(PLUS, MINUS), multiplicativeExpression)).skipIfOneChild();
 	    
-	    shiftExpression.is(additiveExpression, o2n(or(BSL, BSR), additiveExpression)).skipIfOneChild();
+	    shiftExpression.is(additiveExpression, o2n(firstOf(BSL, BSR), additiveExpression)).skipIfOneChild();
 
-	    relationalExpression.is(shiftExpression, o2n(or(LT, GT, LE, GE), shiftExpression)).skipIfOneChild();
+	    relationalExpression.is(shiftExpression, o2n(firstOf(LT, GT, LE, GE), shiftExpression)).skipIfOneChild();
 
-	    equalityExpression.is(relationalExpression, o2n(or(EQUAL, NOTEQUAL, EQUAL2, NOTEQUAL2), relationalExpression)).skipIfOneChild();
+	    equalityExpression.is(relationalExpression, o2n(firstOf(EQUAL, NOTEQUAL, EQUAL2, NOTEQUAL2), relationalExpression)).skipIfOneChild();
 
 	    bitwiseAndExpression.is(equalityExpression, o2n(BAND, equalityExpression)).skipIfOneChild();
 
@@ -603,10 +603,10 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	    
 	    shortCircuitAndAlsoExpression.is(shortCircuitOrElseExpression, o2n(ANDALSO, shortCircuitOrElseExpression)).skipIfOneChild();
 	    
-	    listOperationExpression.is(shortCircuitAndAlsoExpression, o2n(or(PLUSPLUS, MINUSMINUS), shortCircuitAndAlsoExpression)).skipIfOneChild();
+	    listOperationExpression.is(shortCircuitAndAlsoExpression, o2n(firstOf(PLUSPLUS, MINUSMINUS), shortCircuitAndAlsoExpression)).skipIfOneChild();
 
 	    assignmentExpression.is(
-	    	or(
+	    	firstOf(
 	    		and(listOperationExpression, MATCHOP, assignmentExpression),
 	    		listOperationExpression
 	    	)
@@ -616,7 +616,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	    
 	    funExpression.is(
 			ErlangKeyword.FUN,
-			or(
+			firstOf(
 				funcArity,
 				and(functionDeclarationsNoName, END)
 			)
@@ -639,7 +639,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			TRY, 
 			statements, 
 			opt(OF, patternStatements), 
-			or(
+			firstOf(
 				and(catchExpression, afterExpression),
 				catchExpression,
 				afterExpression
@@ -670,14 +670,14 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		 **/
 	private void statements() {
 		eos.is(
-			or(
+			firstOf(
 				COMMA,
 				next(EOF),
 				next(DOT)
 			)
 		);
 		statement.is(
-			or(
+			firstOf(
 				sendStatement,
 				expressionStatement,
 				receiveExpression,

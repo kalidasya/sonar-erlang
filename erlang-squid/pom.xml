@@ -9,9 +9,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>erlang-squid</artifactId>
 	<name>SSLR :: Erlang</name>
-	<properties>
-		<sslr.version>1.15</sslr.version>
-	</properties>
 
 	<dependencies>
 		<dependency>

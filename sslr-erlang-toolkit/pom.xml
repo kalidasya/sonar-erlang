@@ -10,10 +10,6 @@
 	<artifactId>sslr-erlang-toolkit</artifactId>
 	<name>Erlang :: SSLR Toolkit</name>
 
-	<properties>
-		<sslr.version>1.15</sslr.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.kalidasya.sonar.erlang</groupId>
