@@ -80,7 +80,7 @@ public class ErlangComplexityVisitor extends SquidAstVisitor<ErlangGrammar> {
 	 * @param functionDec
 	 */
 	private void countClauses(AstNode functionDec) {
-		increaseComplexity((functionDec.findDirectChildren(grammar.functionClause).size() - 1));
+		increaseComplexity((functionDec.findDirectChildren(grammar.functionClause).size()));
 	}
 
 }

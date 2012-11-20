@@ -17,26 +17,23 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.erlang;
+package org.sonar.plugins.erlang.dialyzer;
 
-import static org.fest.assertions.Assertions.assertThat;
+import org.sonar.api.profiles.ProfileDefinition;
+import org.sonar.api.profiles.RulesProfile;
+import org.sonar.api.profiles.XMLProfileParser;
+import org.sonar.api.utils.ValidationMessages;
 
-import java.util.List;
+public class DialyzerProfile extends ProfileDefinition {
+  private XMLProfileParser xmlProfileParser;
 
-import org.junit.Test;
-import org.kalidasya.sonar.erlang.checks.CheckList;
-import org.sonar.api.rules.AnnotationRuleParser;
-import org.sonar.api.rules.Rule;
+  public DialyzerProfile(XMLProfileParser xmlProfileParser) {
+    this.xmlProfileParser = xmlProfileParser;
+  }
 
-public class ErlangRuleRepositoryTest {
-
-	@Test
-	public void test() {
-		ErlangRuleRepository ruleRepository = new ErlangRuleRepository(new AnnotationRuleParser());
-		assertThat(ruleRepository.getKey()).isEqualTo("erlang");
-		assertThat(ruleRepository.getName()).isEqualTo("Sonar");
-		List<Rule> rules = ruleRepository.createRules();
-		assertThat(rules.size()).isEqualTo(CheckList.getChecks().size());
-	}
-
+  @Override
+  public RulesProfile createProfile(ValidationMessages messages) {
+    return xmlProfileParser.parseResource(getClass().getClassLoader(),
+                                          "org/sonar/plugins/erlang/profile-default.xml", messages);
+  }
 }

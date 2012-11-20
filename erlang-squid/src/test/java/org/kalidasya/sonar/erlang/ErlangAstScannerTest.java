@@ -122,7 +122,7 @@ public class ErlangAstScannerTest {
   @Test
   public void complexity() {
     SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/metrics/complexity.erl"));
-    assertThat(file.getInt(ErlangMetric.COMPLEXITY)).isEqualTo(9);
+    assertThat(file.getInt(ErlangMetric.COMPLEXITY)).isEqualTo(10);
   }
   
   @Test

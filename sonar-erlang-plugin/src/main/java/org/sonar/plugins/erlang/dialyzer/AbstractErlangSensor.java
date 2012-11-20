@@ -17,25 +17,30 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.erlang;
+package org.sonar.plugins.erlang.dialyzer;
 
-import static org.fest.assertions.Assertions.assertThat;
+import org.sonar.api.batch.Sensor;
+import org.sonar.api.resources.Project;
+import org.sonar.plugins.erlang.core.Erlang;
 
-import org.junit.Before;
-import org.junit.Test;
+/**
+ * This is a helper base class for sensors that should only be executed on Erlang projects.
+ *
+ * @since 0.1
+ */
+public abstract class AbstractErlangSensor implements Sensor {
 
-public class ErlangPluginTest {
+  private final Erlang erlang;
 
-  private ErlangPlugin plugin;
-
-  @Before
-  public void setUp() throws Exception {
-    plugin = new ErlangPlugin();
+  protected AbstractErlangSensor(Erlang erlang) {
+    this.erlang = erlang;
   }
 
-  @Test
-  public void testGetExtensions() throws Exception {
-    assertThat(plugin.getExtensions().size()).isEqualTo(12);
+  public final boolean shouldExecuteOnProject(Project project) {
+    return project.getLanguage().equals(erlang);
   }
 
+  public final Erlang getErlang() {
+    return erlang;
+  }
 }

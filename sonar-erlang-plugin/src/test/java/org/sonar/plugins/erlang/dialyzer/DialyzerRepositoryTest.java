@@ -17,25 +17,26 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.erlang;
+package org.sonar.plugins.erlang.dialyzer;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.junit.Before;
+import java.util.List;
+
 import org.junit.Test;
+import org.kalidasya.sonar.erlang.checks.CheckList;
+import org.sonar.api.rules.Rule;
+import org.sonar.api.rules.XMLRuleParser;
 
-public class ErlangPluginTest {
+public class DialyzerRepositoryTest {
 
-  private ErlangPlugin plugin;
-
-  @Before
-  public void setUp() throws Exception {
-    plugin = new ErlangPlugin();
-  }
-
-  @Test
-  public void testGetExtensions() throws Exception {
-    assertThat(plugin.getExtensions().size()).isEqualTo(12);
-  }
+	@Test
+	public void test() {
+		DialyzerRuleRepository ruleRepository = new DialyzerRuleRepository(new XMLRuleParser());
+		assertThat(ruleRepository.getKey()).isEqualTo("dialyzer");
+		assertThat(ruleRepository.getName()).isEqualTo("Dialyzer");
+		List<Rule> rules = ruleRepository.createRules();
+		assertThat(rules.size()).isEqualTo(41);
+	}
 
 }

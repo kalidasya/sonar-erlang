@@ -17,7 +17,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.erlang;
+package org.sonar.plugins.erlang.checks;
 
 import java.util.List;
 
@@ -27,15 +27,13 @@ import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleRepository;
 import org.sonar.plugins.erlang.core.Erlang;
 
-public class ErlangRuleRepository extends RuleRepository {
-
-  private static final String REPOSITORY_NAME = "Sonar";
+public class ErlangChecksRuleRepository extends RuleRepository {
 
   private final AnnotationRuleParser annotationRuleParser;
 
-  public ErlangRuleRepository(AnnotationRuleParser annotationRuleParser) {
+  public ErlangChecksRuleRepository(AnnotationRuleParser annotationRuleParser) {
     super(CheckList.REPOSITORY_KEY, Erlang.KEY);
-    setName(REPOSITORY_NAME);
+    setName(CheckList.SONAR_WAY_PROFILE);
     this.annotationRuleParser = annotationRuleParser;
   }
 

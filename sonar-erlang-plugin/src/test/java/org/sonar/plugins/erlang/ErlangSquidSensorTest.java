@@ -98,7 +98,7 @@ public class ErlangSquidSensorTest {
 		verify(context).saveMeasure(Mockito.any(Resource.class),
 				Mockito.eq(CoreMetrics.STATEMENTS), Mockito.eq(8.0));
 		verify(context).saveMeasure(Mockito.any(Resource.class),
-				Mockito.eq(CoreMetrics.COMPLEXITY), Mockito.eq(4.0));
+				Mockito.eq(CoreMetrics.COMPLEXITY), Mockito.eq(6.0));
 		verify(context).saveMeasure(Mockito.any(Resource.class),
 				Mockito.eq(CoreMetrics.COMMENT_LINES), Mockito.eq(1.0));
 		

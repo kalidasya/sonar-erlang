@@ -17,47 +17,27 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.erlang;
-
-import java.util.List;
+package org.sonar.plugins.erlang.checks;
 
 import org.kalidasya.sonar.erlang.checks.CheckList;
 import org.sonar.api.profiles.AnnotationProfileParser;
 import org.sonar.api.profiles.ProfileDefinition;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.profiles.XMLProfileParser;
-import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.erlang.core.Erlang;
 
-public class ErlangProfile extends ProfileDefinition {
+public class ErlangChecksProfile extends ProfileDefinition {
 
-	public static final String REPOSITORY_KEY = "erlang_default";
-	public static final String PROFILE_NAME = RulesProfile.SONAR_WAY_NAME;
 	private final AnnotationProfileParser annotationProfileParser;
-	private final XMLProfileParser xmlProfileParser;
 
-	public ErlangProfile(AnnotationProfileParser annotationProfileParser,
-			XMLProfileParser xmlProfileParser) {
+	public ErlangChecksProfile(AnnotationProfileParser annotationProfileParser) {
 		this.annotationProfileParser = annotationProfileParser;
-		this.xmlProfileParser = xmlProfileParser;
 	}
 
 	@Override
 	public RulesProfile createProfile(ValidationMessages validation) {
-		RulesProfile ret = RulesProfile.create(REPOSITORY_KEY, Erlang.KEY);
-		ret.setName(PROFILE_NAME);
-		RulesProfile checks = annotationProfileParser.parse(CheckList.REPOSITORY_KEY,
-				CheckList.SONAR_WAY_PROFILE, Erlang.KEY, CheckList.getChecks(), validation);
-		RulesProfile dialyzer = xmlProfileParser.parseResource(getClass().getClassLoader(),
-				"org/sonar/plugins/erlang/profile-default.xml", validation);
-
-		List<ActiveRule> rules = checks.getActiveRules();
-		rules.addAll(dialyzer.getActiveRules());
-
-		ret.setActiveRules(rules);
-
-		return ret;
+		return annotationProfileParser.parse(CheckList.REPOSITORY_KEY, CheckList.SONAR_WAY_PROFILE,
+				Erlang.KEY, CheckList.getChecks(), validation);
 	}
 
 }

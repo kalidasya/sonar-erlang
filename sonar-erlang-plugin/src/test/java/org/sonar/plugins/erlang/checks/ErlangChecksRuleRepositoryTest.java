@@ -17,25 +17,27 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.erlang;
+package org.sonar.plugins.erlang.checks;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.junit.Before;
+import java.util.List;
+
 import org.junit.Test;
+import org.kalidasya.sonar.erlang.checks.CheckList;
+import org.sonar.api.rules.AnnotationRuleParser;
+import org.sonar.api.rules.Rule;
+import org.sonar.plugins.erlang.checks.ErlangChecksRuleRepository;
 
-public class ErlangPluginTest {
+public class ErlangChecksRuleRepositoryTest {
 
-  private ErlangPlugin plugin;
-
-  @Before
-  public void setUp() throws Exception {
-    plugin = new ErlangPlugin();
-  }
-
-  @Test
-  public void testGetExtensions() throws Exception {
-    assertThat(plugin.getExtensions().size()).isEqualTo(12);
-  }
+	@Test
+	public void test() {
+		ErlangChecksRuleRepository ruleRepository = new ErlangChecksRuleRepository(new AnnotationRuleParser());
+		assertThat(ruleRepository.getKey()).isEqualTo("erlang-checks");
+		assertThat(ruleRepository.getName()).isEqualTo("Erlang checks");
+		List<Rule> rules = ruleRepository.createRules();
+		assertThat(rules.size()).isEqualTo(CheckList.getChecks().size());
+	}
 
 }

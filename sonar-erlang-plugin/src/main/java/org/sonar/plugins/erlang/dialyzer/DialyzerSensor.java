@@ -17,25 +17,31 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.erlang;
+package org.sonar.plugins.erlang.dialyzer;
 
-import static org.fest.assertions.Assertions.assertThat;
+import org.sonar.api.batch.SensorContext;
+import org.sonar.api.profiles.RulesProfile;
+import org.sonar.api.resources.Project;
+import org.sonar.plugins.erlang.core.Erlang;
 
-import org.junit.Before;
-import org.junit.Test;
+/**
+ * Calls the dialyzer report parser saves violations to sonar
+ * 
+ * @author tkende
+ * 
+ */
+public class DialyzerSensor extends AbstractErlangSensor {
 
-public class ErlangPluginTest {
+	private ErlangRuleManager dialyzerRuleManager = new ErlangRuleManager(
+			DialyzerRuleRepository.DIALYZER_PATH);
+	private RulesProfile rulesProfile;
 
-  private ErlangPlugin plugin;
+	public DialyzerSensor(Erlang erlang, RulesProfile rulesProfile) {
+		super(erlang);
+		this.rulesProfile = rulesProfile;
+	}
 
-  @Before
-  public void setUp() throws Exception {
-    plugin = new ErlangPlugin();
-  }
-
-  @Test
-  public void testGetExtensions() throws Exception {
-    assertThat(plugin.getExtensions().size()).isEqualTo(12);
-  }
-
+	public void analyse(Project project, SensorContext context) {
+		new DialyzerReportParser().dialyzer(project, context, dialyzerRuleManager, rulesProfile);
+	}
 }
