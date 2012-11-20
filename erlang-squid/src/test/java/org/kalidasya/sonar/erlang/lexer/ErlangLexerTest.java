@@ -93,6 +93,10 @@ public class ErlangLexerTest {
 	    assertThat("escaped double quote", lexer.lex("\"\\\"\""), hasToken("\"\\\"\"", GenericTokenType.LITERAL));
 	    assertThat("multiline", lexer.lex("\"\\\n\""), hasToken("\"\\\n\"", GenericTokenType.LITERAL));
 	    assertThat("new line in literal", lexer.lex("\"~n\""), hasToken("\"~n\"", GenericTokenType.LITERAL));
+	    assertThat("new line in literal", lexer.lex("\"a'b'c\""), hasToken("\"a'b'c\"", GenericTokenType.LITERAL));
+	    assertThat("new line in literal", lexer.lex("\"a\\\"b\\\"c\""), hasToken("\"a\\\"b\\\"c\"", GenericTokenType.LITERAL));
+	    assertThat("new line in literal", lexer.lex("\"This is a multiline string\nspanning two lines\""), hasToken("\"This is a multiline string\nspanning two lines\"", GenericTokenType.LITERAL));
+	    assertThat("new line in literal", lexer.lex("\"This is a multiline string that spans two lines\\n\"\n\"using two source lines for convenience\""), hasToken("\"This is a multiline string that spans two lines\\n\"\n\"using two source lines for convenience\"", GenericTokenType.LITERAL));
 	  }
 
 	  @Test
