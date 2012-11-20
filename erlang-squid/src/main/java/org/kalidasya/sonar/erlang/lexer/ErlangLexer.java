@@ -44,7 +44,7 @@ public final class ErlangLexer {
 	
 	public static Lexer create(ErlangConfiguration conf){
 		return Lexer.builder()
-				.withChannel(regexp(LITERAL, "\"([^\"\\\\]*+(\\\\[\\s\\S])?+)*+\"([\\s\\S][^\\s\\S]*\"([^\"\\\\]*+(\\\\[\\s\\S])?+)*+\")?"))
+				.withChannel(regexp(LITERAL, "\"([^\"\\\\]*+(\\\\[\\s\\S])?+)*+\""))
 				.withChannel(new BlackHoleChannel("\\s++"))
 				.withChannel(commentRegexp("%[^\\n\\r]*+"))
 				.withChannel(regexp(NUMERIC_LITERAL, "[0-9]++\\.([0-9]++)" + EXP + "?"))

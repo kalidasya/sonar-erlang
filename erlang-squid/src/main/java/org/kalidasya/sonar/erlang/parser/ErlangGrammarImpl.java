@@ -428,7 +428,8 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		literal.is(
 				firstOf(
 					NUMERIC_LITERAL,
-					LITERAL
+					//handle string concetanation ("..."\n[\r\t]"..." is one literal
+					one2n(LITERAL)
 				)
 			);
 	    primaryExpression.is(firstOf(
