@@ -103,6 +103,12 @@ public class ModuleAttributesTest {
 										"}.")));
 	}
 	
+	@Test
+	public void exportTypeTest(){
+		assertThat(p, parse(code("-export_type([compile_init_data/0,",
+	              "one_file_result/0,",
+	              "compile_result/0]).")));
+	}
 	
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);

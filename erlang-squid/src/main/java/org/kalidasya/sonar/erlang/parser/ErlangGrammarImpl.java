@@ -144,22 +144,22 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			COMMA,
 			LCURLYBRACE,
 			and(
-				opt(
-					IDENTIFIER,
-					COLON, COLON
-				),
 				callExpression,
-				opt(MATCHOP,callExpression)
+				opt(
+					MATCHOP,
+					callExpression
+				),
+				opt(COLON, COLON, callExpression)
 			),
 			o2n(
 				firstOf(COMMA,PIPE),
 				and(
-					opt(
-						IDENTIFIER,
-						COLON, COLON
-					),
 					callExpression,
-					opt(MATCHOP,callExpression)
+					opt(
+						MATCHOP,
+						callExpression
+					),
+					opt(COLON, COLON, callExpression)
 				)	
 			),
 			RCURLYBRACE,
@@ -256,7 +256,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		
 		genericAttr.is(
 				MINUS, 
-				firstOf("behaviour", "import", "vsn", "on_load", "include", "file", "ignore_xref", "include_lib", "author"), 
+				firstOf("behaviour", "import", "vsn", "on_load", "include", "file", "ignore_xref", "include_lib", "author", "export_type"), 
 				LPARENTHESIS, 
 				firstOf(
 					funcArity,
@@ -447,7 +447,8 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		    		and(
 		    			assignmentExpression,
 		    			LISTCOMP,
-		    			one2n(qualifier)
+		    			qualifier,
+		    			o2n(COMMA, qualifier)
 		    		),
 		    		and(
 		    			assignmentExpression,
@@ -459,15 +460,14 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	    	RBRACKET
 	    );
 	    qualifier.is(
-	    	firstOf(
-	    		and(
-   					primaryExpression,
-   					ARROWBACK,
-   					expression,
-   					o2n(COMMA,expression)
-   				)/*,
-   				expression*/
-   			)
+			firstOf(
+				and(
+					assignmentExpression,
+					ARROWBACK,
+					expression
+				),
+				expression
+			)
 	    );
 	    recordLiteral.is(
 		    	opt(IDENTIFIER),

@@ -105,6 +105,9 @@ public class ErlangParserExpressionTest {
 		assertThat(p, parse(code("[10, 23] -- [X*2 || X <- [1,2,3]] ++ [7,8,9]")));
 		assertThat(p, parse(code("[756, 877] ++ [X*2 || X <- [1,2,3]] -- [7,8,9]")));
 		assertThat(p, parse(code("[{A,B} || {A, B} <- method(), method2(File)]")));
+		assertThat(p, parse(code("[Call || {_From, To} = Call <- ExtCalls, lists:member(To, RelevantAPICalls)]")));
+		assertThat(p, parse(code("[{M, F, A} || {nowarn_unused_function, FAs} <- Opts,  {F, A} <- lists:flatten([FAs])]")));
+		assertThat(p, parse(code("[Call || Call = {_From, To} <- ExtCalls, not dialyzer_plt:contains_mfa(InitPlt, To)]")));
 	}
 
 	@Test
