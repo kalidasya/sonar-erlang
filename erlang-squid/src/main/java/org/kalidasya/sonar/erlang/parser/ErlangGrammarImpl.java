@@ -175,10 +175,13 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 					firstOf(RCURLYBRACE, RBRACKET)
 				),
 				and(
-					callExpression,
-					opt(COLON, COLON, recordField)
+					firstOf(
+						specFun,
+						callExpression
+					)
 				)
-			)
+			),
+			opt(COLON, COLON, recordField)
 		);
 		
 		flowControlAttr.is(
@@ -248,10 +251,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			MINUS,
 			"compile",
 			LPARENTHESIS, 
-			firstOf(
-				LITERAL,
-				IDENTIFIER
-			),
+			primaryExpression,
 			RPARENTHESIS, 
 			DOT
 		);
