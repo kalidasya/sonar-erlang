@@ -70,6 +70,20 @@ public class ErlangParserCaseStatementTest {
 		assertThat(p, parse(code("case assignmentExpression of patternStatement; patternStatement end")));
 	}
 	
+	@Test
+	public void caseReal1() {
+		assertThat(p, parse(code(
+				"case cerl:is_c_var(PosVar) andalso (cerl:var_name(PosVar) =/= '') of",
+				"true -> \"variable \"++String;", 
+				"false -> \"pattern \"++String", 
+				"end")));
+	}
+	
+
+	
+	
+     
+	
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);
 	}

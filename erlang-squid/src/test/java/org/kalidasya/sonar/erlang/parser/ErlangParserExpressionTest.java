@@ -237,6 +237,13 @@ public class ErlangParserExpressionTest {
 				parse(code("if guardExpression; guardExpression, guardExpression -> assignmentExpression, assignmentExpression; guardExpression, guardExpression; guardExpression -> assignmentExpression end")));
 	}
 	
+	@Test
+	public void minus(){
+		assertThat(
+				p,
+				parse(code("t_from_range(-(1 bsl (N - 1)), 1 bsl (N - 1) - 1)")));
+	}
+	
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);
 	}

@@ -124,6 +124,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				exportAttr,
 				compileAttr,
 				defineAttr,
+				importAttr,
 				typeSpec, 
 				spec, 
 				recordAttr,
@@ -144,27 +145,40 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			COMMA,
 			LCURLYBRACE,
 			and(
-				callExpression,
+				recordField,
 				opt(
 					MATCHOP,
-					callExpression
-				),
-				opt(COLON, COLON, callExpression)
+					recordField
+				)
 			),
 			o2n(
 				firstOf(COMMA,PIPE),
 				and(
-					callExpression,
+					recordField,
 					opt(
 						MATCHOP,
-						callExpression
-					),
-					opt(COLON, COLON, callExpression)
+						recordField
+					)
 				)	
 			),
 			RCURLYBRACE,
 			RPARENTHESIS,
 			DOT
+		);
+		
+		recordField.is(
+			firstOf(
+				and(
+					firstOf(LCURLYBRACE, LBRACKET),
+					recordField,
+					o2n(COMMA, recordField),
+					firstOf(RCURLYBRACE, RBRACKET)
+				),
+				and(
+					callExpression,
+					opt(COLON, COLON, recordField)
+				)
+			)
 		);
 		
 		flowControlAttr.is(
@@ -254,9 +268,23 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			DOT
 		);
 		
+		importAttr.is(
+			MINUS,
+			"import",
+			LPARENTHESIS,
+			IDENTIFIER,
+			COMMA,
+			LBRACKET,
+			funcArity,
+			o2n(COMMA, funcArity),
+			RBRACKET,
+			RPARENTHESIS,
+			DOT
+		);
+		
 		genericAttr.is(
 				MINUS, 
-				firstOf("behaviour", "import", "vsn", "on_load", "include", "file", "ignore_xref", "include_lib", "author", "export_type"), 
+				firstOf("behaviour", "vsn", "on_load", "include", "file", "ignore_xref", "include_lib", "author", "export_type"), 
 				LPARENTHESIS, 
 				firstOf(
 					funcArity,
@@ -309,7 +337,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		
 		typeSpec.is(
 				MINUS, 
-				"type",
+				firstOf("type","opaque"),
 				opt(LPARENTHESIS),
 				funcDecl,
 				firstOf(
@@ -429,13 +457,13 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	private void expressions() {
 		literal.is(
 				firstOf(
-					and(opt(MINUS),NUMERIC_LITERAL),
+					IDENTIFIER,
+					NUMERIC_LITERAL,
 					//handle string concetanation ("..."\n[\r\t]"..." is one literal
 					one2n(LITERAL)
 				)
 			);
 	    primaryExpression.is(firstOf(
-	        IDENTIFIER,
 	        literal,
 	        listLiteral,
 	        tupleLiteral,
@@ -530,8 +558,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	   				expression,
 	   				o2n(COMMA, expression)
 	   			  
-	   			)/*,
-	   			expression*/
+	   			)
 	   		)
 		);
 	    
@@ -576,9 +603,11 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	     ).skipIfOneChild();
 	    
 	    arguments.is(LPARENTHESIS, opt(assignmentExpression, o2n(COMMA, assignmentExpression)), RPARENTHESIS);
-	    unaryExpression.is(firstOf(
-	        callExpression,
-	        and(NOT, unaryExpression)
+	    unaryExpression.is(
+	    	firstOf(
+	    			//handle things like: -12, -A, -func(A), -(6+3)
+	    		and(opt(MINUS), callExpression),
+	    		and(NOT, unaryExpression)
 	        )).skipIfOneChild();
 	    otherArithmeticExpression.is(unaryExpression, o2n(firstOf(BNOT, ErlangKeyword.DIV, REM), unaryExpression)).skipIfOneChild();
 	    multiplicativeExpression.is(otherArithmeticExpression, o2n(firstOf(STAR, DIV), otherArithmeticExpression)).skipIfOneChild();

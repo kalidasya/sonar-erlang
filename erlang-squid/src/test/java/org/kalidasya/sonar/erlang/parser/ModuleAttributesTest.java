@@ -69,6 +69,11 @@ public class ModuleAttributesTest {
 	public void recordDefTest() {
 		assertThat(p, parse(code("-record(state, {last::calendar:datetime(), tref::timer:tref()}).")));
 		assertThat(p, parse(code("-record(auth, {","token :: string() | binary()","}).")));
+		assertThat(p, parse(code("-record(map, {dict = dict:new()   :: dict(),",
+	              "subst = dict:new()  :: dict(),",
+	              "modified = []       :: [Key :: term()],",
+	              "modified_stack = [] :: [{[Key :: term()],reference()}],",
+	              "ref = undefined     :: reference() | undefined}).")));
 		
 	}
 	
@@ -87,6 +92,10 @@ public class ModuleAttributesTest {
 		assertThat(p, parse(code("-type ascii_string() :: [1..255].")));
 		
 		assertThat(p, parse(code("-type timestamp() :: {MegaSecs::non_neg_integer(), Secs::non_neg_integer(), MicroSecs::non_neg_integer()}.")));
+		
+		assertThat(p, parse(code("-opaque my_opaq_type() :: Type.")));
+		
+		assertThat(p, parse(code("-opaque codeserver() :: #codeserver{}.")));
 	}
 
 	@Test
@@ -109,6 +118,31 @@ public class ModuleAttributesTest {
 		assertThat(p, parse(code("-export_type([compile_init_data/0,",
 	              "one_file_result/0,",
 	              "compile_result/0]).")));
+	}
+	
+	@Test
+	public void importTest(){
+		assertThat(p, parse(code("-import(erl_types,",
+				"[any_none/1, t_any/0, t_atom/0, t_atom/1, t_atom_vals/1,",
+				 "t_binary/0, t_boolean/0,",
+				 "t_bitstr/0, t_bitstr/2, t_bitstr_concat/1, t_bitstr_match/2,",
+				 "t_cons/0, t_cons/2, t_cons_hd/1, t_cons_tl/1, t_contains_opaque/1,",
+				 "t_find_opaque_mismatch/2, t_float/0, t_from_range/2, t_from_term/1,",
+				 "t_fun/0, t_fun/2, t_fun_args/1, t_fun_range/1,",
+				 "t_inf/2, t_inf/3, t_inf_lists/2, t_inf_lists/3, t_inf_lists_masked/3,",
+				 "t_integer/0, t_integers/1,",
+				 "t_is_any/1, t_is_atom/1, t_is_atom/2, t_is_boolean/1, t_is_equal/2,",
+				 "t_is_integer/1, t_is_nil/1, t_is_none/1, t_is_none_or_unit/1,",
+				 "t_is_number/1, t_is_reference/1, t_is_pid/1, t_is_port/1,",
+				 "t_is_subtype/2, t_is_unit/1,",
+				 "t_limit/2, t_list/0, t_maybe_improper_list/0, t_module/0,",
+				 "t_none/0, t_non_neg_integer/0, t_number/0, t_number_vals/1,",
+				 "t_opaque_match_atom/2, t_opaque_match_record/2,",
+				 "t_opaque_matching_structure/2,",
+				 "t_pid/0, t_port/0, t_product/1, t_reference/0,",
+				 "t_sup/1, t_sup/2, t_subtract/2, t_to_string/2, t_to_tlist/1,",
+				 "t_tuple/0, t_tuple/1, t_tuple_args/1, t_tuple_subtypes/1,",
+				 "t_unit/0, t_unopaque/1]).")));
 	}
 	
 	private static String code(String... lines) {
