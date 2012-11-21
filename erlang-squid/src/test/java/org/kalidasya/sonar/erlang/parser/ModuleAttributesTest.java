@@ -58,6 +58,8 @@ public class ModuleAttributesTest {
 				parse(code("-ifdef(debug).",
 						"-define(LOG(X), io:format(\"{~p,~p}: ~p~n\", [?MODULE,?LINE,X])).",
 						"-else.", "-define(LOG(X), true).", "-endif.")));
+		
+
 	}
 
 	@Test
@@ -124,7 +126,7 @@ public class ModuleAttributesTest {
 		assertThat(
 				p,
 				parse(code("-spec analyze(cerl:c_module()) -> {dict(), ordset('external' | label()), dict()}.")));
-	}
+	}						
 
 	@Test
 	public void exportTypeTest() {

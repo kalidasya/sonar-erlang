@@ -60,7 +60,7 @@ public class CoverCoverageSensor implements Sensor {
 
 		String[] list = reportsDir.list(filter);
 
-		if (list.length == 0) {
+		if (list==null || list.length == 0) {
 			LOG.warn("no files end with .html in ", reportsDir);
 			return;
 		}

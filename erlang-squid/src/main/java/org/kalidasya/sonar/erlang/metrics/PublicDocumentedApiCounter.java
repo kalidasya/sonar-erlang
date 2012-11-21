@@ -51,10 +51,10 @@ public class PublicDocumentedApiCounter extends SquidAstVisitor<ErlangGrammar> {
 	@Override
 	public void visitNode(AstNode astNode) {
 		/*
-		 * Ignore test exports
+		 * Ignore all exports in flow control (we cannot decide what to do
+		 * TODO: analyse common export related flow controls
 		 */
-		if (!(astNode.findFirstParent(g.flowControlAttr) != null && "TEST".equalsIgnoreCase(astNode
-				.findFirstParent(g.flowControlAttr).findFirstDirectChild(g.ifdefAttr).getChild(3).getTokenOriginalValue()))) {
+		if (astNode.findFirstParent(g.flowControlAttr) == null) {
 			List<AstNode> exports = astNode.findChildren(getContext().getGrammar().funcArity);
 			numOfPublicAPIs += exports.size();
 			for (AstNode export : exports) {
