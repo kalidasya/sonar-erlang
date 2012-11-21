@@ -177,6 +177,13 @@ public class ErlangParserModulesTest {
 				p,
 				parse(code("-module(m).", "hexstring(<< X:128/big-unsigned-integer >>) -> ",
 						"lists:flatten(io_lib:format(\"~32.16.0b\", [X])).")));
+		
+		assertThat(
+				p,
+				parse(code("-module(m).",
+						"sys_info() ->",
+						"SysArch = string:strip(erlang:system_info(system_architecture),right,$\\n)."
+						)));
 	}
 
 	@Test

@@ -71,6 +71,10 @@ public class ErlangRealCodeTest {
 		assertThat(p, parse(readFromFile("egs_proto.erl")));
 	}
 	
+	@Test
+	public void realLife6() throws IOException, URISyntaxException {
+		assertThat(p, parse(readFromFile("megaco.erl")));
+	}
 
 	private String readFromFile(String fileName) throws IOException,
 			URISyntaxException {

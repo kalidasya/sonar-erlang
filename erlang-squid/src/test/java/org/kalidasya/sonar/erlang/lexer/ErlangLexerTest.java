@@ -76,8 +76,16 @@ public class ErlangLexerTest {
 	    
 	    assertThat(lexer.lex("2#12"), hasToken("2#12", ErlangTokenType.NUMERIC_LITERAL));
 	    assertThat(lexer.lex("16#1f"), hasToken("16#1f", ErlangTokenType.NUMERIC_LITERAL));
-	    assertThat(lexer.lex("$\n"), hasToken("$\n", ErlangTokenType.NUMERIC_LITERAL));
+	    assertThat(lexer.lex("$\\n"), hasToken("$\\n", ErlangTokenType.NUMERIC_LITERAL));
+	    assertThat(lexer.lex("$\\"), hasToken("$\\", ErlangTokenType.NUMERIC_LITERAL));
 	    assertThat(lexer.lex("$w"), hasToken("$w", ErlangTokenType.NUMERIC_LITERAL));
+	    assertThat(lexer.lex("$\\b"), hasToken("$\\b", ErlangTokenType.NUMERIC_LITERAL));
+	    assertThat(lexer.lex("$\\123"), hasToken("$\\123", ErlangTokenType.NUMERIC_LITERAL));
+	    assertThat(lexer.lex("$\\xA0"), hasToken("$\\xA0", ErlangTokenType.NUMERIC_LITERAL));
+	    assertThat(lexer.lex("$\\x{A2F}"), hasToken("$\\x{A2F}", ErlangTokenType.NUMERIC_LITERAL));
+	    assertThat(lexer.lex("$\\^A"), hasToken("$\\^A", ErlangTokenType.NUMERIC_LITERAL));
+	    assertThat(lexer.lex("$\\\""), hasToken("$\\\"", ErlangTokenType.NUMERIC_LITERAL));
+	    assertThat(lexer.lex("$\\\\"), hasToken("$\\\\", ErlangTokenType.NUMERIC_LITERAL));
 	  }
 
 	  @Test

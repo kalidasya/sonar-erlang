@@ -36,8 +36,8 @@ import com.sonar.sslr.impl.events.ExtendedStackTraceStream;
 
 public class ErlangParserStatementTest {
 	ExtendedStackTrace listener = new ExtendedStackTrace();
-	Parser<ErlangGrammar> p = ErlangParser.create(new ErlangConfiguration(
-			Charsets.UTF_8), listener);
+	Parser<ErlangGrammar> p = ErlangParser
+			.create(new ErlangConfiguration(Charsets.UTF_8), listener);
 
 	ErlangGrammar g = p.getGrammar();
 
@@ -69,21 +69,17 @@ public class ErlangParserStatementTest {
 		assertThat(
 				p,
 				parse(code("fun	(Name) ->", "Spec = agner:spec(Name),",
-						"Searchable = string:to_lower(\"hElO\");",
-						"(Name, 23) when Name>=2 ->",
-						"Spec = agner:spec(Name),",
-						"Searchable = string:to_lower(\"hElO\")", "end")));
-	
+						"Searchable = string:to_lower(\"hElO\");", "(Name, 23) when Name>=2 ->",
+						"Spec = agner:spec(Name),", "Searchable = string:to_lower(\"hElO\")", "end")));
+
 	}
-	
 
 	@Test
 	public void caseStatements() {
 		assertThat(
 				p,
-				parse(code("case Signal of", "{signal, _What, _From, _To} ->",
-						"true;", "{signal, _What, _To} ->", "true;",
-						"_Else -> false", "end")));
+				parse(code("case Signal of", "{signal, _What, _From, _To} ->", "true;",
+						"{signal, _What, _To} ->", "true;", "_Else -> false", "end")));
 	}
 
 	@Test
@@ -97,17 +93,14 @@ public class ErlangParserStatementTest {
 	public void receiveStatements() {
 		assertThat(
 				p,
-				parse(code("receive", "onhook ->", "disconnect(),", "idle();",
-						"{connect, B} ->", "B ! {busy, self()},",
-						"wait_for_onhook()", "after", "60000 ->",
+				parse(code("receive", "onhook ->", "disconnect(),", "idle();", "{connect, B} ->",
+						"B ! {busy, self()},", "wait_for_onhook()", "after", "60000 ->",
 						"disconnect(),", "error()", "end")));
 	}
 
 	@Test
 	public void tryStatements() {
-		assertThat(
-				p,
-				parse(code("try Exprs of Pattern when GuardSeq -> Body after AfterBody end")));
+		assertThat(p, parse(code("try Exprs of Pattern when GuardSeq -> Body after AfterBody end")));
 
 		assertThat(
 				p,
@@ -117,20 +110,16 @@ public class ErlangParserStatementTest {
 
 		assertThat(
 				p,
-				parse(code("try", "{ok,Bin} = file:read(F, 1024*1024),",
-						"binary_to_term(Bin)", "after", "file:close(F)", "end")));
+				parse(code("try", "{ok,Bin} = file:read(F, 1024*1024),", "binary_to_term(Bin)",
+						"after", "file:close(F)", "end")));
 
 		assertThat(
 				p,
-				parse(code(
-						"try Expr",
-						"catch",
-						"throw:Term -> Term;",
+				parse(code("try Expr", "catch", "throw:Term -> Term;",
 						"exit:Reason -> {'EXIT',Reason};",
-						"error:Reason -> {'EXIT',{Reason,erlang:get_stacktrace()}}",
-						"end")));
+						"error:Reason -> {'EXIT',{Reason,erlang:get_stacktrace()}}", "end")));
 	}
-	
+
 	@Test
 	public void blockStatements() {
 		assertThat(p, parse(code("begin a, S=2 end")));

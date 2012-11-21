@@ -149,6 +149,7 @@ public class ErlangParserExpressionTest {
 		assertThat(p, parse(code("method(\"hello\",234234)")));
 		assertThat(p, parse(code("haho:method(\"hello\")")));
 		assertThat(p, parse(code("io:format(\"assert error in module ~p on line ~p~n\")")));
+		assertThat(p, parse(code("string:strip(erlang:system_info(system_architecture),right,$\n)")));
 	}
 
 	@Test
@@ -184,7 +185,7 @@ public class ErlangParserExpressionTest {
 		assertThat(p, parse(code("?MACRO1(X, 123)")));
 		assertThat(p, parse(code("server:call(refserver, Request, ?TIMEOUT)")));
 		assertThat(p, parse(code("server:call(refserver, Request, ?MACRO1(a, b))")));
-
+		assertThat(p, parse(code("?MODULE:report_event(DetailLevel, FromTo, FromTo, Label, Contents)")));
 	}
 
 	@Test

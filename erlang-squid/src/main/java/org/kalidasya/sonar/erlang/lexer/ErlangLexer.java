@@ -37,7 +37,12 @@ import com.sonar.sslr.impl.channel.UnknownCharacterChannel;
 
 public final class ErlangLexer {
 
-	 private static final String EXP = "([Ee][-]?+[0-9_]++)";
+	private static final String EXP = "([Ee][-]?+[0-9_]++)";
+	private static final String escapeSequence = "(\\$\\\\b)|(\\$\\\\d)|(\\$\\\\e)|(\\$\\\\f)|(\\$\\\\n)|(\\$\\\\r)|(\\$\\\\s)|(\\$\\\\t)|(\\$\\\\v)|(\\$\\\\')|(\\$\\\\\")|(\\$\\\\\\\\)"+
+	"|(\\$\\\\\\^[A-Za-z])"+
+	"|(\\$\\\\x\\{[A-F0-9]+\\})"+
+	"|(\\$\\\\x[A-F0-9]{1,2})"+
+	"|(\\$\\\\[0-7]{1,3})";
 	
 	private ErlangLexer(){
 	}
@@ -50,6 +55,7 @@ public final class ErlangLexer {
 				.withChannel(regexp(NUMERIC_LITERAL, "[0-9]++\\.([0-9]++)" + EXP + "?"))
 				.withChannel(regexp(NUMERIC_LITERAL, "[0-9]++\\#([0-9A-Fa-f]++)?+"))
 				.withChannel(regexp(NUMERIC_LITERAL, "[0-9]++"))
+				.withChannel(regexp(NUMERIC_LITERAL, escapeSequence))
 				.withChannel(regexp(NUMERIC_LITERAL, "\\$[\\x00-\\x7F]"))
 				.withChannel(new IdentifierAndKeywordChannel(or("('[^'\n\r]*')","^(?!\\$)(\\p{javaJavaIdentifierStart}++\\p{javaJavaIdentifierPart}*+)"), true, ErlangKeyword.values()))
 				.withChannel(new PunctuatorChannel(ErlangPunctuator.values()))

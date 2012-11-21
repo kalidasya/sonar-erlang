@@ -133,10 +133,6 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			)
 		);
 		
-		/*moduleBodyAttr.is(
-			firstOf(flowControlAttr, typeSpec, spec, defineAttr, recordAttr)
-		);*/
-		
 		recordAttr.is(
 			MINUS,
 			"record",
@@ -284,7 +280,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		
 		genericAttr.is(
 				MINUS, 
-				firstOf("behaviour", "vsn", "on_load", "include", "file", "ignore_xref", "include_lib", "author", "export_type"), 
+				firstOf("behaviour", "vsn", "on_load", "include", "file", "ignore_xref", "include_lib", "author", "export_type", "deprecated"), 
 				LPARENTHESIS, 
 				firstOf(
 					funcArity,
@@ -597,7 +593,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	     */
 	    callExpression.is(
 	    	firstOf(
-	    		and(opt(IDENTIFIER, COLON), memberExpression, arguments),
+	    		and(opt(memberExpression, COLON), memberExpression, arguments),
 	    		memberExpression
 	    	)
 	     ).skipIfOneChild();
