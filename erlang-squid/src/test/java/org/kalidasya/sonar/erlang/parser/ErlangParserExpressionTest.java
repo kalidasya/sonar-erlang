@@ -175,6 +175,7 @@ public class ErlangParserExpressionTest {
 		assertThat(p, parse(code("Expr#Name.Field")));
 		assertThat(p, parse(code("N2#nrec2.nrec1#nrec1.nrec0.nrec00#nrec0.name.first")));
 		assertThat(p, parse(code("N2#nrec2.nrec1#nrec1.nrec0#nrec0{name = \"nested0a\"}")));
+		assertThat(p, parse(code("(PartialMsg#'MegacoMessage'.mess)#'Message'.version")));
 
 	}
 

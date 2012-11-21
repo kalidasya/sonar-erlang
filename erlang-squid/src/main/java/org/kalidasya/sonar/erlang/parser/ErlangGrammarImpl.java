@@ -280,7 +280,8 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		
 		genericAttr.is(
 				MINUS, 
-				firstOf("behaviour", "vsn", "on_load", "include", "file", "ignore_xref", "include_lib", "author", "export_type", "deprecated"), 
+				firstOf("behaviour", "vsn", "on_load", "include", "file", "ignore_xref", "include_lib", "author", "export_type", "deprecated",
+						"asn1_info"), 
 				LPARENTHESIS, 
 				firstOf(
 					funcArity,
@@ -496,7 +497,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			)
 	    );
 	    recordLiteral.is(
-		    	opt(IDENTIFIER),
+		    	opt(primaryExpression),
 	    		one2n(
 	    			recordLiteralHead
 	    		),
