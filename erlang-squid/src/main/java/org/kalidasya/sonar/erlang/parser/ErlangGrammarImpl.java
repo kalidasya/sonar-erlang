@@ -395,7 +395,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				// Matching to specFun
 				specFun, 
 				// something like: list(A | B)
-				and(IDENTIFIER, LPARENTHESIS, IDENTIFIER, one2n(PIPE, IDENTIFIER), RPARENTHESIS),
+				and(IDENTIFIER, LPARENTHESIS, callExpression, one2n(PIPE, callExpression), RPARENTHESIS),
 				// and: Mega::giga()
 				and(IDENTIFIER, COLON,COLON,specTypeDef),
 				// and for records

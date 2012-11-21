@@ -120,6 +120,10 @@ public class ModuleAttributesTest {
 		assertThat(
 				p,
 				parse(code("-spec in_neighbours(mfa_or_funlbl(), callgraph()) -> 'none' | [mfa_or_funlbl(),...].")));
+		
+		assertThat(
+				p,
+				parse(code("-spec analyze(cerl:c_module()) -> {dict(), ordset('external' | label()), dict()}.")));
 	}
 
 	@Test
