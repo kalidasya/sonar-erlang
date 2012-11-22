@@ -52,16 +52,17 @@ public class CoverCoverageSensor implements Sensor {
 
 	@Override
 	public void analyse(Project project, SensorContext context) {
-		File reportsDir = new File(erlang.getConfiguration().getString(
-				ErlangPlugin.EUNIT_FOLDER_KEY, ErlangPlugin.EUNIT_DEFAULT_FOLDER));
-		LOG.debug("Parsing Eunit run results in Surefile format from folder {}", reportsDir);
+
+		File reportsDir = new File(project.getFileSystem().getBasedir(), erlang.getConfiguration()
+				.getString(ErlangPlugin.EUNIT_FOLDER_KEY, ErlangPlugin.EUNIT_DEFAULT_FOLDER));
+		LOG.debug("Parsing coverage results in html format from folder {}", reportsDir);
 
 		GenericExtFilter filter = new GenericExtFilter(".html");
 
 		String[] list = reportsDir.list(filter);
 
-		if (list==null || list.length == 0) {
-			LOG.warn("no files end with .html in ", reportsDir);
+		if (list == null || list.length == 0) {
+			LOG.warn("no files end with .html in {}", reportsDir);
 			return;
 		}
 		List<ErlangFileCoverage> coveredFiles = new ArrayList<ErlangFileCoverage>();
@@ -74,7 +75,8 @@ public class CoverCoverageSensor implements Sensor {
 		analyseCoveredFiles(project, context, coveredFiles);
 	}
 
-	public ErlangFileCoverage analyse(Project project, SensorContext sensorContext, String testCoverageFileName) {
+	public ErlangFileCoverage analyse(Project project, SensorContext sensorContext,
+			String testCoverageFileName) {
 		File coverCoverageReportFile = new File(project.getFileSystem().getBasedir(),
 				getTestReportsFolder() + "/" + testCoverageFileName);
 		LCOVParser parser = new LCOVParser();
@@ -141,7 +143,7 @@ public class CoverCoverageSensor implements Sensor {
 		return erlang.getConfiguration().getString(ErlangPlugin.EUNIT_FOLDER_KEY,
 				ErlangPlugin.EUNIT_DEFAULT_FOLDER);
 	}
-	
+
 	@Override
 	public String toString() {
 		return getClass().getSimpleName();
