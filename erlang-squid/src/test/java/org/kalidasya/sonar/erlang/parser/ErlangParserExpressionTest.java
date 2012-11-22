@@ -96,6 +96,8 @@ public class ErlangParserExpressionTest {
 	public void tupleExpression() {
 		assertThat(p, parse(code("{asd,ore,{ow,[2,23,as],3},[hello,{23,as}]}")));
 		assertThat(p, parse(code("{float(), float()}")));
+		assertThat(p, parse(code("{Rest2, catch list_to_integer(Digits)}")));
+		
 	}
 
 	@Test

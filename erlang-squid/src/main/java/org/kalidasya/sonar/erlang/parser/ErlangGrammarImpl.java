@@ -121,6 +121,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		moduleHeadAttr.is(
 			firstOf(
 				moduleAttr,
+				fileAttr,
 				exportAttr,
 				compileAttr,
 				defineAttr,
@@ -277,6 +278,17 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			RPARENTHESIS,
 			DOT
 		);
+		
+		fileAttr.is(
+				MINUS,
+				"file",
+				LPARENTHESIS,
+				primaryExpression,
+				COMMA,
+				primaryExpression,
+				RPARENTHESIS,
+				DOT
+			);
 		
 		genericAttr.is(
 				MINUS, 
@@ -437,12 +449,12 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		
 		funcArity.is(
 			opt(
-				IDENTIFIER,
+				literal,
 				ErlangPunctuator.COLON
 			),
-			IDENTIFIER,
+			literal,
 			ErlangPunctuator.DIV,
-			ErlangTokenType.NUMERIC_LITERAL
+			literal
 		);
 
 		funcDecl.is(
@@ -526,7 +538,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	    	IDENTIFIER,
 	    	opt(arguments)
 	    );
-	    tupleLiteral.is(LCURLYBRACE, o2n(firstOf(COMMA, assignmentExpression)), RCURLYBRACE);
+	    tupleLiteral.is(LCURLYBRACE, o2n(firstOf(COMMA, expression)), RCURLYBRACE);
 	    binaryLiteral.is(
 	    	BINSTART,
 	    	firstOf(
@@ -648,7 +660,8 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			firstOf(
 				funcArity,
 				and(functionDeclarationsNoName, END)
-			)
+			),
+			opt(arguments)
 		);
 		functionDeclarationsNoName.is(
 			functionDeclarationNoName,

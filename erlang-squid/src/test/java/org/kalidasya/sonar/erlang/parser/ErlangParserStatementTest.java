@@ -71,6 +71,13 @@ public class ErlangParserStatementTest {
 				parse(code("fun	(Name) ->", "Spec = agner:spec(Name),",
 						"Searchable = string:to_lower(\"hElO\");", "(Name, 23) when Name>=2 ->",
 						"Spec = agner:spec(Name),", "Searchable = string:to_lower(\"hElO\")", "end")));
+		
+		assertThat(p, parse(code("fun (Name) ->" + "Spec = agner:spec(Name),"
+				+ "Searchable = string:to_lower(\"hElO\")" + "end()")));
+		
+		assertThat(p, parse(code("fun module:function/3")));
+		
+		assertThat(p, parse(code("fun M:F/Arity")));
 
 	}
 

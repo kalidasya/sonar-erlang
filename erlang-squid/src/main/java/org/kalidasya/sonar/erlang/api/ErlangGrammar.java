@@ -115,6 +115,7 @@ public class ErlangGrammar extends Grammar {
 	public Rule moduleHeadAttr;
 	public Rule importAttr;
 	public Rule recordField;
+	public Rule fileAttr;
 	
 	
 	@Override
