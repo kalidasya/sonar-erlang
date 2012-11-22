@@ -28,6 +28,7 @@ import org.kalidasya.sonar.erlang.api.ErlangMetric;
 import org.kalidasya.sonar.erlang.api.ErlangPunctuator;
 import org.kalidasya.sonar.erlang.metrics.BranchesOfRecursion;
 import org.kalidasya.sonar.erlang.metrics.ErlangComplexityVisitor;
+import org.kalidasya.sonar.erlang.metrics.ErlangStatementVisitor;
 import org.kalidasya.sonar.erlang.metrics.NumberOfFunctionArgument;
 import org.kalidasya.sonar.erlang.metrics.PublicDocumentedApiCounter;
 import org.kalidasya.sonar.erlang.parser.ErlangParser;
@@ -60,8 +61,8 @@ public final class ErlangAstScanner {
 		if (!file.isFile()) {
 			throw new IllegalArgumentException("File '" + file + "' not found.");
 		}
-		AstScanner<ErlangGrammar> scanner = create(new ErlangConfiguration(Charset.forName("UTF-8")),
-				visitors);
+		AstScanner<ErlangGrammar> scanner = create(
+				new ErlangConfiguration(Charset.forName("UTF-8")), visitors);
 		scanner.scanFile(file);
 		Collection<SourceCode> sources = scanner.getIndex().search(
 				new QueryByType(SourceFile.class));
@@ -110,23 +111,24 @@ public final class ErlangAstScanner {
 				new SourceCodeBuilderCallback() {
 					public SourceCode createSourceCode(SourceCode parentSourceCode, AstNode astNode) {
 						String functionName = astNode.getChild(0).getTokenValue();
-						SourceFunction function = new SourceFunction(functionName + "/" + getArity(astNode)+":"+astNode.getTokenLine());
+						SourceFunction function = new SourceFunction(functionName + "/"
+								+ getArity(astNode) + ":" + astNode.getTokenLine());
 						function.setStartAtLine(astNode.getTokenLine());
 						return function;
 					}
 
 					private String getArity(AstNode ast) {
 						AstNode args = ast.getChild(0).getChild(0).getChild(1);
-						int num = args.getNumberOfChildren()>3?args.findChildren(ErlangPunctuator.COMMA).size()+1:args.getNumberOfChildren()-2;
-						//TODO for some reason this does not work:
-						//AstNodeXPathQuery.create("//clauseHead/funcDecl/arguments/*[node()!='COMMA' or node()!='LPARENTHESIS' or node()!='RPARENTHESIS']//IDENTIFIER").selectNodes(ast).size();
+						int num = args.getNumberOfChildren() > 3 ? args.findChildren(
+								ErlangPunctuator.COMMA).size() + 1 : args.getNumberOfChildren() - 2;
+						// TODO for some reason this does not work:
+						// AstNodeXPathQuery.create("//clauseHead/funcDecl/arguments/*[node()!='COMMA' or node()!='LPARENTHESIS' or node()!='RPARENTHESIS']//IDENTIFIER").selectNodes(ast).size();
 						return String.valueOf(num);
 					}
 				}, parser.getGrammar().functionClause));
 
 		builder.withSquidAstVisitor(CounterVisitor.<ErlangGrammar> builder().setMetricDef(
-				ErlangMetric.FUNCTIONS).subscribeTo(parser.getGrammar().functionClause)
-				.build());
+				ErlangMetric.FUNCTIONS).subscribeTo(parser.getGrammar().functionClause).build());
 
 		/* Metrics */
 
@@ -138,16 +140,11 @@ public final class ErlangAstScanner {
 				ErlangMetric.COMMENT_LINES)
 				.withBlankCommentMetric(ErlangMetric.COMMENT_BLANK_LINES).withNoSonar(true)
 				.withIgnoreHeaderComment(false).build());
-		builder.withSquidAstVisitor(CounterVisitor.<ErlangGrammar> builder().setMetricDef(
-				ErlangMetric.STATEMENTS).subscribeTo(parser.getGrammar().statement
-		/*
-		 * , parser.getGrammar().receiveStatement,
-		 * parser.getGrammar().expressionStatement,
-		 * parser.getGrammar().tryStatement
-		 */).build());
 
-		
+		/* Statements */
+		builder.withSquidAstVisitor(new ErlangStatementVisitor());
 
+		/* Complexity */
 		builder.withSquidAstVisitor(new ErlangComplexityVisitor());
 
 		/* Public API counter */
@@ -163,16 +160,15 @@ public final class ErlangAstScanner {
 		builder.withSquidAstVisitor(ComplexityVisitor.<ErlangGrammar> builder().setMetricDef(
 				ErlangMetric.NUM_OF_FUN_EXRP).subscribeTo(parser.getGrammar().funExpression)
 				.build());
-		
+
 		/* Number of function clauses */
 		builder.withSquidAstVisitor(ComplexityVisitor.<ErlangGrammar> builder().setMetricDef(
 				ErlangMetric.NUM_OF_FUN_CLAUSES).subscribeTo(parser.getGrammar().functionClause)
 				.build());
-		
+
 		/* Number of macro definitions */
 		builder.withSquidAstVisitor(ComplexityVisitor.<ErlangGrammar> builder().setMetricDef(
-				ErlangMetric.NUM_OF_MACROS).subscribeTo(parser.getGrammar().defineAttr)
-				.build());
+				ErlangMetric.NUM_OF_MACROS).subscribeTo(parser.getGrammar().defineAttr).build());
 
 		/* External visitors (typically Check ones) */
 		for (SquidAstVisitor<ErlangGrammar> visitor : visitors) {

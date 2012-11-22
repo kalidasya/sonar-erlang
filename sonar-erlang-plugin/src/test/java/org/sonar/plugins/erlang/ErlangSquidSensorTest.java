@@ -103,5 +103,40 @@ public class ErlangSquidSensorTest {
 				Mockito.eq(CoreMetrics.COMMENT_LINES), Mockito.eq(1.0));
 		
 	}
+	
+	@Test
+	public void analyse() {
+		ProjectFileSystem fs = mock(ProjectFileSystem.class);
+		when(fs.getSourceCharset()).thenReturn(Charset.forName("UTF-8"));
+		InputFile inputFile = InputFileUtils.create(new File("src/test/resources"), new File(
+				"src/test/resources/megaco_ber_bin_encoder.erl"));
+		when(fs.mainFiles(Erlang.KEY)).thenReturn(ImmutableList.of(inputFile));
+		Project project = new Project("key");
+		project.setFileSystem(fs);
+		SensorContext context = mock(SensorContext.class);
+
+		sensor.analyse(project, context);
+
+		verify(context).saveMeasure(Mockito.any(Resource.class), Mockito.eq(CoreMetrics.FILES),
+				Mockito.eq(1.0));
+		verify(context).saveMeasure(Mockito.any(Resource.class), Mockito.eq(CoreMetrics.LINES),
+				Mockito.eq(717.0));
+		//TODO it should be 14 not 13
+		verify(context).saveMeasure(Mockito.any(Resource.class), Mockito.eq(CoreMetrics.NCLOC),
+				Mockito.eq(371.0));
+		verify(context).saveMeasure(Mockito.any(Resource.class), Mockito.eq(CoreMetrics.FUNCTIONS),
+				Mockito.eq(90.0));
+		verify(context).saveMeasure(Mockito.any(Resource.class),
+				Mockito.eq(CoreMetrics.STATEMENTS), Mockito.eq(210.0));
+		verify(context).saveMeasure(Mockito.any(Resource.class),
+				Mockito.eq(CoreMetrics.COMPLEXITY), Mockito.eq(90.0));
+		verify(context).saveMeasure(Mockito.any(Resource.class),
+				Mockito.eq(CoreMetrics.COMMENT_LINES), Mockito.eq(261.0));
+		
+		verify(context).saveMeasure(Mockito.any(Resource.class),
+				Mockito.eq(CoreMetrics.COMMENT_LINES_DENSITY), Mockito.eq(70.35040431266847));
+		
+		
+	}
 
 }

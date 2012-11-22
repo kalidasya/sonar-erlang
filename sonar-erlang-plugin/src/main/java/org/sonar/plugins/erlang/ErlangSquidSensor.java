@@ -121,7 +121,7 @@ public class ErlangSquidSensor implements Sensor {
 				.getDouble(ErlangMetric.COMMENT_LINES));
 		context.saveMeasure(sonarFile, CoreMetrics.COMMENT_LINES_DENSITY, squidFile
 				.getDouble(ErlangMetric.COMMENT_LINES)/squidFile
-				.getDouble(ErlangMetric.LINES_OF_CODE));
+				.getDouble(ErlangMetric.LINES_OF_CODE)*100);
 		context.saveMeasure(sonarFile, CoreMetrics.PUBLIC_API, squidFile
 				.getDouble(ErlangMetric.PUBLIC_API));
 		context.saveMeasure(sonarFile, CoreMetrics.PUBLIC_UNDOCUMENTED_API, squidFile
