@@ -699,7 +699,10 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		);
 		
 		receiveExpression.is(
-			RECEIVE, patternStatements, opt(AFTER, expression, ARROW, statements), END
+			RECEIVE, firstOf(
+				and(patternStatements, opt(AFTER, expression, ARROW, statements)),
+				and(AFTER, expression, ARROW, statements)
+			), END
 		);
 			
 		blockExpression.is(

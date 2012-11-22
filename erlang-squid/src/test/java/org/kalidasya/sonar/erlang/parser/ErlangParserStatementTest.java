@@ -66,27 +66,23 @@ public class ErlangParserStatementTest {
 		assertThat(p, parse(code("fun (Name) ->" + "Spec = agner:spec(Name),"
 				+ "Searchable = string:to_lower(\"hElO\")" + "end")));
 
-		assertThat(
-				p,
-				parse(code("fun	(Name) ->", "Spec = agner:spec(Name),",
-						"Searchable = string:to_lower(\"hElO\");", "(Name, 23) when Name>=2 ->",
-						"Spec = agner:spec(Name),", "Searchable = string:to_lower(\"hElO\")", "end")));
-		
+		assertThat(p, parse(code("fun	(Name) ->", "Spec = agner:spec(Name),",
+				"Searchable = string:to_lower(\"hElO\");", "(Name, 23) when Name>=2 ->",
+				"Spec = agner:spec(Name),", "Searchable = string:to_lower(\"hElO\")", "end")));
+
 		assertThat(p, parse(code("fun (Name) ->" + "Spec = agner:spec(Name),"
 				+ "Searchable = string:to_lower(\"hElO\")" + "end()")));
-		
+
 		assertThat(p, parse(code("fun module:function/3")));
-		
+
 		assertThat(p, parse(code("fun M:F/Arity")));
 
 	}
 
 	@Test
 	public void caseStatements() {
-		assertThat(
-				p,
-				parse(code("case Signal of", "{signal, _What, _From, _To} ->", "true;",
-						"{signal, _What, _To} ->", "true;", "_Else -> false", "end")));
+		assertThat(p, parse(code("case Signal of", "{signal, _What, _From, _To} ->", "true;",
+				"{signal, _What, _To} ->", "true;", "_Else -> false", "end")));
 	}
 
 	@Test
@@ -98,11 +94,11 @@ public class ErlangParserStatementTest {
 
 	@Test
 	public void receiveStatements() {
-		assertThat(
-				p,
-				parse(code("receive", "onhook ->", "disconnect(),", "idle();", "{connect, B} ->",
-						"B ! {busy, self()},", "wait_for_onhook()", "after", "60000 ->",
-						"disconnect(),", "error()", "end")));
+		assertThat(p, parse(code("receive", "onhook ->", "disconnect(),", "idle();",
+				"{connect, B} ->", "B ! {busy, self()},", "wait_for_onhook()", "after", "60000 ->",
+				"disconnect(),", "error()", "end")));
+
+		assertThat(p, parse(code("receive after To -> ok end")));
 	}
 
 	@Test
@@ -115,16 +111,12 @@ public class ErlangParserStatementTest {
 
 		assertThat(p, parse(code("try Exprs after AfterBody end")));
 
-		assertThat(
-				p,
-				parse(code("try", "{ok,Bin} = file:read(F, 1024*1024),", "binary_to_term(Bin)",
-						"after", "file:close(F)", "end")));
+		assertThat(p, parse(code("try", "{ok,Bin} = file:read(F, 1024*1024),",
+				"binary_to_term(Bin)", "after", "file:close(F)", "end")));
 
-		assertThat(
-				p,
-				parse(code("try Expr", "catch", "throw:Term -> Term;",
-						"exit:Reason -> {'EXIT',Reason};",
-						"error:Reason -> {'EXIT',{Reason,erlang:get_stacktrace()}}", "end")));
+		assertThat(p, parse(code("try Expr", "catch", "throw:Term -> Term;",
+				"exit:Reason -> {'EXIT',Reason};",
+				"error:Reason -> {'EXIT',{Reason,erlang:get_stacktrace()}}", "end")));
 	}
 
 	@Test

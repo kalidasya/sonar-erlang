@@ -77,12 +77,18 @@ public class ModuleAttributesTest {
 		assertThat(
 				p,
 				parse(code("-record(fun_var, {'fun' :: fun((_) -> erl_types:erl_type()), deps :: [dep()], origin :: integer()}).")));
-
 	}
 
 	@Test
 	public void defineTest() {
 		assertThat(p, parse(code("-define(PARAM_TOKEN_TIMEOUT,                    60*15).")));
+
+		assertThat(p, parse(code("-define(TC_AWAIT_CANCEL_EVENT(),",
+				"case megaco_tc_controller:lookup(block_on_cancel) of",
+				"{value, {Tag, Pid}} when is_pid(Pid) ->", "Pid ! {Tag, self()},", "receive",
+				"{Tag, Pid} ->", "ok", "end;",
+				"{value, {sleep, To}} when is_integer(To) andalso (To > 0) ->",
+				"receive after To -> ok end;", "_ ->", "ok", "end).")));
 	}
 
 	@Test
