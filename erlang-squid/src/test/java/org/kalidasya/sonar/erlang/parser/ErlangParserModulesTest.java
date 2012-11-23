@@ -51,10 +51,8 @@ public class ErlangParserModulesTest {
 
 	@Test
 	public void realLife() {
-		assertThat(
-				p,
-				parse(code("-module(m).", "-export([fact/1]).", "", "fact(N) when N>0 ->",
-						"N * fact(N-1);", "fact(0) ->", "1.")));
+		assertThat(p, parse(code("-module(m).", "-export([fact/1]).", "", "fact(N) when N>0 ->",
+				"N * fact(N-1);", "fact(0) ->", "1.")));
 	}
 
 	@Test
@@ -74,23 +72,17 @@ public class ErlangParserModulesTest {
 
 	@Test
 	public void returnWithCalcCase() throws IOException, URISyntaxException {
-		assertThat(
-				p,
-				parse(code("-module(m).", "dodo(A) ->", "case A of", "0->",
-						"{a, (A + 2), <<0>>} end.")));
+		assertThat(p, parse(code("-module(m).", "dodo(A) ->", "case A of", "0->",
+				"{a, (A + 2), <<0>>} end.")));
 	}
 
 	@Test
 	public void caseTuple() throws IOException, URISyntaxException {
-		assertThat(
-				p,
-				parse(code("-module(m).", "dodo(A) ->", "case A of",
-						"{aborted, {already_exists, user}} -> ok end.")));
-		assertThat(
-				p,
-				parse(code("-module(m).", "dodo(A) ->", "case A of",
-						"{atomic, ok} -> init_user_data();",
-						" {aborted, {already_exists, user}} -> ok end.")));
+		assertThat(p, parse(code("-module(m).", "dodo(A) ->", "case A of",
+				"{aborted, {already_exists, user}} -> ok end.")));
+		assertThat(p, parse(code("-module(m).", "dodo(A) ->", "case A of",
+				"{atomic, ok} -> init_user_data();",
+				" {aborted, {already_exists, user}} -> ok end.")));
 	}
 
 	@Test
@@ -105,10 +97,8 @@ public class ErlangParserModulesTest {
 
 	@Test
 	public void booleanReturn() {
-		assertThat(
-				p,
-				parse(code("-module(m).", "dodo(A) ->",
-						"string:rstr(Searchable, string:to_lower(Search)) > 0.")));
+		assertThat(p, parse(code("-module(m).", "dodo(A) ->",
+				"string:rstr(Searchable, string:to_lower(Search)) > 0.")));
 	}
 
 	@Test
@@ -166,24 +156,15 @@ public class ErlangParserModulesTest {
 						"Transport:send(Socket, Fragment),",
 						"packet_fragment_send(Client, Rest, Size, Current + 16#4000).")));
 
-		assertThat(
-				p,
-				parse(code("-module(m).", "packet_prepare(Packet) ->",
-						"Size = 4 + byte_size(Packet),", "case Size rem 4 of",
-						"0 -> {ok, Size, <<>>};", "2 -> {ok, Size + 2, << 0:16 >>};",
-						"_ -> {error, badarg}", "end.")));
+		assertThat(p, parse(code("-module(m).", "packet_prepare(Packet) ->",
+				"Size = 4 + byte_size(Packet),", "case Size rem 4 of", "0 -> {ok, Size, <<>>};",
+				"2 -> {ok, Size + 2, << 0:16 >>};", "_ -> {error, badarg}", "end.")));
 
-		assertThat(
-				p,
-				parse(code("-module(m).", "hexstring(<< X:128/big-unsigned-integer >>) -> ",
-						"lists:flatten(io_lib:format(\"~32.16.0b\", [X])).")));
-		
-		assertThat(
-				p,
-				parse(code("-module(m).",
-						"sys_info() ->",
-						"SysArch = string:strip(erlang:system_info(system_architecture),right,$\\n)."
-						)));
+		assertThat(p, parse(code("-module(m).", "hexstring(<< X:128/big-unsigned-integer >>) -> ",
+				"lists:flatten(io_lib:format(\"~32.16.0b\", [X])).")));
+
+		assertThat(p, parse(code("-module(m).", "sys_info() ->",
+				"SysArch = string:strip(erlang:system_info(system_architecture),right,$\\n).")));
 	}
 
 	@Test
@@ -219,70 +200,50 @@ public class ErlangParserModulesTest {
 
 	@Test
 	public void recordInFuncMatch() {
-		assertThat(
-				p,
-				parse(code("-module(m).", "send_010a(ItemsList, Client=#client{gid=DestGID}) ->",
-						"true.")));
+		assertThat(p, parse(code("-module(m).",
+				"send_010a(ItemsList, Client=#client{gid=DestGID}) ->", "true.")));
 
 	}
 
 	@Test
 	public void recordInFuncCall() {
-		assertThat(
-				p,
-				parse(code(
-						"-module(m).",
-						"dodo(A) ->",
-						"case mnesia:read(user, Username) of",
-						"[User] -> mnesia:write(User#user{ibuttons = User#user.ibuttons ++ [IButton]});",
-						"E -> E", "end.")));
+		assertThat(p, parse(code("-module(m).", "dodo(A) ->",
+				"case mnesia:read(user, Username) of",
+				"[User] -> mnesia:write(User#user{ibuttons = User#user.ibuttons ++ [IButton]});",
+				"E -> E", "end.")));
 	}
 
 	@Test
 	public void recordSetWithListExp() {
-		assertThat(
-				p,
-				parse(code("-module(m).", "dodo(A) ->",
-						"User#user{ibuttons = User#user.ibuttons ++ [IButton]}", ".")));
+		assertThat(p, parse(code("-module(m).", "dodo(A) ->",
+				"User#user{ibuttons = User#user.ibuttons ++ [IButton]}", ".")));
 	}
 
 	@Test
 	public void nestedBinaryMatch() {
-		assertThat(
-				p,
-				parse(code("-module(m).", "dodo(A) ->",
-						"UCS2Name = << << X:8, 0:8 >> || << X >> <= <<Name>> >>.")));
+		assertThat(p, parse(code("-module(m).", "dodo(A) ->",
+				"UCS2Name = << << X:8, 0:8 >> || << X >> <= <<Name>> >>.")));
 	}
 
 	@Test
 	public void exports() throws IOException, URISyntaxException {
 
-		assertThat(
-				p,
-				parse(code("-module(m).", "-export([dodo/1]).", "-export(dodo/2).", "-export([]).",
-						"dodo(A) ->", "{a, node()}.")));
+		assertThat(p, parse(code("-module(m).", "-export([dodo/1]).", "-export(dodo/2).",
+				"-export([]).", "dodo(A) ->", "{a, node()}.")));
 	}
 
 	@Test
 	public void typeTest() throws IOException, URISyntaxException {
 
-		assertThat(
-				p,
-				parse(code("-module(m).", "-export(dodo/1).",
-						"-type my_type() :: atom() | integer().", "dodo(A) ->", "{a, node()}.")));
+		assertThat(p, parse(code("-module(m).", "-export(dodo/1).",
+				"-type my_type() :: atom() | integer().", "dodo(A) ->", "{a, node()}.")));
 
-		assertThat(
-				p,
-				parse(code(
-						"-module(m).",
-						"-export(dodo/1).",
-						"-type my_type() :: {non_reg_integer(), non_reg_integer(), non_reg_integer()}.",
-						"dodo(A) ->", "{a, node()}.")));
+		assertThat(p, parse(code("-module(m).", "-export(dodo/1).",
+				"-type my_type() :: {non_reg_integer(), non_reg_integer(), non_reg_integer()}.",
+				"dodo(A) ->", "{a, node()}.")));
 
-		assertThat(
-				p,
-				parse(code("-module(m).", "-export(dodo/1).",
-						"-type(gid_record() :: #gid_record{}).", "dodo(A) ->", "{a, node()}.")));
+		assertThat(p, parse(code("-module(m).", "-export(dodo/1).",
+				"-type(gid_record() :: #gid_record{}).", "dodo(A) ->", "{a, node()}.")));
 	}
 
 	@Test
@@ -297,14 +258,12 @@ public class ErlangParserModulesTest {
 
 	@Test
 	public void flowControlMacros() {
-		assertThat(
-				p,
-				parse(code("-module(m).", "-spec dodo(integer()) -> atom().", "-ifdef(debug).",
-						"-define(LOG(X), io:format(\"{~p,~p}: ~p~n\", [?MODULE,?LINE,X])).",
-						"-else.", "-define(LOG(X), true).", "-endif.", "dodo(A) ->", "{a, node()}.")));
+		assertThat(p, parse(code("-module(m).", "-spec dodo(integer()) -> atom().",
+				"-ifdef(debug).",
+				"-define(LOG(X), io:format(\"{~p,~p}: ~p~n\", [?MODULE,?LINE,X])).", "-else.",
+				"-define(LOG(X), true).", "-endif.", "dodo(A) ->", "{a, node()}.")));
 
-		assertThat(
-				p,
+		assertThat(p,
 				parse(code("-module(m).", "-ifdef(debug).", "dodo(A) ->", "{a, node()}.", "-else.",
 						"dodo(A) ->", "{a, node2()}.", "-endif.", "dodo(A, B) ->", "{a, node()}.")));
 
@@ -312,18 +271,13 @@ public class ErlangParserModulesTest {
 
 	@Test
 	public void specTest() {
-		assertThat(
-				p,
-				parse(code("-module(m).",
-						"-spec split_nodename(atom() | string()) -> {atom(), nonempty_string()}.",
-						"dodo(A) ->", "{a, node()}.")));
+		assertThat(p, parse(code("-module(m).",
+				"-spec split_nodename(atom() | string()) -> {atom(), nonempty_string()}.",
+				"dodo(A) ->", "{a, node()}.")));
 
-		assertThat(
-				p,
-				parse(code(
-						"-module(m).",
-						"-spec test_fun(any(), fun(() -> ok), pos_integer(), pos_integer()) -> {float()}.",
-						"dodo(A) ->", "{a, node()}.")));
+		assertThat(p, parse(code("-module(m).",
+				"-spec test_fun(any(), fun(() -> ok), pos_integer(), pos_integer()) -> {float()}.",
+				"dodo(A) ->", "{a, node()}.")));
 
 		assertThat(
 				p,
@@ -332,22 +286,15 @@ public class ErlangParserModulesTest {
 						"-spec doit(calendar:datetime(), calendar:datetime()) -> [reload | error | unmodified | gone].",
 						"dodo(A) ->", "{a, node()}.")));
 
-		assertThat(
-				p,
-				parse(code("-module(m).", "-spec init([]) -> {ok, record(state)}.", "dodo(A) ->",
-						"{a, node()}.")));
+		assertThat(p, parse(code("-module(m).", "-spec init([]) -> {ok, record(state)}.",
+				"dodo(A) ->", "{a, node()}.")));
 
-		assertThat(
-				p,
-				parse(code("-module(m).", "-spec hexstring(binary()) -> string().", "dodo(A) ->",
-						"{a, node()}.")));
+		assertThat(p, parse(code("-module(m).", "-spec hexstring(binary()) -> string().",
+				"dodo(A) ->", "{a, node()}.")));
 
-		assertThat(
-				p,
-				parse(code(
-						"-module(m).",
-						"-spec join(list(I), Sep) -> list(I | Sep) when Sep :: term(), I :: term().",
-						"dodo(A) ->", "{a, node()}.")));
+		assertThat(p, parse(code("-module(m).",
+				"-spec join(list(I), Sep) -> list(I | Sep) when Sep :: term(), I :: term().",
+				"dodo(A) ->", "{a, node()}.")));
 
 		assertThat(
 				p,
@@ -356,11 +303,9 @@ public class ErlangParserModulesTest {
 						"-spec now_ms({MegaSecs::pos_integer(),Secs::pos_integer(),MicroSecs::pos_integer()}) -> pos_integer().",
 						"dodo(A) ->", "{a, node()}.")));
 
-		assertThat(
-				p,
-				parse(code("-module(m).",
-						"-spec trace_named([atom()], pos_integer()) -> {ok, timer:tref()}.",
-						"dodo(A) ->", "{a, node()}.")));
+		assertThat(p, parse(code("-module(m).",
+				"-spec trace_named([atom()], pos_integer()) -> {ok, timer:tref()}.", "dodo(A) ->",
+				"{a, node()}.")));
 
 		assertThat(
 				p,
@@ -388,45 +333,45 @@ public class ErlangParserModulesTest {
 
 	@Test
 	public void moduleAttrTest() {
-		assertThat(
-				p,
-				parse(code("-module(m).", "-ignore_xref([{json, decode, 1}]).", "dodo(A) ->",
-						"{a, node()}.")));
+		assertThat(p, parse(code("-module(m).", "-ignore_xref([{json, decode, 1}]).", "dodo(A) ->",
+				"{a, node()}.")));
 	}
 
 	@Test
 	public void moduleEverythingInIfTest() {
-		assertThat(
-				p,
-				parse(code("-module(m).", "-ifdef(A).", "dodo(A) ->", "{a, node()}.", "-else.",
-						"dodo(A) ->", "{a, node()}.", "-endif.")));
+		assertThat(p, parse(code("-module(m).", "-ifdef(A).", "dodo(A) ->", "{a, node()}.",
+				"-else.", "dodo(A) ->", "{a, node()}.", "-endif.")));
 	}
 
 	@Test
 	public void linebreakInMethodCall() {
-		assertThat(
-				p,
-				parse(code("-module(m).",
-						"ordinal(N) when is_integer(N) -> io_lib:format(\"~wth\"",
-						"                                                        ,[N]).")));
+		assertThat(p, parse(code("-module(m).",
+				"ordinal(N) when is_integer(N) -> io_lib:format(\"~wth\"",
+				"                                                        ,[N]).")));
 	}
+
 	@Test
 	public void linebreakInStringLiteral() {
 		assertThat(
 				p,
-				parse(code("-module(m).",
+				parse(code(
+						"-module(m).",
 						"ordinal(N) when is_integer(N) -> io_lib:format(\"This is a multiline string that spans two lines\\n\"\n\"using two source lines for convenience\").")));
-		
+
 		assertThat(
 				p,
-				parse(code("-module(m).",
+				parse(code(
+						"-module(m).",
 						"ordinal(N) when is_integer(N) -> io_lib:format(\"This is a multiline string that spans two lines\\n\"\n\r\t \t\"using two source lines for convenience\").")));
 
 	}
-	
 
-	
-	
+	@Test
+	public void macroOutsideOfFunction() {
+		assertThat(p,
+				parse(code("-module(m).", "-define(TIME(A),-decorate({})).", "?TIME(huh).", "a() -> error.")));
+	}
+
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);
 	}

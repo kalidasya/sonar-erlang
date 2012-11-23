@@ -124,6 +124,17 @@ public class ModuleAttributesTest {
 		assertThat(
 				p,
 				parse(code("-spec analyze(cerl:c_module()) -> {dict(), ordset('external' | label()), dict()}.")));
+
+		assertThat(
+				p,
+				parse(code("-spec method(c_module(), Param :: module:flyable(), Param2 :: module:stringiflyable()) -> module:ok_mokes(Id :: integer()).")));
+
+		assertThat(p, parse(code("-spec method(#b{}, {error, {db, any()}},",
+				"(fun((id()) -> ok | {error, term()})))",
+				"-> {{error, term()} | {ok, id()}, #b{}}.")));
+		
+		
+		assertThat(p, parse(code("-spec test_fun(any(), fun(() -> ok), pos_integer(), pos_integer()) -> {float()}.")));
 	}
 
 	@Test

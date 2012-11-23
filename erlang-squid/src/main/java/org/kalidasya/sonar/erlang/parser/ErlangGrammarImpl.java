@@ -110,8 +110,10 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	private void module() {
 		module.is(
 			one2n(
+					//TODO: does the -module mandatory? mybe we should move it one level up
 				firstOf(
 					moduleHeadAttr,
+					and(macroLiteral, DOT),
 					functionDeclaration
 				)
 			), 
@@ -401,31 +403,32 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 		
 		specSub.is(
 			firstOf(
-				// Matching to specFun
-				specFun, 
+				// things in ()
+				and(LPARENTHESIS, specTypeDef, RPARENTHESIS),
+				// workaround for fun like expression:fun(), fun((id())-> error | ok) 
+				and(specFun),
 				// something like: list(A | B)
 				and(IDENTIFIER, LPARENTHESIS, callExpression, one2n(PIPE, callExpression), RPARENTHESIS),
 				// and: Mega::giga()
-				and(IDENTIFIER, COLON,COLON,specTypeDef),
+				and(firstOf(funcArity, IDENTIFIER), COLON,COLON,specTypeDef),
 				// and for records
 				and(NUMBERSIGN, IDENTIFIER, specTypeDef),
 				// and things like: 1..255
 				and(primaryExpression, DOT,DOT,primaryExpression),
 				// or just simple ...
 				and(DOT, DOT, DOT),
-				// workaround for fun like expression:fun() 
-				and("fun", LPARENTHESIS, RPARENTHESIS),
 				// and simple function call
+				and(opt(IDENTIFIER, COLON),IDENTIFIER,LPARENTHESIS, opt(specTypeDef), RPARENTHESIS),
+				// and everything other
 				callExpression
 			)
 		);
 		
 		specFun.is(
-			FUN,
-			LPARENTHESIS,
-			arguments,
-			ARROW,
-			specType,
+			FUN, 
+			LPARENTHESIS, 
+			opt(LPARENTHESIS, opt(specTypeDef), RPARENTHESIS), 
+			opt(ARROW, specTypeDef), 
 			RPARENTHESIS
 		);
 		
