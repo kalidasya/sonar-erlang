@@ -58,8 +58,8 @@ public class LCOVParserTest {
 
 	@Test
 	public void checkDialyzer() {
-		assertThat(cov.getCoveredLines(), Matchers.equalTo(18));
+		assertThat(cov.getCoveredLines(), Matchers.equalTo(19));
 		assertThat(cov.getLinesToCover(), Matchers.equalTo(21));
-		assertThat(cov.getUncoveredLines(), Matchers.equalTo(3));
+		assertThat(cov.getUncoveredLines(), Matchers.equalTo(2));
 	}
 }

@@ -87,7 +87,7 @@ public class CoverCoverageSensorTest {
 		
 		verify(context).saveMeasure((Resource) anyObject(), (Measure)anyObject());
 		verify(context).saveMeasure((Resource) anyObject(), (Metric) anyObject(), eq(21.0));
-		verify(context).saveMeasure((Resource) anyObject(), (Metric) anyObject(), eq(3.0));
+		verify(context).saveMeasure((Resource) anyObject(), (Metric) anyObject(), eq(2.0));
 	}
 	
 }
