@@ -28,6 +28,7 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
 import org.sonar.api.batch.SensorContext;
@@ -42,8 +43,8 @@ import org.sonar.plugins.erlang.core.Erlang;
 
 public class ProjectUtil {
 
-	public static Project getProject(ArrayList<InputFile> srcFiles,
-			ArrayList<InputFile> otherFiles, final Configuration configuration)
+	public static Project getProject(List<InputFile> srcFiles,
+			List<InputFile> otherFiles, final Configuration configuration)
 			throws URISyntaxException {
 		final ProjectFileSystem fileSystem = mock(ProjectFileSystem.class);
 		when(fileSystem.getSourceCharset()).thenReturn(Charset.defaultCharset());
