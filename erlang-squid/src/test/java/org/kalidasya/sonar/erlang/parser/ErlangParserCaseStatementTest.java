@@ -19,8 +19,7 @@
  */
 package org.kalidasya.sonar.erlang.parser;
 
-import static com.sonar.sslr.test.parser.ParserMatchers.parse;
-import static org.junit.Assert.assertThat;
+import static org.sonar.sslr.tests.Assertions.assertThat;
 
 import org.junit.After;
 import org.junit.Before;
@@ -51,28 +50,28 @@ public class ErlangParserCaseStatementTest {
 	public void caseSimple1() {
 		g.assignmentExpression.mock();
 		g.patternStatements.mock();
-		assertThat(p, parse(code("case assignmentExpression of patternStatements end")));
+		assertThat(p).matches((code("case assignmentExpression of patternStatements end")));
 	}
 
 	@Test
 	public void caseSimple2() {
 		g.assignmentExpression.mock();
 		g.patternStatement.mock();
-		assertThat(p, parse(code("case assignmentExpression of patternStatement end")));
-		assertThat(p, parse(code("case assignmentExpression of patternStatement; patternStatement end")));
+		assertThat(p).matches((code("case assignmentExpression of patternStatement end")));
+		assertThat(p).matches((code("case assignmentExpression of patternStatement; patternStatement end")));
 	}
 	
 	@Test
 	public void caseSimple3() {
 		g.assignmentExpression.mock();
 		g.patternStatement.mock();
-		assertThat(p, parse(code("case assignmentExpression of patternStatement end")));
-		assertThat(p, parse(code("case assignmentExpression of patternStatement; patternStatement end")));
+		assertThat(p).matches((code("case assignmentExpression of patternStatement end")));
+		assertThat(p).matches((code("case assignmentExpression of patternStatement; patternStatement end")));
 	}
 	
 	@Test
 	public void caseReal1() {
-		assertThat(p, parse(code(
+		assertThat(p).matches((code(
 				"case cerl:is_c_var(PosVar) andalso (cerl:var_name(PosVar) =/= '') of",
 				"true -> \"variable \"++String;", 
 				"false -> \"pattern \"++String", 

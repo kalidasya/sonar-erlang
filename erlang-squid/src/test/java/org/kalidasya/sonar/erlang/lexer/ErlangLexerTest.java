@@ -123,7 +123,6 @@ public class ErlangLexerTest {
 
 	  @Test
 	  public void custom() {
-		  //assertThat(lexer.lex("-module(m)."), hasTokens("-","module","(","m",")","."));
 		  assertThat(lexer.lex("module"), hasToken("module", GenericTokenType.IDENTIFIER));
 		  assertThat(lexer.lex("m"), hasToken("m", GenericTokenType.IDENTIFIER));
 		  assertThat(lexer.lex("_"), hasToken("_", GenericTokenType.IDENTIFIER));
@@ -131,14 +130,11 @@ public class ErlangLexerTest {
 		  assertThat(lexer.lex("A"), hasToken("A", GenericTokenType.IDENTIFIER));
 		  assertThat(lexer.lex("Aodule"), hasToken("Aodule", GenericTokenType.IDENTIFIER));
 		  assertThat(lexer.lex("1."), Matchers.allOf(hasToken("1", ErlangTokenType.NUMERIC_LITERAL),hasToken(".", ErlangPunctuator.DOT)));
-		 // assertThat(lexer.lex("io:format(\"~s~n\",[agner_spec:property_to_list(lists:keyfind(list_to_atom(Property), 1, Spec))])"), hasToken("1", ErlangTokenType.NUMERIC_LITERAL));
-		  //assertThat(lexer.lex("-module(m).\ndodo() ->{maci}."), hasToken("1", ErlangTokenType.NUMERIC_LITERAL));
 		  
 	  }
 	 
 	  @Test
 	  public void keyword() {
-		  //assertThat(lexer.lex("-module(m)."), hasTokens("-","module","(","m",")","."));
 		  assertThat(lexer.lex("when"), hasToken("when", ErlangKeyword.WHEN));
 		  assertThat(lexer.lex("bor"), hasToken("bor", ErlangKeyword.BOR));
 		  assertThat(lexer.lex("andalso"), hasToken("andalso", ErlangKeyword.ANDALSO));

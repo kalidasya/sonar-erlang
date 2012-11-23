@@ -19,8 +19,7 @@
  */
 package org.kalidasya.sonar.erlang.parser;
 
-import static com.sonar.sslr.test.parser.ParserMatchers.parse;
-import static org.junit.Assert.assertThat;
+import static org.sonar.sslr.tests.Assertions.assertThat;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -41,8 +40,8 @@ import com.sonar.sslr.impl.events.ExtendedStackTraceStream;
 
 public class ErlangRealCodeTest {
 	ExtendedStackTrace listener = new ExtendedStackTrace();
-	Parser<ErlangGrammar> p = ErlangParser.create(new ErlangConfiguration(
-			Charsets.UTF_8), listener);
+	Parser<ErlangGrammar> p = ErlangParser
+			.create(new ErlangConfiguration(Charsets.UTF_8), listener);
 
 	ErlangGrammar g = p.getGrammar();
 
@@ -53,34 +52,33 @@ public class ErlangRealCodeTest {
 
 	@Test
 	public void realLife2() throws IOException, URISyntaxException {
-		assertThat(p, parse(readFromFile("user_auth_mnesia.erl")));
+		assertThat(p).matches((readFromFile("user_auth_mnesia.erl")));
 	}
 
 	@Test
 	public void realLife3() throws IOException, URISyntaxException {
-		assertThat(p, parse(readFromFile("agner_main_sub.erl")));
+		assertThat(p).matches((readFromFile("agner_main_sub.erl")));
 	}
 
 	@Test
 	public void realLife4() throws IOException, URISyntaxException {
-		assertThat(p, parse(readFromFile("erl_img.erl")));
-	}
-	
-	@Test
-	public void realLife5() throws IOException, URISyntaxException {
-		assertThat(p, parse(readFromFile("egs_proto.erl")));
-	}
-	
-	@Test
-	public void realLife6() throws IOException, URISyntaxException {
-		assertThat(p, parse(readFromFile("megaco.erl")));
+		assertThat(p).matches((readFromFile("erl_img.erl")));
 	}
 
-	private String readFromFile(String fileName) throws IOException,
-			URISyntaxException {
+	@Test
+	public void realLife5() throws IOException, URISyntaxException {
+		assertThat(p).matches((readFromFile("egs_proto.erl")));
+	}
+
+	@Test
+	public void realLife6() throws IOException, URISyntaxException {
+		assertThat(p).matches((readFromFile("megaco.erl")));
+	}
+
+	private String readFromFile(String fileName) throws IOException, URISyntaxException {
 		StringBuilder text = new StringBuilder();
-		File file = new File(ErlangRealCodeTest.class.getClassLoader()
-				.getResource(fileName).toURI());
+		File file = new File(ErlangRealCodeTest.class.getClassLoader().getResource(fileName)
+				.toURI());
 		BufferedReader reader = Files.newReader(file, Charsets.UTF_8);
 		String line = null;
 		while ((line = reader.readLine()) != null) {

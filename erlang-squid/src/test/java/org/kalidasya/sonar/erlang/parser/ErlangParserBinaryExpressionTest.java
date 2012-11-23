@@ -19,7 +19,6 @@
  */
 package org.kalidasya.sonar.erlang.parser;
 
-import static com.sonar.sslr.test.parser.ParserMatchers.parse;
 import static org.sonar.sslr.tests.Assertions.assertThat;
 
 import org.junit.After;
@@ -64,6 +63,9 @@ public class ErlangParserBinaryExpressionTest {
 				"Version:?BYTE,",
 				"Type:?BYTE,",
 				">>"));
+		assertThat(p).matches((code("<< << (X*2) >> || <<X>> <= << 1,2,3 >> >>")));
+		assertThat(p).matches((code("<< << (X*2) >> || <<X>> <= method1() >>")));
+		assertThat(p).matches((code("<< << (X*2) >> || <<X>> <= method1(), method2() >>")));
 	}
 	
 	private static String code(String... lines) {

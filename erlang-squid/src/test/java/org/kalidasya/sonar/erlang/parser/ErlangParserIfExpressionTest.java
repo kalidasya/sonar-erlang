@@ -33,7 +33,7 @@ import com.sonar.sslr.impl.Parser;
 import com.sonar.sslr.impl.events.ExtendedStackTrace;
 import com.sonar.sslr.impl.events.ExtendedStackTraceStream;
 
-public class ErlangParserFunctionCallExpressionTest {
+public class ErlangParserIfExpressionTest {
 	ExtendedStackTrace listener = new ExtendedStackTrace();
 	Parser<ErlangGrammar> p = ErlangParser.create(new ErlangConfiguration(
 			Charsets.UTF_8), listener);
@@ -42,20 +42,54 @@ public class ErlangParserFunctionCallExpressionTest {
 
 	@Before
 	public void init() {
-		p.setRootRule(g.statement);
+		p.setRootRule(g.memberExpression);
 	}
 
 
 	@Test
-	public void functionCallExpressions() {
-		assertThat(p).matches((code("method(\"hello\")")));
-		assertThat(p).matches((code("method(12)")));
-		assertThat(p).matches((code("method(\"hello\",234234)")));
-		assertThat(p).matches((code("haho:method(\"hello\")")));
-		assertThat(p).matches((code("method(\"hello\")")));
-		assertThat(p).matches((code("io:format(\"assert error in module ~p on line ~p~n\")")));
+	public void ifSimple() {
+		g.branchExps.mock();
+		assertThat(p).matches((code("if branchExps end")));
+	}
+
+	@Test
+	public void ifSimple2() {
+		g.branchExp.mock();
+		assertThat(p).matches((code("if branchExp; branchExp end")));
+	}
+
+	@Test
+	public void ifSimple3() {
+		g.guardSequence.mock();
+		g.assignmentExpression.mock();
 		assertThat(p).matches(
-				(code("string:strip(erlang:system_info(system_architecture),right,$\n)")));
+				code("if guardSequence -> assignmentExpression, assignmentExpression end"));
+		assertThat(p)
+				.matches(
+						code("if guardSequence -> assignmentExpression, assignmentExpression; guardSequence -> assignmentExpression end"));
+	}
+
+	@Test
+	public void ifSimple4() {
+		g.guard.mock();
+		g.assignmentExpression.mock();
+		assertThat(p).matches(
+				code("if guard; guard; guard -> assignmentExpression, assignmentExpression end"));
+		assertThat(p)
+				.matches(
+						code("if guard; guard -> assignmentExpression, assignmentExpression; guard; guard -> assignmentExpression end"));
+	}
+
+	@Test
+	public void ifSimple5() {
+		g.guardExpression.mock();
+		g.assignmentExpression.mock();
+		assertThat(p)
+				.matches(
+						(code("if guardExpression, guardExpression; guardExpression; guardExpression, guardExpression ,guardExpression -> assignmentExpression, assignmentExpression end")));
+		assertThat(p)
+				.matches(
+						(code("if guardExpression; guardExpression, guardExpression -> assignmentExpression, assignmentExpression; guardExpression, guardExpression; guardExpression -> assignmentExpression end")));
 	}
 	
 	private static String code(String... lines) {
