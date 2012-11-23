@@ -77,6 +77,8 @@ public class ModuleAttributesTest {
 		assertThat(
 				p,
 				parse(code("-record(fun_var, {'fun' :: fun((_) -> erl_types:erl_type()), deps :: [dep()], origin :: integer()}).")));
+		
+		assertThat(p, parse(code("-record(cat, {}).")));
 	}
 
 	@Test

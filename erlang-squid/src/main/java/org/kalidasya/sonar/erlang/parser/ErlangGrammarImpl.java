@@ -24,10 +24,10 @@ import static com.sonar.sslr.api.GenericTokenType.IDENTIFIER;
 import static com.sonar.sslr.api.GenericTokenType.LITERAL;
 import static com.sonar.sslr.impl.matcher.GrammarFunctions.Predicate.next;
 import static com.sonar.sslr.impl.matcher.GrammarFunctions.Standard.and;
+import static com.sonar.sslr.impl.matcher.GrammarFunctions.Standard.firstOf;
 import static com.sonar.sslr.impl.matcher.GrammarFunctions.Standard.o2n;
 import static com.sonar.sslr.impl.matcher.GrammarFunctions.Standard.one2n;
 import static com.sonar.sslr.impl.matcher.GrammarFunctions.Standard.opt;
-import static com.sonar.sslr.impl.matcher.GrammarFunctions.Standard.firstOf;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.AFTER;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.AND;
 import static org.kalidasya.sonar.erlang.api.ErlangKeyword.ANDALSO;
@@ -91,7 +91,6 @@ import static org.kalidasya.sonar.erlang.api.ErlangTokenType.NUMERIC_LITERAL;
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.kalidasya.sonar.erlang.api.ErlangKeyword;
 import org.kalidasya.sonar.erlang.api.ErlangPunctuator;
-import org.kalidasya.sonar.erlang.api.ErlangTokenType;
 
 import com.sonar.sslr.impl.matcher.GrammarFunctions;
 
@@ -110,7 +109,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	private void module() {
 		module.is(
 			one2n(
-					//TODO: does the -module mandatory? mybe we should move it one level up
+				//TODO: does the -module mandatory? maybe we should move it one level up
 				firstOf(
 					moduleHeadAttr,
 					and(macroLiteral, DOT),
@@ -143,22 +142,24 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			IDENTIFIER,
 			COMMA,
 			LCURLYBRACE,
-			and(
-				recordField,
-				opt(
-					MATCHOP,
-					recordField
-				)
-			),
-			o2n(
-				firstOf(COMMA,PIPE),
+			opt(
 				and(
 					recordField,
 					opt(
 						MATCHOP,
 						recordField
 					)
-				)	
+				),
+				o2n(
+					firstOf(COMMA,PIPE),
+					and(
+						recordField,
+						opt(
+							MATCHOP,
+							recordField
+						)
+					)	
+				)
 			),
 			RCURLYBRACE,
 			RPARENTHESIS,
