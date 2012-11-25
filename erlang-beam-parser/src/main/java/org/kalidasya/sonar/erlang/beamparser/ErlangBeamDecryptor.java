@@ -1,7 +1,6 @@
 package org.kalidasya.sonar.erlang.beamparser;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 
 import org.apache.commons.lang.ArrayUtils;
 
@@ -19,8 +18,18 @@ public class ErlangBeamDecryptor {
 		byte[] chunks = ArrayUtils.subarray(beam, 12, header.getFormLength() - 8);
 
 		findAtom(chunks);
-
+		findExportTable(chunks);
 		return ret;
+	}
+
+	private static void findExportTable(byte[] chunks) {
+		int atomStart = ByteFinder.indexOf(chunks, "ExpT".getBytes());
+		
+		ExportTableChunk atom = new ExportTableChunk(ArrayUtils.subarray(chunks, atomStart, chunks.length));
+
+		System.out.println(atomStart);
+		System.out.println(atom.getLength());
+		
 	}
 
 	private static void findAtom(byte[] chunks) {

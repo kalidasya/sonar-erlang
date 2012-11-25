@@ -1,11 +1,8 @@
 package org.kalidasya.sonar.erlang.beamparser;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.lang.ArrayUtils;
-
-
 
 public class AtomChunk extends BeamChunk {
 
@@ -15,10 +12,12 @@ public class AtomChunk extends BeamChunk {
 	}
 
 	private void populateStrings() {
-		int i = 0;
-		while (i < data.length && atoms.size()<getNumOfEntries()) {
-			atoms.add(new String(ArrayUtils.subarray(data, i+1, i+1+Integer.valueOf(data[i]))));
-			i = Integer.valueOf(data[i])+i+1;
+		ByteBuffer wrap = ByteBuffer.wrap(data);
+		while (atoms.size()<getNumOfEntries()) {
+			int l = wrap.get();
+			byte[] atom = new byte[l];
+			wrap.get(atom, 0, l);
+			atoms.add(new String(atom));
 		}
 	}
 
