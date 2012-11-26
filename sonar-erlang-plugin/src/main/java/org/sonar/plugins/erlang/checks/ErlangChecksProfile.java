@@ -19,7 +19,8 @@
  */
 package org.sonar.plugins.erlang.checks;
 
-import org.kalidasya.sonar.erlang.checks.CheckList;
+import org.sonar.erlang.checks.CheckList;
+
 import org.sonar.api.profiles.AnnotationProfileParser;
 import org.sonar.api.profiles.ProfileDefinition;
 import org.sonar.api.profiles.RulesProfile;

@@ -19,14 +19,16 @@
  */
 package org.sonar.plugins.erlang;
 
+import org.sonar.erlang.ErlangAstScanner;
+import org.sonar.erlang.ErlangConfiguration;
+import org.sonar.erlang.api.ErlangGrammar;
+import org.sonar.erlang.api.ErlangMetric;
+
+import org.sonar.erlang.checks.CheckList;
+
 import com.google.common.collect.Lists;
 import com.sonar.sslr.squid.AstScanner;
 import com.sonar.sslr.squid.SquidAstVisitor;
-import org.kalidasya.sonar.erlang.ErlangAstScanner;
-import org.kalidasya.sonar.erlang.ErlangConfiguration;
-import org.kalidasya.sonar.erlang.api.ErlangGrammar;
-import org.kalidasya.sonar.erlang.api.ErlangMetric;
-import org.kalidasya.sonar.erlang.checks.CheckList;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.checks.AnnotationCheckFactory;

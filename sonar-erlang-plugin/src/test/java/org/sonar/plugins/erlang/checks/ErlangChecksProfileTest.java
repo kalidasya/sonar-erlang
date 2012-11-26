@@ -19,8 +19,9 @@
  */
 package org.sonar.plugins.erlang.checks;
 
+import org.sonar.erlang.checks.CheckList;
+
 import org.junit.Test;
-import org.kalidasya.sonar.erlang.checks.CheckList;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.sonar.api.profiles.AnnotationProfileParser;

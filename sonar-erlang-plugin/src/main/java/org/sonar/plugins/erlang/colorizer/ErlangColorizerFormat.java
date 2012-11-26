@@ -19,8 +19,9 @@
  */
 package org.sonar.plugins.erlang.colorizer;
 
+import org.sonar.erlang.api.ErlangKeyword;
+
 import com.google.common.collect.ImmutableList;
-import org.kalidasya.sonar.erlang.api.ErlangKeyword;
 import org.sonar.api.web.CodeColorizerFormat;
 import org.sonar.colorizer.CDocTokenizer;
 import org.sonar.colorizer.CppDocTokenizer;
