@@ -23,19 +23,8 @@ import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.kalidasya.sonar.erlang.api.ErlangMetric;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.AstNodeType;
 import com.sonar.sslr.squid.SquidAstVisitor;
 
-/**
- * Erlang complexity calculation
- * +1 for every function clause over 1
- * +1 for every fun expression
- * +1 for every branch expression (if)
- * +1 for every pattern statement (case, try)
- * +1 for every catch pattern statement (catch)
- * @author Tamas Kende
- *
- */
 public class ErlangStatementVisitor extends SquidAstVisitor<ErlangGrammar> {
 
 	ErlangGrammar grammar;

@@ -74,8 +74,7 @@ public class ErlangComplexityVisitor extends SquidAstVisitor<ErlangGrammar> {
 	}
 
 	/**
-	 * Only increase complexity if the function has more than one function
-	 * clause
+	 * Increase the complexity with the number of clauses
 	 * 
 	 * @param functionDec
 	 */

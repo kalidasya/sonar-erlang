@@ -22,6 +22,7 @@ package org.kalidasya.sonar.erlang;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.Collection;
+import java.util.List;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.kalidasya.sonar.erlang.api.ErlangMetric;
@@ -81,6 +82,7 @@ public final class ErlangAstScanner {
 
 		AstScanner.Builder<ErlangGrammar> builder = AstScanner.<ErlangGrammar> builder(context)
 				.setBaseParser(parser);
+		final ErlangGrammar grammar = parser.getGrammar();
 
 		/* Metrics */
 		builder.withMetrics(ErlangMetric.values());
@@ -101,34 +103,46 @@ public final class ErlangAstScanner {
 						cls.setStartAtLine(astNode.getTokenLine());
 						return cls;
 					}
-				}, parser.getGrammar().moduleAttr));
+				}, grammar.moduleAttr));
 
 		builder.withSquidAstVisitor(CounterVisitor.<ErlangGrammar> builder().setMetricDef(
-				ErlangMetric.MODULES).subscribeTo(parser.getGrammar().moduleAttr).build());
+				ErlangMetric.MODULES).subscribeTo(grammar.moduleAttr).build());
 
 		/* Functions */
 		builder.withSquidAstVisitor(new SourceCodeBuilderVisitor<ErlangGrammar>(
 				new SourceCodeBuilderCallback() {
 					public SourceCode createSourceCode(SourceCode parentSourceCode, AstNode astNode) {
-						String functionName = astNode.getChild(0).getTokenValue();
-						SourceFunction function = new SourceFunction(functionName + "/"
-								+ getArity(astNode) + ":" + astNode.getTokenLine());
+						SourceFunction function = new SourceFunction(getFunctionKey(astNode));
 						function.setStartAtLine(astNode.getTokenLine());
 						return function;
 					}
 
+					private String getFunctionKey(AstNode ast) {
+						AstNode clause = null;
+						boolean isDec = false;
+						if (ast.getType().equals(grammar.functionDeclaration)) {
+							clause = ast.findFirstChild(grammar.functionClause);
+							isDec = true;
+						} else {
+							clause = ast;
+						}
+						String functionName = clause.findFirstDirectChild(grammar.clauseHead)
+								.getTokenValue();
+						return functionName + "/" + ((!isDec)?"c":"") + getArity(clause) + ":" + clause.getTokenLine();
+					}
+
 					private String getArity(AstNode ast) {
-						AstNode args = ast.getChild(0).getChild(0).getChild(1);
+						AstNode args = ast.findFirstDirectChild(grammar.clauseHead)
+								.findFirstDirectChild(grammar.funcDecl).findFirstDirectChild(
+										grammar.arguments);
 						int num = args.getNumberOfChildren() > 3 ? args.findChildren(
 								ErlangPunctuator.COMMA).size() + 1 : args.getNumberOfChildren() - 2;
-						// TODO for some reason this does not work:
-						// AstNodeXPathQuery.create("//clauseHead/funcDecl/arguments/*[node()!='COMMA' or node()!='LPARENTHESIS' or node()!='RPARENTHESIS']//IDENTIFIER").selectNodes(ast).size();
 						return String.valueOf(num);
 					}
-				}, parser.getGrammar().functionClause));
+				}, grammar.functionDeclaration, grammar.functionClause));
 
 		builder.withSquidAstVisitor(CounterVisitor.<ErlangGrammar> builder().setMetricDef(
-				ErlangMetric.FUNCTIONS).subscribeTo(parser.getGrammar().functionClause).build());
+				ErlangMetric.FUNCTIONS).subscribeTo(grammar.functionDeclaration).build());
 
 		/* Metrics */
 
@@ -158,17 +172,15 @@ public final class ErlangAstScanner {
 
 		/* Number of fun expressions */
 		builder.withSquidAstVisitor(ComplexityVisitor.<ErlangGrammar> builder().setMetricDef(
-				ErlangMetric.NUM_OF_FUN_EXRP).subscribeTo(parser.getGrammar().funExpression)
-				.build());
+				ErlangMetric.NUM_OF_FUN_EXRP).subscribeTo(grammar.funExpression).build());
 
 		/* Number of function clauses */
 		builder.withSquidAstVisitor(ComplexityVisitor.<ErlangGrammar> builder().setMetricDef(
-				ErlangMetric.NUM_OF_FUN_CLAUSES).subscribeTo(parser.getGrammar().functionClause)
-				.build());
+				ErlangMetric.NUM_OF_FUN_CLAUSES).subscribeTo(grammar.functionClause).build());
 
 		/* Number of macro definitions */
 		builder.withSquidAstVisitor(ComplexityVisitor.<ErlangGrammar> builder().setMetricDef(
-				ErlangMetric.NUM_OF_MACROS).subscribeTo(parser.getGrammar().defineAttr).build());
+				ErlangMetric.NUM_OF_MACROS).subscribeTo(grammar.defineAttr).build());
 
 		/* External visitors (typically Check ones) */
 		for (SquidAstVisitor<ErlangGrammar> visitor : visitors) {
