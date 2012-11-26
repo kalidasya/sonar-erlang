@@ -19,25 +19,25 @@
  */
 package org.sonar.plugins.erlang.checks;
 
-import static org.fest.assertions.Assertions.assertThat;
-
-import java.util.List;
-
 import org.junit.Test;
 import org.kalidasya.sonar.erlang.checks.CheckList;
 import org.sonar.api.rules.AnnotationRuleParser;
 import org.sonar.api.rules.Rule;
-import org.sonar.plugins.erlang.checks.ErlangChecksRuleRepository;
+
+import java.util.List;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 public class ErlangChecksRuleRepositoryTest {
 
-	@Test
-	public void test() {
-		ErlangChecksRuleRepository ruleRepository = new ErlangChecksRuleRepository(new AnnotationRuleParser());
-		assertThat(ruleRepository.getKey()).isEqualTo("erlang-checks");
-		assertThat(ruleRepository.getName()).isEqualTo("Erlang checks");
-		List<Rule> rules = ruleRepository.createRules();
-		assertThat(rules.size()).isEqualTo(CheckList.getChecks().size());
-	}
+  @Test
+  public void test() {
+    ErlangChecksRuleRepository ruleRepository = new ErlangChecksRuleRepository(
+        new AnnotationRuleParser());
+    assertThat(ruleRepository.getKey()).isEqualTo("erlang-checks");
+    assertThat(ruleRepository.getName()).isEqualTo("Erlang checks");
+    List<Rule> rules = ruleRepository.createRules();
+    assertThat(rules.size()).isEqualTo(CheckList.getChecks().size());
+  }
 
 }

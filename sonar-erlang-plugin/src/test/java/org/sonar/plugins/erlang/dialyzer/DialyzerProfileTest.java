@@ -19,11 +19,6 @@
  */
 package org.sonar.plugins.erlang.dialyzer;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -33,6 +28,11 @@ import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.erlang.core.Erlang;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class DialyzerProfileTest {
 
@@ -46,17 +46,21 @@ public class DialyzerProfileTest {
 
     assertThat(profile.getLanguage()).isEqualTo(Erlang.KEY);
     assertThat(profile.getName()).isEqualTo("Dialyzer Profile");
-    assertThat(profile.getActiveRulesByRepository(DialyzerRuleRepository.REPOSITORY_KEY)).hasSize(41);
+    assertThat(profile.getActiveRulesByRepository(DialyzerRuleRepository.REPOSITORY_KEY))
+        .hasSize(41);
     assertThat(validation.hasErrors()).isFalse();
   }
 
   static RuleFinder ruleFinder() {
-    return when(mock(RuleFinder.class).findByKey(anyString(), anyString())).thenAnswer(new Answer<Rule>() {
-      public Rule answer(InvocationOnMock invocation) {
-        Object[] arguments = invocation.getArguments();
-        return Rule.create((String) arguments[0], (String) arguments[1], (String) arguments[1]);
-      }
-    }).getMock();
+    return when(mock(RuleFinder.class).findByKey(anyString(), anyString())).thenAnswer(
+        new Answer<Rule>() {
+          @Override
+          public Rule answer(InvocationOnMock invocation) {
+            Object[] arguments = invocation.getArguments();
+            return Rule.create((String) arguments[0], (String) arguments[1],
+                (String) arguments[1]);
+          }
+        }).getMock();
   }
 
 }

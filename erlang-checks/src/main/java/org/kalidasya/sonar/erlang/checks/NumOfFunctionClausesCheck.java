@@ -19,6 +19,8 @@
  */
 package org.kalidasya.sonar.erlang.checks;
 
+import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.squid.checks.SquidCheck;
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.kalidasya.sonar.erlang.api.ErlangMetric;
 import org.sonar.check.BelongsToProfile;
@@ -28,40 +30,38 @@ import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.squid.api.SourceFunction;
 
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.squid.checks.SquidCheck;
-
 @Rule(key = "FunctionClauses", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE,
-		name = "FunctionClauses", description = "Check the maximum allowed number of function clauses")
+  name = "FunctionClauses",
+  description = "Check the maximum allowed number of function clauses")
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class NumOfFunctionClausesCheck extends SquidCheck<ErlangGrammar> {
 
-	private static final int DEFAULT_MAXIMUM_FUNCTION_CLAUSES_THRESHOLD = 10;
+  private static final int DEFAULT_MAXIMUM_FUNCTION_CLAUSES_THRESHOLD = 10;
 
-	@RuleProperty(key = "maximumFunctionClausesThreshold", defaultValue = ""
-			+ DEFAULT_MAXIMUM_FUNCTION_CLAUSES_THRESHOLD)
-	private int maximumFunctionClausesThreshold = DEFAULT_MAXIMUM_FUNCTION_CLAUSES_THRESHOLD;
+  @RuleProperty(key = "maximumFunctionClausesThreshold", defaultValue = ""
+    + DEFAULT_MAXIMUM_FUNCTION_CLAUSES_THRESHOLD)
+  private int maximumFunctionClausesThreshold = DEFAULT_MAXIMUM_FUNCTION_CLAUSES_THRESHOLD;
 
-	@Override
-	public void init() {
-		subscribeTo(getContext().getGrammar().functionDeclaration);
-	}
+  @Override
+  public void init() {
+    subscribeTo(getContext().getGrammar().functionDeclaration);
+  }
 
-	@Override
-	public void leaveNode(AstNode node) {
-		SourceFunction function = (SourceFunction) getContext().peekSourceCode();
-		if (function.getInt(ErlangMetric.COMPLEXITY) > maximumFunctionClausesThreshold) {
-			getContext()
-					.createLineViolation(
-							this,
-							"Function has {0,number,integer} clauses which is greater than {1,number,integer} authorized.",
-							node, function.getInt(ErlangMetric.COMPLEXITY),
-							maximumFunctionClausesThreshold);
-		}
-	}
+  @Override
+  public void leaveNode(AstNode node) {
+    SourceFunction function = (SourceFunction) getContext().peekSourceCode();
+    if (function.getInt(ErlangMetric.COMPLEXITY) > maximumFunctionClausesThreshold) {
+      getContext()
+          .createLineViolation(
+              this,
+              "Function has {0,number,integer} clauses which is greater than {1,number,integer} authorized.",
+              node, function.getInt(ErlangMetric.COMPLEXITY),
+              maximumFunctionClausesThreshold);
+    }
+  }
 
-	public void setMaximumFunctionClausesThreshold(int threshold) {
-		this.maximumFunctionClausesThreshold = threshold;
-	}
+  public void setMaximumFunctionClausesThreshold(int threshold) {
+    this.maximumFunctionClausesThreshold = threshold;
+  }
 
 }

@@ -19,6 +19,10 @@
  */
 package org.kalidasya.sonar.erlang.checks;
 
+import com.sonar.sslr.api.AstAndTokenVisitor;
+import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.Token;
+import com.sonar.sslr.squid.checks.SquidCheck;
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Cardinality;
@@ -26,54 +30,48 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 
-import com.sonar.sslr.api.AstAndTokenVisitor;
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
-import com.sonar.sslr.squid.checks.SquidCheck;
-
 @Rule(key = "IndentionSize", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE,
-		name = "IndentionSize", description="Allowed indention size")
+  name = "IndentionSize", description = "Allowed indention size")
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class IndentionSizeCheck extends SquidCheck<ErlangGrammar> implements AstAndTokenVisitor {
 
-	private Token previousToken;
-	private int numOfViolations = 0;
+  private Token previousToken;
+  private int numOfViolations = 0;
 
-	@RuleProperty(key = "regularExpression", defaultValue = "4")
-	public int indentionSize = 4;
+  @RuleProperty(key = "regularExpression", defaultValue = "4")
+  public int indentionSize = 4;
 
-	@Override
-	public void visitFile(AstNode astNode) {
-		previousToken = null;
-	}
+  @Override
+  public void visitFile(AstNode astNode) {
+    previousToken = null;
+  }
 
-	@Override
-	public void leaveFile(AstNode astNode) {
-		previousToken = null;
-	}
+  @Override
+  public void leaveFile(AstNode astNode) {
+    previousToken = null;
+  }
 
-	public void visitToken(Token token) {
-		if (numOfViolations<100 && !token.isGeneratedCode()) {
-			if (previousToken == null
-					|| (previousToken != null && previousToken.getLine() != token.getLine())) {
-				if (token.getColumn() % indentionSize != 0) {
-					getContext()
-							.createLineViolation(
-									this,
-									"The line starts with {0, number, integer} characters which is cannot be divided by {1, number, integer}.",
-									token.getLine(), token.getColumn(), indentionSize);
-					numOfViolations++;
-					if(numOfViolations == 100){
-						getContext()
-						.createLineViolation(
-								this,
-								"File has reached 100 indention violation.",
-								token.getLine(), token.getColumn(), indentionSize);
-					}
-				} 
-				previousToken = token;
-			}
-		}
-	}
+  @Override
+  public void visitToken(Token token) {
+    if (numOfViolations < 100 && !token.isGeneratedCode()) {
+      if (previousToken == null
+        || (previousToken != null && previousToken.getLine() != token.getLine())) {
+        if (token.getColumn() % indentionSize != 0) {
+          getContext()
+              .createLineViolation(
+                  this,
+                  "The line starts with {0, number, integer} characters which is cannot be divided by {1, number, integer}.",
+                  token.getLine(), token.getColumn(), indentionSize);
+          numOfViolations++;
+          if (numOfViolations == 100) {
+            getContext().createLineViolation(this,
+                "File has reached 100 indention violation.", token.getLine(),
+                token.getColumn(), indentionSize);
+          }
+        }
+        previousToken = token;
+      }
+    }
+  }
 
 }

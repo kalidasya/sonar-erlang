@@ -19,6 +19,8 @@
  */
 package org.kalidasya.sonar.erlang.checks;
 
+import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.squid.checks.SquidCheck;
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Cardinality;
@@ -26,37 +28,33 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.squid.checks.SquidCheck;
-
 @Rule(key = "NoMacros", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE,
-		name = "NoMacros", description = "Avoid using macros")
+  name = "NoMacros", description = "Avoid using macros")
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class NoMacrosCheck extends SquidCheck<ErlangGrammar> {
 
-	@RuleProperty(key = "skipDefineInFlowControl", defaultValue = "true",
-			description = "Set it false if you want to check macros in flow controls.")
-	private boolean skipDefineInFlowControl = true;
+  @RuleProperty(key = "skipDefineInFlowControl", defaultValue = "true",
+    description = "Set it false if you want to check macros in flow controls.")
+  private boolean skipDefineInFlowControl = true;
 
-	private ErlangGrammar g;
+  private ErlangGrammar g;
 
-	@Override
-	public void init() {
-		g = getContext().getGrammar();
-		subscribeTo(g.defineAttr);
-	}
+  @Override
+  public void init() {
+    g = getContext().getGrammar();
+    subscribeTo(g.defineAttr);
+  }
 
-	@Override
-	public void visitNode(AstNode astNode) {
-		if (!astNode.hasParents(g.flowControlAttr) || !skipDefineInFlowControl) {
-			getContext().createLineViolation(this, "Do not use macros.", astNode.getTokenLine());
-		}
+  @Override
+  public void visitNode(AstNode astNode) {
+    if (!astNode.hasParents(g.flowControlAttr) || !skipDefineInFlowControl) {
+      getContext().createLineViolation(this, "Do not use macros.", astNode.getTokenLine());
+    }
 
-	}
+  }
 
-	public void setSkipDefineInFlowControl(boolean skipDefineInFlowControl) {
-		this.skipDefineInFlowControl = skipDefineInFlowControl;
-	}
+  public void setSkipDefineInFlowControl(boolean skipDefineInFlowControl) {
+    this.skipDefineInFlowControl = skipDefineInFlowControl;
+  }
 
-	
 }

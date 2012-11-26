@@ -19,24 +19,22 @@
  */
 package org.kalidasya.sonar.erlang.checks;
 
-import java.io.File;
-
+import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
 import org.junit.Test;
 import org.kalidasya.sonar.erlang.ErlangAstScanner;
 import org.sonar.squid.api.SourceFile;
 
-import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
+import java.io.File;
 
 public class NumberOfFunctionArgsCheckTest {
 
-	@Test
-	public void test() {
-		NumberOfFunctionArgsCheck check = new NumberOfFunctionArgsCheck();
+  @Test
+  public void test() {
+    NumberOfFunctionArgsCheck check = new NumberOfFunctionArgsCheck();
 
-		SourceFile file = ErlangAstScanner.scanSingleFile(new File(
-				"src/test/resources/checks/funargs.erl"), check);
-		CheckMessagesVerifier.verify(file.getCheckMessages())
-		.next().atLine(4).withMessage("Function has 7 arguments which is greater than 6 authorized.")
-		.noMore();
-	}
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File(
+        "src/test/resources/checks/funargs.erl"), check);
+    CheckMessagesVerifier.verify(file.getCheckMessages()).next().atLine(4).withMessage(
+        "Function has 7 arguments which is greater than 6 authorized.").noMore();
+  }
 }

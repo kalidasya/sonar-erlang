@@ -28,16 +28,16 @@ import org.sonar.plugins.erlang.core.Erlang;
 
 public class ErlangChecksProfile extends ProfileDefinition {
 
-	private final AnnotationProfileParser annotationProfileParser;
+  private final AnnotationProfileParser annotationProfileParser;
 
-	public ErlangChecksProfile(AnnotationProfileParser annotationProfileParser) {
-		this.annotationProfileParser = annotationProfileParser;
-	}
+  public ErlangChecksProfile(AnnotationProfileParser annotationProfileParser) {
+    this.annotationProfileParser = annotationProfileParser;
+  }
 
-	@Override
-	public RulesProfile createProfile(ValidationMessages validation) {
-		return annotationProfileParser.parse(CheckList.REPOSITORY_KEY, CheckList.SONAR_WAY_PROFILE,
-				Erlang.KEY, CheckList.getChecks(), validation);
-	}
+  @Override
+  public RulesProfile createProfile(ValidationMessages validation) {
+    return annotationProfileParser.parse(CheckList.REPOSITORY_KEY, CheckList.SONAR_WAY_PROFILE,
+        Erlang.KEY, CheckList.getChecks(), validation);
+  }
 
 }

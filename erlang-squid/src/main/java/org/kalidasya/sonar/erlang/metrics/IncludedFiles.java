@@ -21,8 +21,9 @@ package org.kalidasya.sonar.erlang.metrics;
 
 /**
  * simple counter metric, needs a threshold first
+ * 
  * @author tkende
- *
+ * 
  */
 public class IncludedFiles {
 

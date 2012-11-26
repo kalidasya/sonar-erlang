@@ -19,12 +19,12 @@
  */
 package org.sonar.plugins.erlang.eunit;
 
-import java.io.File;
-
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.erlang.ErlangPlugin;
 import org.sonar.plugins.erlang.core.Erlang;
+
+import java.io.File;
 
 public class EunitSensor extends EunitXmlSensor {
 
@@ -32,15 +32,17 @@ public class EunitSensor extends EunitXmlSensor {
     super(erlang);
   }
 
+  @Override
   public boolean shouldExecuteOnProject(Project project) {
     return (erlang.equals(project.getLanguage()));
   }
 
+  @Override
   public void analyse(Project project, SensorContext context) {
-    String eunitFolder = erlang.getConfiguration().getString(ErlangPlugin.EUNIT_FOLDER_KEY, ErlangPlugin.EUNIT_DEFAULT_FOLDER);
+    String eunitFolder = erlang.getConfiguration().getString(ErlangPlugin.EUNIT_FOLDER_KEY,
+        ErlangPlugin.EUNIT_DEFAULT_FOLDER);
     collect(project, context, new File(project.getFileSystem().getBasedir(), eunitFolder));
   }
-
 
   @Override
   public String toString() {

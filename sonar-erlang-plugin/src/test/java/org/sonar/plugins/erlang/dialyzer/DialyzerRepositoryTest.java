@@ -19,24 +19,23 @@
  */
 package org.sonar.plugins.erlang.dialyzer;
 
-import static org.fest.assertions.Assertions.assertThat;
-
-import java.util.List;
-
 import org.junit.Test;
-import org.kalidasya.sonar.erlang.checks.CheckList;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.XMLRuleParser;
 
+import java.util.List;
+
+import static org.fest.assertions.Assertions.assertThat;
+
 public class DialyzerRepositoryTest {
 
-	@Test
-	public void test() {
-		DialyzerRuleRepository ruleRepository = new DialyzerRuleRepository(new XMLRuleParser());
-		assertThat(ruleRepository.getKey()).isEqualTo("dialyzer");
-		assertThat(ruleRepository.getName()).isEqualTo("Dialyzer");
-		List<Rule> rules = ruleRepository.createRules();
-		assertThat(rules.size()).isEqualTo(41);
-	}
+  @Test
+  public void test() {
+    DialyzerRuleRepository ruleRepository = new DialyzerRuleRepository(new XMLRuleParser());
+    assertThat(ruleRepository.getKey()).isEqualTo("dialyzer");
+    assertThat(ruleRepository.getName()).isEqualTo("Dialyzer");
+    List<Rule> rules = ruleRepository.createRules();
+    assertThat(rules.size()).isEqualTo(41);
+  }
 
 }

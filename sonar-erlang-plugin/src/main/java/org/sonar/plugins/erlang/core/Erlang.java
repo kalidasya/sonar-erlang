@@ -24,27 +24,28 @@ import org.apache.commons.lang.StringUtils;
 import org.sonar.api.resources.AbstractLanguage;
 import org.sonar.plugins.erlang.ErlangPlugin;
 
-public class Erlang extends AbstractLanguage{
+public class Erlang extends AbstractLanguage {
 
-	public static final String KEY = "erl";
+  public static final String KEY = "erl";
 
-	  private Configuration configuration;
+  private Configuration configuration;
 
-	  public Erlang(Configuration configuration) {
-	    super(KEY, "erl");
-	    this.configuration = configuration;
-	  }
+  public Erlang(Configuration configuration) {
+    super(KEY, "erl");
+    this.configuration = configuration;
+  }
 
-	  public Configuration getConfiguration() {
-	    return this.configuration;
-	  }
+  public Configuration getConfiguration() {
+    return this.configuration;
+  }
 
-	  public String[] getFileSuffixes() {
-	    String[] suffixes = configuration.getStringArray(ErlangPlugin.FILE_SUFFIXES_KEY);
-	    if (suffixes == null || suffixes.length == 0) {
-	      suffixes = StringUtils.split(ErlangPlugin.FILE_SUFFIXES_DEFVALUE, ",");
-	    }
-	    return suffixes;
-	  }
+  @Override
+  public String[] getFileSuffixes() {
+    String[] suffixes = configuration.getStringArray(ErlangPlugin.FILE_SUFFIXES_KEY);
+    if (suffixes == null || suffixes.length == 0) {
+      suffixes = StringUtils.split(ErlangPlugin.FILE_SUFFIXES_DEFVALUE, ",");
+    }
+    return suffixes;
+  }
 
 }

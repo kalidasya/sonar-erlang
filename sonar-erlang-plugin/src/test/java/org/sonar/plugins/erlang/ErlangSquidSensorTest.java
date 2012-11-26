@@ -19,17 +19,10 @@
  */
 package org.sonar.plugins.erlang;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.fest.assertions.Assertions.assertThat;
-
-import java.io.File;
-import java.nio.charset.Charset;
-
+import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.mockito.Matchers;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
@@ -43,100 +36,105 @@ import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
 import org.sonar.plugins.erlang.core.Erlang;
 
-import com.google.common.collect.ImmutableList;
+import java.io.File;
+import java.nio.charset.Charset;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class ErlangSquidSensorTest {
 
-	private ErlangSquidSensor sensor;
+  private ErlangSquidSensor sensor;
 
-	@Before
-	public void setUp() {
-		FileLinesContextFactory fileLinesContextFactory = mock(FileLinesContextFactory.class);
-		FileLinesContext fileLinesContext = mock(FileLinesContext.class);
-		when(fileLinesContextFactory.createFor(Mockito.any(Resource.class))).thenReturn(
-				fileLinesContext);
-		sensor = new ErlangSquidSensor(mock(RulesProfile.class), fileLinesContextFactory);
-	}
+  @Before
+  public void setUp() {
+    FileLinesContextFactory fileLinesContextFactory = mock(FileLinesContextFactory.class);
+    FileLinesContext fileLinesContext = mock(FileLinesContext.class);
+    when(fileLinesContextFactory.createFor(Matchers.any(Resource.class))).thenReturn(
+        fileLinesContext);
+    sensor = new ErlangSquidSensor(mock(RulesProfile.class), fileLinesContextFactory);
+  }
 
-	@Test
-	public void should_execute_on_erlang_project() {
-		Project project = new Project("key");
-		
-		Language java = mock(Language.class);
-		when(java.getKey()).thenReturn("java");
-		project.setLanguage(java);
-		assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
-		
-		Language erl = mock(Language.class);
-		when(erl.getKey()).thenReturn("erl");
-		project.setLanguage(erl);
-		assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
-	}
+  @Test
+  public void should_execute_on_erlang_project() {
+    Project project = new Project("key");
 
-	@Test
-	public void should_analyse() {
-		ProjectFileSystem fs = mock(ProjectFileSystem.class);
-		when(fs.getSourceCharset()).thenReturn(Charset.forName("UTF-8"));
-		InputFile inputFile = InputFileUtils.create(new File("src/test/resources/cpd"), new File(
-				"src/test/resources/cpd/person.erl"));
-		when(fs.mainFiles(Erlang.KEY)).thenReturn(ImmutableList.of(inputFile));
-		Project project = new Project("key");
-		project.setFileSystem(fs);
-		SensorContext context = mock(SensorContext.class);
+    Language java = mock(Language.class);
+    when(java.getKey()).thenReturn("java");
+    project.setLanguage(java);
+    assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
 
-		sensor.analyse(project, context);
+    Language erl = mock(Language.class);
+    when(erl.getKey()).thenReturn("erl");
+    project.setLanguage(erl);
+    assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
+  }
 
-		verify(context).saveMeasure(Mockito.any(Resource.class), Mockito.eq(CoreMetrics.FILES),
-				Mockito.eq(1.0));
-		verify(context).saveMeasure(Mockito.any(Resource.class), Mockito.eq(CoreMetrics.LINES),
-				Mockito.eq(18.0));
-		//TODO it should be 14 not 13
-		verify(context).saveMeasure(Mockito.any(Resource.class), Mockito.eq(CoreMetrics.NCLOC),
-				Mockito.eq(14.0));
-		verify(context).saveMeasure(Mockito.any(Resource.class), Mockito.eq(CoreMetrics.FUNCTIONS),
-				Mockito.eq(2.0));
-		verify(context).saveMeasure(Mockito.any(Resource.class),
-				Mockito.eq(CoreMetrics.STATEMENTS), Mockito.eq(8.0));
-		verify(context).saveMeasure(Mockito.any(Resource.class),
-				Mockito.eq(CoreMetrics.COMPLEXITY), Mockito.eq(6.0));
-		verify(context).saveMeasure(Mockito.any(Resource.class),
-				Mockito.eq(CoreMetrics.COMMENT_LINES), Mockito.eq(1.0));
-		
-	}
-	
-	@Test
-	public void analyse() {
-		ProjectFileSystem fs = mock(ProjectFileSystem.class);
-		when(fs.getSourceCharset()).thenReturn(Charset.forName("UTF-8"));
-		InputFile inputFile = InputFileUtils.create(new File("src/test/resources"), new File(
-				"src/test/resources/megaco_ber_bin_encoder.erl"));
-		when(fs.mainFiles(Erlang.KEY)).thenReturn(ImmutableList.of(inputFile));
-		Project project = new Project("key");
-		project.setFileSystem(fs);
-		SensorContext context = mock(SensorContext.class);
+  @Test
+  public void should_analyse() {
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(fs.getSourceCharset()).thenReturn(Charset.forName("UTF-8"));
+    InputFile inputFile = InputFileUtils.create(new File("src/test/resources/cpd"), new File(
+        "src/test/resources/cpd/person.erl"));
+    when(fs.mainFiles(Erlang.KEY)).thenReturn(ImmutableList.of(inputFile));
+    Project project = new Project("key");
+    project.setFileSystem(fs);
+    SensorContext context = mock(SensorContext.class);
 
-		sensor.analyse(project, context);
+    sensor.analyse(project, context);
 
-		verify(context).saveMeasure(Mockito.any(Resource.class), Mockito.eq(CoreMetrics.FILES),
-				Mockito.eq(1.0));
-		verify(context).saveMeasure(Mockito.any(Resource.class), Mockito.eq(CoreMetrics.LINES),
-				Mockito.eq(717.0));
-		//TODO it should be 14 not 13
-		verify(context).saveMeasure(Mockito.any(Resource.class), Mockito.eq(CoreMetrics.NCLOC),
-				Mockito.eq(371.0));
-		verify(context).saveMeasure(Mockito.any(Resource.class), Mockito.eq(CoreMetrics.FUNCTIONS),
-				Mockito.eq(10.0));
-		verify(context).saveMeasure(Mockito.any(Resource.class),
-				Mockito.eq(CoreMetrics.STATEMENTS), Mockito.eq(210.0));
-		verify(context).saveMeasure(Mockito.any(Resource.class),
-				Mockito.eq(CoreMetrics.COMPLEXITY), Mockito.eq(90.0));
-		verify(context).saveMeasure(Mockito.any(Resource.class),
-				Mockito.eq(CoreMetrics.COMMENT_LINES), Mockito.eq(261.0));
-		
-		verify(context).saveMeasure(Mockito.any(Resource.class),
-				Mockito.eq(CoreMetrics.COMMENT_LINES_DENSITY), Mockito.eq(70.35040431266847));
-		
-		
-	}
+    verify(context).saveMeasure(Matchers.any(Resource.class), Matchers.eq(CoreMetrics.FILES),
+        Matchers.eq(1.0));
+    verify(context).saveMeasure(Matchers.any(Resource.class), Matchers.eq(CoreMetrics.LINES),
+        Matchers.eq(18.0));
+    // TODO it should be 14 not 13
+    verify(context).saveMeasure(Matchers.any(Resource.class), Matchers.eq(CoreMetrics.NCLOC),
+        Matchers.eq(14.0));
+    verify(context).saveMeasure(Matchers.any(Resource.class), Matchers.eq(CoreMetrics.FUNCTIONS),
+        Matchers.eq(2.0));
+    verify(context).saveMeasure(Matchers.any(Resource.class),
+        Matchers.eq(CoreMetrics.STATEMENTS), Matchers.eq(8.0));
+    verify(context).saveMeasure(Matchers.any(Resource.class),
+        Matchers.eq(CoreMetrics.COMPLEXITY), Matchers.eq(6.0));
+    verify(context).saveMeasure(Matchers.any(Resource.class),
+        Matchers.eq(CoreMetrics.COMMENT_LINES), Matchers.eq(1.0));
+
+  }
+
+  @Test
+  public void analyse() {
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(fs.getSourceCharset()).thenReturn(Charset.forName("UTF-8"));
+    InputFile inputFile = InputFileUtils.create(new File("src/test/resources"), new File(
+        "src/test/resources/megaco_ber_bin_encoder.erl"));
+    when(fs.mainFiles(Erlang.KEY)).thenReturn(ImmutableList.of(inputFile));
+    Project project = new Project("key");
+    project.setFileSystem(fs);
+    SensorContext context = mock(SensorContext.class);
+
+    sensor.analyse(project, context);
+
+    verify(context).saveMeasure(Matchers.any(Resource.class), Matchers.eq(CoreMetrics.FILES),
+        Matchers.eq(1.0));
+    verify(context).saveMeasure(Matchers.any(Resource.class), Matchers.eq(CoreMetrics.LINES),
+        Matchers.eq(717.0));
+    // TODO it should be 14 not 13
+    verify(context).saveMeasure(Matchers.any(Resource.class), Matchers.eq(CoreMetrics.NCLOC),
+        Matchers.eq(371.0));
+    verify(context).saveMeasure(Matchers.any(Resource.class), Matchers.eq(CoreMetrics.FUNCTIONS),
+        Matchers.eq(10.0));
+    verify(context).saveMeasure(Matchers.any(Resource.class),
+        Matchers.eq(CoreMetrics.STATEMENTS), Matchers.eq(210.0));
+    verify(context).saveMeasure(Matchers.any(Resource.class),
+        Matchers.eq(CoreMetrics.COMPLEXITY), Matchers.eq(90.0));
+    verify(context).saveMeasure(Matchers.any(Resource.class),
+        Matchers.eq(CoreMetrics.COMMENT_LINES), Matchers.eq(261.0));
+
+    verify(context).saveMeasure(Matchers.any(Resource.class),
+        Matchers.eq(CoreMetrics.COMMENT_LINES_DENSITY), Matchers.eq(70.35040431266847));
+
+  }
 
 }

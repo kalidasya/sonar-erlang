@@ -19,10 +19,6 @@
  */
 package org.sonar.plugins.erlang.eunit;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
 import org.apache.commons.io.FileUtils;
 import org.jfree.util.Log;
 import org.slf4j.Logger;
@@ -36,94 +32,99 @@ import org.sonar.plugins.erlang.ErlangPlugin;
 import org.sonar.plugins.erlang.core.Erlang;
 import org.sonar.plugins.surefire.api.AbstractSurefireParser;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
 public class EunitXmlSensor implements Sensor {
 
-	protected Erlang erlang;
+  protected Erlang erlang;
 
-	public EunitXmlSensor(Erlang erlang) {
-		this.erlang = erlang;
-	}
+  public EunitXmlSensor(Erlang erlang) {
+    this.erlang = erlang;
+  }
 
-	private static final Logger LOG = LoggerFactory.getLogger(EunitXmlSensor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(EunitXmlSensor.class);
 
-	public boolean shouldExecuteOnProject(Project project) {
-		return (erlang.equals(project.getLanguage()) );
-	}
+  @Override
+  public boolean shouldExecuteOnProject(Project project) {
+    return (erlang.equals(project.getLanguage()));
+  }
 
-	public void analyse(Project project, SensorContext context) {
-		String jsTestDriverFolder = erlang.getConfiguration().getString(
-				ErlangPlugin.EUNIT_FOLDER_KEY,
-				ErlangPlugin.EUNIT_DEFAULT_FOLDER);
-		collect(project, context,
-				new File(project.getFileSystem().getBasedir(), jsTestDriverFolder));
-	}
+  @Override
+  public void analyse(Project project, SensorContext context) {
+    String jsTestDriverFolder = erlang.getConfiguration().getString(
+        ErlangPlugin.EUNIT_FOLDER_KEY, ErlangPlugin.EUNIT_DEFAULT_FOLDER);
+    collect(project, context,
+        new File(project.getFileSystem().getBasedir(), jsTestDriverFolder));
+  }
 
-	protected void collect(final Project project, final SensorContext context, File reportsDir) {
-		LOG.debug("Parsing Eunit run results in Surefile format from folder {}", reportsDir);
+  protected void collect(final Project project, final SensorContext context, File reportsDir) {
+    LOG.debug("Parsing Eunit run results in Surefile format from folder {}", reportsDir);
 
-		new AbstractSurefireParser() {
+    new AbstractSurefireParser() {
 
-			@Override
-			protected Resource<?> getUnitTestResource(String classKey) {
+      @Override
+      protected Resource<?> getUnitTestResource(String classKey) {
 
-				org.sonar.api.resources.File unitTestFileResource = getUnitTestFileResource(classKey);
-				unitTestFileResource.setLanguage(erlang);
-				unitTestFileResource.setQualifier(Qualifiers.UNIT_TEST_FILE);
+        org.sonar.api.resources.File unitTestFileResource = getUnitTestFileResource(classKey);
+        unitTestFileResource.setLanguage(erlang);
+        unitTestFileResource.setQualifier(Qualifiers.UNIT_TEST_FILE);
 
-				LOG.debug("Adding unittest resource: {}", unitTestFileResource.toString());
+        LOG.debug("Adding unittest resource: {}", unitTestFileResource.toString());
 
-				List<File> testDirectories = project.getFileSystem().getTestDirs();
+        List<File> testDirectories = project.getFileSystem().getTestDirs();
 
-				File unitTestFile = getUnitTestFile(testDirectories, getUnitTestFileName(classKey));
+        File unitTestFile = getUnitTestFile(testDirectories, getUnitTestFileName(classKey));
 
-				String source = "";
+        String source = "";
 
-				try {
-					source = FileUtils.readFileToString(unitTestFile, project.getFileSystem()
-							.getSourceCharset().name());
-				} catch (IOException e) {
-					source = "Could not find source for unit test: " + classKey
-							+ " in any of test directories";
-					Log.debug(source, e);
-				}
+        try {
+          source = FileUtils.readFileToString(unitTestFile, project.getFileSystem()
+              .getSourceCharset().name());
+        } catch (IOException e) {
+          source = "Could not find source for unit test: " + classKey
+            + " in any of test directories";
+          Log.debug(source, e);
+        }
 
-				context.saveSource(unitTestFileResource, source);
+        context.saveSource(unitTestFileResource, source);
 
-				return unitTestFileResource;
-			}
-		}.collect(project, context, reportsDir);
+        return unitTestFileResource;
+      }
+    }.collect(project, context, reportsDir);
 
-	}
+  }
 
-	protected String cleanName(String name){
-		return name.replaceFirst("(.*?')(.*?)('.*)", "$2");
-	}
-	
-	protected org.sonar.api.resources.File getUnitTestFileResource(String classKey) {
-		return new org.sonar.api.resources.File(cleanName(classKey).replaceAll("\\.", "/") + ".erl");
-	}
+  protected String cleanName(String name) {
+    return name.replaceFirst("(.*?')(.*?)('.*)", "$2");
+  }
 
-	protected String getUnitTestFileName(String className) {
-		String fileName = cleanName(className);
-		fileName = fileName.replace('.', '/');
-		fileName = fileName + ".erl";
-		return fileName;
-	}
+  protected org.sonar.api.resources.File getUnitTestFileResource(String classKey) {
+    return new org.sonar.api.resources.File(cleanName(classKey).replaceAll("\\.", "/") + ".erl");
+  }
 
-	protected File getUnitTestFile(List<File> testDirectories, String name) {
-		File unitTestFile = new File("");
-		for (File dir : testDirectories) {
-			unitTestFile = new File(dir, name);
+  protected String getUnitTestFileName(String className) {
+    String fileName = cleanName(className);
+    fileName = fileName.replace('.', '/');
+    fileName = fileName + ".erl";
+    return fileName;
+  }
 
-			if (unitTestFile.exists()) {
-				break;
-			}
-		}
-		return unitTestFile;
-	}
+  protected File getUnitTestFile(List<File> testDirectories, String name) {
+    File unitTestFile = new File("");
+    for (File dir : testDirectories) {
+      unitTestFile = new File(dir, name);
 
-	@Override
-	public String toString() {
-		return getClass().getSimpleName();
-	}
+      if (unitTestFile.exists()) {
+        break;
+      }
+    }
+    return unitTestFile;
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
 }

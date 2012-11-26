@@ -34,6 +34,6 @@ public class DialyzerProfile extends ProfileDefinition {
   @Override
   public RulesProfile createProfile(ValidationMessages messages) {
     return xmlProfileParser.parseResource(getClass().getClassLoader(),
-                                          "org/sonar/plugins/erlang/profile-default.xml", messages);
+        "org/sonar/plugins/erlang/profile-default.xml", messages);
   }
 }

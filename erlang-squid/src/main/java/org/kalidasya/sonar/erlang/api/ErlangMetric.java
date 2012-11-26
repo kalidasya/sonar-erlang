@@ -22,49 +22,35 @@ package org.kalidasya.sonar.erlang.api;
 import org.sonar.squid.measures.CalculatedMetricFormula;
 import org.sonar.squid.measures.MetricDef;
 
-public enum ErlangMetric implements MetricDef{
-	FILES,
-	LINES,
-	LINES_OF_CODE,
-	COMMENT_LINES,
-	COMMENT_BLANK_LINES,
-	STATEMENTS,
-	COMPLEXITY,
-	FUNCTIONS, 
-	MODULES, 
-	PUBLIC_API, 
-	PUBLIC_DOC_API, 
-	PUBLIC_DOCUMENTED_API_DENSITY,
-	
-	//Erlang specific metrics
-	NUM_OF_FUN_EXRP,
-	NUM_OF_FUN_CLAUSES,
-	NUM_OF_MACROS,
-	NUM_OF_RECORDS,
-	INCLUDED_FILES,
-	IMPORTED_MODULES, 
-	NUM_OF_FUNC_ARGS, 
-	DEPTH_OF_CASES, 
-	BRANCHES_OF_RECURSION;
+public enum ErlangMetric implements MetricDef {
+  FILES, LINES, LINES_OF_CODE, COMMENT_LINES, COMMENT_BLANK_LINES, STATEMENTS, COMPLEXITY, FUNCTIONS, MODULES, PUBLIC_API, PUBLIC_DOC_API, PUBLIC_DOCUMENTED_API_DENSITY,
 
-	public boolean aggregateIfThereIsAlreadyAValue() {
-		return true;
-	}
+  // Erlang specific metrics
+  NUM_OF_FUN_EXRP, NUM_OF_FUN_CLAUSES, NUM_OF_MACROS, NUM_OF_RECORDS, INCLUDED_FILES, IMPORTED_MODULES, NUM_OF_FUNC_ARGS, DEPTH_OF_CASES, BRANCHES_OF_RECURSION;
 
-	public CalculatedMetricFormula getCalculatedMetricFormula() {
-		return null;
-	}
+  @Override
+  public boolean aggregateIfThereIsAlreadyAValue() {
+    return true;
+  }
 
-	public String getName() {
-		return name();
-	}
+  @Override
+  public CalculatedMetricFormula getCalculatedMetricFormula() {
+    return null;
+  }
 
-	public boolean isCalculatedMetric() {
-		return false;
-	}
+  @Override
+  public String getName() {
+    return name();
+  }
 
-	public boolean isThereAggregationFormula() {
-		return true;
-	}
+  @Override
+  public boolean isCalculatedMetric() {
+    return false;
+  }
+
+  @Override
+  public boolean isThereAggregationFormula() {
+    return true;
+  }
 
 }

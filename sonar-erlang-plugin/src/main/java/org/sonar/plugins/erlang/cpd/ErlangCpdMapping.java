@@ -19,14 +19,13 @@
  */
 package org.sonar.plugins.erlang.cpd;
 
-import java.nio.charset.Charset;
-
 import net.sourceforge.pmd.cpd.Tokenizer;
-
 import org.sonar.api.batch.AbstractCpdMapping;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.erlang.core.Erlang;
+
+import java.nio.charset.Charset;
 
 public class ErlangCpdMapping extends AbstractCpdMapping {
 
@@ -38,10 +37,12 @@ public class ErlangCpdMapping extends AbstractCpdMapping {
     this.charset = fs.getSourceCharset();
   }
 
+  @Override
   public Tokenizer getTokenizer() {
     return new ErlangTokenizer(charset);
   }
 
+  @Override
   public Language getLanguage() {
     return language;
   }

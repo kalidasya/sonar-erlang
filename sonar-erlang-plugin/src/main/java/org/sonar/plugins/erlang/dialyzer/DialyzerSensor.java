@@ -32,16 +32,17 @@ import org.sonar.plugins.erlang.core.Erlang;
  */
 public class DialyzerSensor extends AbstractErlangSensor {
 
-	private ErlangRuleManager dialyzerRuleManager = new ErlangRuleManager(
-			DialyzerRuleRepository.DIALYZER_PATH);
-	private RulesProfile rulesProfile;
+  private ErlangRuleManager dialyzerRuleManager = new ErlangRuleManager(
+      DialyzerRuleRepository.DIALYZER_PATH);
+  private RulesProfile rulesProfile;
 
-	public DialyzerSensor(Erlang erlang, RulesProfile rulesProfile) {
-		super(erlang);
-		this.rulesProfile = rulesProfile;
-	}
+  public DialyzerSensor(Erlang erlang, RulesProfile rulesProfile) {
+    super(erlang);
+    this.rulesProfile = rulesProfile;
+  }
 
-	public void analyse(Project project, SensorContext context) {
-		new DialyzerReportParser().dialyzer(project, context, dialyzerRuleManager, rulesProfile);
-	}
+  @Override
+  public void analyse(Project project, SensorContext context) {
+    new DialyzerReportParser().dialyzer(project, context, dialyzerRuleManager, rulesProfile);
+  }
 }

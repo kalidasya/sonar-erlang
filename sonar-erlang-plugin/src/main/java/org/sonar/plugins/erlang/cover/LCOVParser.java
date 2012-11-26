@@ -19,53 +19,52 @@
  */
 package org.sonar.plugins.erlang.cover;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+
 public final class LCOVParser {
 
-	private static final String COVERAGE_DATA_REGEX = "(.*?)([0-9]+)(\\.\\..*?)";
-	private static final Logger LOG = LoggerFactory.getLogger(LCOVParser.class);
+  private static final String COVERAGE_DATA_REGEX = "(.*?)([0-9]+)(\\.\\..*?)";
+  private static final Logger LOG = LoggerFactory.getLogger(LCOVParser.class);
 
-	public ErlangFileCoverage parseFile(File file) {
-		List<String> lines = new LinkedList<String>();
-		try {
-			lines = FileUtils.readLines(file);
-		} catch (IOException e) {
-			LOG.debug("Cound not read content from file: " + file.getName());
-		}
+  public ErlangFileCoverage parseFile(File file) {
+    List<String> lines = new LinkedList<String>();
+    try {
+      lines = FileUtils.readLines(file);
+    } catch (IOException e) {
+      LOG.debug("Cound not read content from file: " + file.getName());
+    }
 
-
-		ErlangFileCoverage fileCoverage = new ErlangFileCoverage();
-		boolean started = false;
-		int lineNumber = 1;
-		for (String line : lines) {
-			if(!started && line.matches("File generated from .*")){
-				String fileName = line.replaceFirst("(File generated from )(.*?)( by .*)", "$2");
-				fileName = fileName.substring(fileName.lastIndexOf("/")+1);
-				fileCoverage = new ErlangFileCoverage();
-				fileCoverage.setFilePath(fileName);
-			}
-			if (line.indexOf("**************") > -1) {
-				started = true;
-			}
-			if (started && line.matches(".*?\\|.*")) {
-				String[] lineData = line.split("\\|", 2);
-				if (!StringUtils.isBlank(lineData[0].trim())) {
-					String executionCount = lineData[0].trim()
-							.replaceAll(COVERAGE_DATA_REGEX, "$2");
-					fileCoverage.addLine(lineNumber, Integer.valueOf(executionCount).intValue());
-				}
-				lineNumber++;
-			}
-		}
-		return fileCoverage;
-	}
+    ErlangFileCoverage fileCoverage = new ErlangFileCoverage();
+    boolean started = false;
+    int lineNumber = 1;
+    for (String line : lines) {
+      if (!started && line.matches("File generated from .*")) {
+        String fileName = line.replaceFirst("(File generated from )(.*?)( by .*)", "$2");
+        fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
+        fileCoverage = new ErlangFileCoverage();
+        fileCoverage.setFilePath(fileName);
+      }
+      if (line.indexOf("**************") > -1) {
+        started = true;
+      }
+      if (started && line.matches(".*?\\|.*")) {
+        String[] lineData = line.split("\\|", 2);
+        if (!StringUtils.isBlank(lineData[0].trim())) {
+          String executionCount = lineData[0].trim()
+              .replaceAll(COVERAGE_DATA_REGEX, "$2");
+          fileCoverage.addLine(lineNumber, Integer.valueOf(executionCount).intValue());
+        }
+        lineNumber++;
+      }
+    }
+    return fileCoverage;
+  }
 }

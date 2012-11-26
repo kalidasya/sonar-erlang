@@ -19,8 +19,6 @@
  */
 package org.sonar.plugins.erlang;
 
-import java.util.List;
-
 import org.kalidasya.sonar.erlang.checks.CheckList;
 import org.sonar.api.profiles.AnnotationProfileParser;
 import org.sonar.api.profiles.ProfileDefinition;
@@ -30,34 +28,36 @@ import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.erlang.core.Erlang;
 
+import java.util.List;
+
 public class ErlangProfile extends ProfileDefinition {
 
-	public static final String REPOSITORY_KEY = "erlang_default";
-	public static final String PROFILE_NAME = RulesProfile.SONAR_WAY_NAME;
-	private final AnnotationProfileParser annotationProfileParser;
-	private final XMLProfileParser xmlProfileParser;
+  public static final String REPOSITORY_KEY = "erlang_default";
+  public static final String PROFILE_NAME = RulesProfile.SONAR_WAY_NAME;
+  private final AnnotationProfileParser annotationProfileParser;
+  private final XMLProfileParser xmlProfileParser;
 
-	public ErlangProfile(AnnotationProfileParser annotationProfileParser,
-			XMLProfileParser xmlProfileParser) {
-		this.annotationProfileParser = annotationProfileParser;
-		this.xmlProfileParser = xmlProfileParser;
-	}
+  public ErlangProfile(AnnotationProfileParser annotationProfileParser,
+      XMLProfileParser xmlProfileParser) {
+    this.annotationProfileParser = annotationProfileParser;
+    this.xmlProfileParser = xmlProfileParser;
+  }
 
-	@Override
-	public RulesProfile createProfile(ValidationMessages validation) {
-		RulesProfile ret = RulesProfile.create(REPOSITORY_KEY, Erlang.KEY);
-		ret.setName(PROFILE_NAME);
-		RulesProfile checks = annotationProfileParser.parse(CheckList.REPOSITORY_KEY,
-				CheckList.SONAR_WAY_PROFILE, Erlang.KEY, CheckList.getChecks(), validation);
-		RulesProfile dialyzer = xmlProfileParser.parseResource(getClass().getClassLoader(),
-				"org/sonar/plugins/erlang/profile-default.xml", validation);
+  @Override
+  public RulesProfile createProfile(ValidationMessages validation) {
+    RulesProfile ret = RulesProfile.create(REPOSITORY_KEY, Erlang.KEY);
+    ret.setName(PROFILE_NAME);
+    RulesProfile checks = annotationProfileParser.parse(CheckList.REPOSITORY_KEY,
+        CheckList.SONAR_WAY_PROFILE, Erlang.KEY, CheckList.getChecks(), validation);
+    RulesProfile dialyzer = xmlProfileParser.parseResource(getClass().getClassLoader(),
+        "org/sonar/plugins/erlang/profile-default.xml", validation);
 
-		List<ActiveRule> rules = checks.getActiveRules();
-		rules.addAll(dialyzer.getActiveRules());
+    List<ActiveRule> rules = checks.getActiveRules();
+    rules.addAll(dialyzer.getActiveRules());
 
-		ret.setActiveRules(rules);
+    ret.setActiveRules(rules);
 
-		return ret;
-	}
+    return ret;
+  }
 
 }

@@ -19,13 +19,13 @@
  */
 package org.sonar.plugins.erlang.checks;
 
-import java.util.List;
-
 import org.kalidasya.sonar.erlang.checks.CheckList;
 import org.sonar.api.rules.AnnotationRuleParser;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleRepository;
 import org.sonar.plugins.erlang.core.Erlang;
+
+import java.util.List;
 
 public class ErlangChecksRuleRepository extends RuleRepository {
 

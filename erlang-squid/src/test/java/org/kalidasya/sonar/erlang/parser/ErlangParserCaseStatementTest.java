@@ -19,77 +19,70 @@
  */
 package org.kalidasya.sonar.erlang.parser;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
+import com.google.common.base.Charsets;
+import com.google.common.base.Joiner;
+import com.sonar.sslr.impl.Parser;
+import com.sonar.sslr.impl.events.ExtendedStackTrace;
+import com.sonar.sslr.impl.events.ExtendedStackTraceStream;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.kalidasya.sonar.erlang.ErlangConfiguration;
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Joiner;
-import com.sonar.sslr.impl.Parser;
-import com.sonar.sslr.impl.events.ExtendedStackTrace;
-import com.sonar.sslr.impl.events.ExtendedStackTraceStream;
+import static org.sonar.sslr.tests.Assertions.assertThat;
 
 public class ErlangParserCaseStatementTest {
-	ExtendedStackTrace listener = new ExtendedStackTrace();
-	Parser<ErlangGrammar> p = ErlangParser.create(new ErlangConfiguration(
-			Charsets.UTF_8), listener);
+  ExtendedStackTrace listener = new ExtendedStackTrace();
+  Parser<ErlangGrammar> p = ErlangParser
+      .create(new ErlangConfiguration(Charsets.UTF_8), listener);
 
-	ErlangGrammar g = p.getGrammar();
+  ErlangGrammar g = p.getGrammar();
 
-	@Before
-	public void init() {
-		p.setRootRule(g.caseExpression);
-	}
+  @Before
+  public void init() {
+    p.setRootRule(g.caseExpression);
+  }
 
+  @Test
+  public void caseSimple1() {
+    g.assignmentExpression.mock();
+    g.patternStatements.mock();
+    assertThat(p).matches((code("case assignmentExpression of patternStatements end")));
+  }
 
-	@Test
-	public void caseSimple1() {
-		g.assignmentExpression.mock();
-		g.patternStatements.mock();
-		assertThat(p).matches((code("case assignmentExpression of patternStatements end")));
-	}
+  @Test
+  public void caseSimple2() {
+    g.assignmentExpression.mock();
+    g.patternStatement.mock();
+    assertThat(p).matches((code("case assignmentExpression of patternStatement end")));
+    assertThat(p).matches(
+        (code("case assignmentExpression of patternStatement; patternStatement end")));
+  }
 
-	@Test
-	public void caseSimple2() {
-		g.assignmentExpression.mock();
-		g.patternStatement.mock();
-		assertThat(p).matches((code("case assignmentExpression of patternStatement end")));
-		assertThat(p).matches((code("case assignmentExpression of patternStatement; patternStatement end")));
-	}
-	
-	@Test
-	public void caseSimple3() {
-		g.assignmentExpression.mock();
-		g.patternStatement.mock();
-		assertThat(p).matches((code("case assignmentExpression of patternStatement end")));
-		assertThat(p).matches((code("case assignmentExpression of patternStatement; patternStatement end")));
-	}
-	
-	@Test
-	public void caseReal1() {
-		assertThat(p).matches((code(
-				"case cerl:is_c_var(PosVar) andalso (cerl:var_name(PosVar) =/= '') of",
-				"true -> \"variable \"++String;", 
-				"false -> \"pattern \"++String", 
-				"end")));
-	}
-	
+  @Test
+  public void caseSimple3() {
+    g.assignmentExpression.mock();
+    g.patternStatement.mock();
+    assertThat(p).matches((code("case assignmentExpression of patternStatement end")));
+    assertThat(p).matches(
+        (code("case assignmentExpression of patternStatement; patternStatement end")));
+  }
 
-	
-	
-     
-	
-	private static String code(String... lines) {
-		return Joiner.on("\n").join(lines);
-	}
+  @Test
+  public void caseReal1() {
+    assertThat(p).matches(
+        (code("case cerl:is_c_var(PosVar) andalso (cerl:var_name(PosVar) =/= '') of",
+            "true -> \"variable \"++String;", "false -> \"pattern \"++String", "end")));
+  }
 
-	@After
-	public void log() {
-		ExtendedStackTraceStream.print(listener, System.out);
-	}
-	
+  private static String code(String... lines) {
+    return Joiner.on("\n").join(lines);
+  }
+
+  @After
+  public void log() {
+    ExtendedStackTraceStream.print(listener, System.out);
+  }
+
 }

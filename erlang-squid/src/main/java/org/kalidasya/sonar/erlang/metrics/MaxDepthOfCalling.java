@@ -21,7 +21,7 @@ package org.kalidasya.sonar.erlang.metrics;
 
 /**
  * Needs a proper implementation to avoid using findChildren... maybe
- * subscribing to callExpressions and build up a call tree upward 
+ * subscribing to callExpressions and build up a call tree upward
  * 
  * @author tkende
  * 

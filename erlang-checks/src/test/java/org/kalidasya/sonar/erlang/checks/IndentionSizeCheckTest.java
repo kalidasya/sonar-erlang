@@ -19,28 +19,26 @@
  */
 package org.kalidasya.sonar.erlang.checks;
 
-import java.io.File;
-
+import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
 import org.junit.Test;
 import org.kalidasya.sonar.erlang.ErlangAstScanner;
 import org.sonar.squid.api.SourceFile;
 
-import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
+import java.io.File;
 
 public class IndentionSizeCheckTest {
 
-	@Test
-	public void test() {
-		IndentionSizeCheck check = new IndentionSizeCheck();
+  @Test
+  public void test() {
+    IndentionSizeCheck check = new IndentionSizeCheck();
 
-		SourceFile file = ErlangAstScanner.scanSingleFile(new File(
-				"src/test/resources/checks/spacesastabs.erl"), check);
-		CheckMessagesVerifier.verify(file.getCheckMessages())
-		.next().atLine(5)
-		.next().atLine(10)
-		.next().atLine(11)
-		.next().atLine(12).withMessage("The line starts with 5 characters which is cannot be divided by 4.")
-		.next().atLine(13).withMessage("The line starts with 1 characters which is cannot be divided by 4.")
-		.noMore();
-	}
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File(
+        "src/test/resources/checks/spacesastabs.erl"), check);
+    CheckMessagesVerifier.verify(file.getCheckMessages()).next().atLine(5).next().atLine(10)
+        .next().atLine(11).next().atLine(12).withMessage(
+            "The line starts with 5 characters which is cannot be divided by 4.")
+        .next().atLine(13).withMessage(
+            "The line starts with 1 characters which is cannot be divided by 4.")
+        .noMore();
+  }
 }

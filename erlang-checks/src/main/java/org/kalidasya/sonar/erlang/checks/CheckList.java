@@ -19,9 +19,9 @@
  */
 package org.kalidasya.sonar.erlang.checks;
 
-import java.util.List;
-
 import com.google.common.collect.ImmutableList;
+
+import java.util.List;
 
 public final class CheckList {
 
@@ -33,26 +33,16 @@ public final class CheckList {
   }
 
   public static List<Class> getChecks() {
-    return ImmutableList.<Class> of(
-        BlockSeparatorCharacterCheck.class,
-        BranchesOfRecursionCheck.class,
-        CommentRegularExpressionCheck.class,
-        DepthOfCasesCheck.class,
-        DoNotUseExportAllCheck.class,
-        ExportOneFunctionPerLineCheck.class,
-        FunctionComplexityCheck.class,
-        FunctionDefAndClausesSeparationCheck.class,
-        IndentionSizeCheck.class,
-        LineLengthCheck.class,
-        MultipleBlankLinesCheck.class,
-        NoEmacsStyleLeadingCommasCheck.class,
-        NoSpaceAfterBeforeBracketsCheck.class,
-        NoTabsForIndentionCheck.class,
-        NoTrailingWhitespaceCheck.class,
-        NumberOfFunctionArgsCheck.class,
-        NumOfFunctionClausesCheck.class,
-        SpaceAfterBeforeOperatorsCheck.class,
-        XPathCheck.class);
+    return ImmutableList.<Class> of(BlockSeparatorCharacterCheck.class,
+        BranchesOfRecursionCheck.class, CommentRegularExpressionCheck.class,
+        DepthOfCasesCheck.class, DoNotUseExportAllCheck.class,
+        ExportOneFunctionPerLineCheck.class, FunctionComplexityCheck.class,
+        FunctionDefAndClausesSeparationCheck.class, IndentionSizeCheck.class,
+        LineLengthCheck.class, MultipleBlankLinesCheck.class,
+        NoEmacsStyleLeadingCommasCheck.class, NoSpaceAfterBeforeBracketsCheck.class,
+        NoTabsForIndentionCheck.class, NoTrailingWhitespaceCheck.class,
+        NumberOfFunctionArgsCheck.class, NumOfFunctionClausesCheck.class,
+        SpaceAfterBeforeOperatorsCheck.class, XPathCheck.class);
   }
 
 }

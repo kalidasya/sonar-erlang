@@ -19,34 +19,31 @@
  */
 package org.kalidasya.sonar.erlang.checks;
 
-import java.io.File;
-
+import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
 import org.junit.Test;
 import org.kalidasya.sonar.erlang.ErlangAstScanner;
 import org.sonar.squid.api.SourceFile;
 
-import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
+import java.io.File;
 
 public class NoMacrosTest {
 
-	@Test
-	public void test() {
-		NumOfFunctionClausesCheck check = new NumOfFunctionClausesCheck();
+  @Test
+  public void test() {
+    NumOfFunctionClausesCheck check = new NumOfFunctionClausesCheck();
 
-		SourceFile file = ErlangAstScanner.scanSingleFile(new File(
-				"src/test/resources/checks/funargs.erl"), check);
-		CheckMessagesVerifier.verify(file.getCheckMessages())
-		.noMore();
-	}
-	
-	@Test
-	public void test2() {
-		NumOfFunctionClausesCheck check = new NumOfFunctionClausesCheck();
-		check.setMaximumFunctionClausesThreshold(1);
-		SourceFile file = ErlangAstScanner.scanSingleFile(new File(
-				"src/test/resources/checks/funargs.erl"), check);
-		CheckMessagesVerifier.verify(file.getCheckMessages())
-		.next().atLine(2).withMessage("Function has 2 clauses which is greater than 1 authorized.")
-		.noMore();
-	}
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File(
+        "src/test/resources/checks/funargs.erl"), check);
+    CheckMessagesVerifier.verify(file.getCheckMessages()).noMore();
+  }
+
+  @Test
+  public void test2() {
+    NumOfFunctionClausesCheck check = new NumOfFunctionClausesCheck();
+    check.setMaximumFunctionClausesThreshold(1);
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File(
+        "src/test/resources/checks/funargs.erl"), check);
+    CheckMessagesVerifier.verify(file.getCheckMessages()).next().atLine(2).withMessage(
+        "Function has 2 clauses which is greater than 1 authorized.").noMore();
+  }
 }

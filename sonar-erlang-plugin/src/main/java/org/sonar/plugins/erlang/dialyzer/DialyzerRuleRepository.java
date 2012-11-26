@@ -19,40 +19,39 @@
  */
 package org.sonar.plugins.erlang.dialyzer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleRepository;
 import org.sonar.api.rules.XMLRuleParser;
 import org.sonar.plugins.erlang.ErlangPlugin;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DialyzerRuleRepository extends RuleRepository {
-	private XMLRuleParser parser;
-	public static final String REPOSITORY_NAME = "Dialyzer";
-	public static final String REPOSITORY_KEY = "dialyzer";
-	public static final String DIALYZER_PATH = "/org/sonar/plugins/erlang/dialyzer/rules.xml";
+  private XMLRuleParser parser;
+  public static final String REPOSITORY_NAME = "Dialyzer";
+  public static final String REPOSITORY_KEY = "dialyzer";
+  public static final String DIALYZER_PATH = "/org/sonar/plugins/erlang/dialyzer/rules.xml";
 
-	public DialyzerRuleRepository() {
-		super(REPOSITORY_KEY, ErlangPlugin.LANG_KEY);
-		setName(REPOSITORY_NAME);
-		this.parser = new XMLRuleParser();
-	}
+  public DialyzerRuleRepository() {
+    super(REPOSITORY_KEY, ErlangPlugin.LANG_KEY);
+    setName(REPOSITORY_NAME);
+    this.parser = new XMLRuleParser();
+  }
 
-	public DialyzerRuleRepository(XMLRuleParser parser) {
-		super(REPOSITORY_KEY, ErlangPlugin.LANG_KEY);
-		setName(REPOSITORY_NAME);
-		this.parser = parser;
-	}
+  public DialyzerRuleRepository(XMLRuleParser parser) {
+    super(REPOSITORY_KEY, ErlangPlugin.LANG_KEY);
+    setName(REPOSITORY_NAME);
+    this.parser = parser;
+  }
 
-	@Override
-	public List<Rule> createRules() {
-		List<Rule> rules = new ArrayList<Rule>();
-		rules.addAll(parser
-				.parse(getClass().getResourceAsStream(DIALYZER_PATH)));
-		for (Rule rule : rules) {
-			rule.setRepositoryKey(REPOSITORY_KEY);
-		}
-		return rules;
-	}
+  @Override
+  public List<Rule> createRules() {
+    List<Rule> rules = new ArrayList<Rule>();
+    rules.addAll(parser.parse(getClass().getResourceAsStream(DIALYZER_PATH)));
+    for (Rule rule : rules) {
+      rule.setRepositoryKey(REPOSITORY_KEY);
+    }
+    return rules;
+  }
 }

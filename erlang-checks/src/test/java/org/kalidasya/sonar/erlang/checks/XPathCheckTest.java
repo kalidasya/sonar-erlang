@@ -19,13 +19,12 @@
  */
 package org.kalidasya.sonar.erlang.checks;
 
-import java.io.File;
-
+import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
 import org.junit.Test;
 import org.kalidasya.sonar.erlang.ErlangAstScanner;
 import org.sonar.squid.api.SourceFile;
 
-import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
+import java.io.File;
 
 public class XPathCheckTest {
 
@@ -35,10 +34,10 @@ public class XPathCheckTest {
     check.xpathQuery = "//IDENTIFIER[@tokenValue = 'really_retain']";
     check.message = "Do not use name: really_retain";
 
-    SourceFile file = ErlangAstScanner.scanSingleFile(new File("src/test/resources/checks/complexity.erl"), check);
-    CheckMessagesVerifier.verify(file.getCheckMessages())
-        .next().atLine(18).withMessage("Do not use name: really_retain")
-        .noMore();
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File(
+        "src/test/resources/checks/complexity.erl"), check);
+    CheckMessagesVerifier.verify(file.getCheckMessages()).next().atLine(18).withMessage(
+        "Do not use name: really_retain").noMore();
   }
 
 }

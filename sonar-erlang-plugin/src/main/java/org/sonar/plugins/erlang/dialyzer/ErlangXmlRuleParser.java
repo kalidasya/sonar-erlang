@@ -19,44 +19,45 @@
  */
 package org.sonar.plugins.erlang.dialyzer;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import org.dom4j.DocumentException;
+import org.sonar.api.ServerComponent;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.dom4j.DocumentException;
-import org.sonar.api.ServerComponent;
-import org.xml.sax.SAXException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class ErlangXmlRuleParser implements ServerComponent {
 
-	/**
-	 * Warning : the input stream is closed in this method
-	 * @throws IOException 
-	 * @throws SAXException 
-	 * @throws ParserConfigurationException 
-	 * 
-	 * @throws DocumentException
-	 */
-	public List<ErlangRule> parse(InputStream input) {
-		List<ErlangRule> rules = new ArrayList<ErlangRule>();
-		SAXParserFactory factory = SAXParserFactory.newInstance();
-		SAXParser saxParser;
-		RuleHandler a = new RuleHandler();
-		try {
-			saxParser = factory.newSAXParser();
-			saxParser.parse(input, a);
-		} catch (ParserConfigurationException e) {
-		} catch (SAXException e) {
-		} catch (IOException e) {
-		}
-		
-		rules = a.getRules();
-		return rules;
+  /**
+   * Warning : the input stream is closed in this method
+   * 
+   * @throws IOException
+   * @throws SAXException
+   * @throws ParserConfigurationException
+   * 
+   * @throws DocumentException
+   */
+  public List<ErlangRule> parse(InputStream input) {
+    List<ErlangRule> rules = new ArrayList<ErlangRule>();
+    SAXParserFactory factory = SAXParserFactory.newInstance();
+    SAXParser saxParser;
+    RuleHandler a = new RuleHandler();
+    try {
+      saxParser = factory.newSAXParser();
+      saxParser.parse(input, a);
+    } catch (ParserConfigurationException e) {
+    } catch (SAXException e) {
+    } catch (IOException e) {
+    }
 
-	}
+    rules = a.getRules();
+    return rules;
+
+  }
 }

@@ -19,30 +19,30 @@
  */
 package org.kalidasya.sonar.erlang.checks;
 
-import java.io.File;
-
+import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
 import org.junit.Test;
 import org.kalidasya.sonar.erlang.ErlangAstScanner;
 import org.sonar.squid.api.SourceFile;
 
-import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
+import java.io.File;
 
 public class DoNotUseExportAllTest {
 
-	@Test
-	public void test() {
-		DoNotUseExportAllCheck check = new DoNotUseExportAllCheck();
+  @Test
+  public void test() {
+    DoNotUseExportAllCheck check = new DoNotUseExportAllCheck();
 
-		SourceFile file = ErlangAstScanner.scanSingleFile(new File(
-				"src/test/resources/checks/spacesastabs.erl"), check);
-		CheckMessagesVerifier.verify(file.getCheckMessages()).noMore();
-	}
-	
-	@Test
-	public void test2() {
-		DoNotUseExportAllCheck check = new DoNotUseExportAllCheck();
-		SourceFile file = ErlangAstScanner.scanSingleFile(new File(
-				"src/test/resources/checks/exportall.erl"), check);
-		CheckMessagesVerifier.verify(file.getCheckMessages()).next().atLine(2).withMessage("Do not use export_all");
-	}
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File(
+        "src/test/resources/checks/spacesastabs.erl"), check);
+    CheckMessagesVerifier.verify(file.getCheckMessages()).noMore();
+  }
+
+  @Test
+  public void test2() {
+    DoNotUseExportAllCheck check = new DoNotUseExportAllCheck();
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File(
+        "src/test/resources/checks/exportall.erl"), check);
+    CheckMessagesVerifier.verify(file.getCheckMessages()).next().atLine(2).withMessage(
+        "Do not use export_all");
+  }
 }

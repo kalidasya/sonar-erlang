@@ -19,47 +19,31 @@
  */
 package org.sonar.plugins.erlang.cover;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import org.hamcrest.Matchers;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.apache.commons.configuration.Configuration;
-import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.sonar.api.batch.SensorContext;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.resources.InputFile;
-import org.sonar.api.resources.InputFileUtils;
-import org.sonar.api.resources.Project;
-import org.sonar.api.rules.ActiveRule;
-import org.sonar.api.rules.Violation;
-import org.sonar.plugins.erlang.ErlangPlugin;
-import org.sonar.plugins.erlang.dialyzer.ProjectUtil;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class LCOVParserTest {
 
-	private ErlangFileCoverage cov;
+  private ErlangFileCoverage cov;
 
-	@Before
-	public void setup() throws URISyntaxException, IOException {
-		
-		cov = new LCOVParser().parseFile(new File("src/test/resources", "org/sonar/plugins/erlang/erlcount/.eunit/erlcount_lib.COVER.html"));
-	}
+  @Before
+  public void setup() throws URISyntaxException, IOException {
 
-	@Test
-	public void checkDialyzer() {
-		assertThat(cov.getCoveredLines(), Matchers.equalTo(19));
-		assertThat(cov.getLinesToCover(), Matchers.equalTo(21));
-		assertThat(cov.getUncoveredLines(), Matchers.equalTo(2));
-	}
+    cov = new LCOVParser().parseFile(new File("src/test/resources",
+        "org/sonar/plugins/erlang/erlcount/.eunit/erlcount_lib.COVER.html"));
+  }
+
+  @Test
+  public void checkDialyzer() {
+    assertThat(cov.getCoveredLines(), Matchers.equalTo(19));
+    assertThat(cov.getLinesToCover(), Matchers.equalTo(21));
+    assertThat(cov.getUncoveredLines(), Matchers.equalTo(2));
+  }
 }

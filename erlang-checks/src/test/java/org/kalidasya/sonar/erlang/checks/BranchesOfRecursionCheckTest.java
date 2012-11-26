@@ -19,34 +19,32 @@
  */
 package org.kalidasya.sonar.erlang.checks;
 
-import java.io.File;
-
+import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
 import org.junit.Test;
 import org.kalidasya.sonar.erlang.ErlangAstScanner;
 import org.sonar.squid.api.SourceFile;
 
-import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
+import java.io.File;
 
 public class BranchesOfRecursionCheckTest {
 
-	@Test
-	public void test() {
-		BranchesOfRecursionCheck check = new BranchesOfRecursionCheck();
+  @Test
+  public void test() {
+    BranchesOfRecursionCheck check = new BranchesOfRecursionCheck();
 
-		SourceFile file = ErlangAstScanner.scanSingleFile(new File(
-				"src/test/resources/checks/branchesofrecursion.erl"), check);
-				CheckMessagesVerifier.verify(file.getCheckMessages())
-		.noMore();
-	}
-	
-	@Test
-	public void test2() {
-		BranchesOfRecursionCheck check = new BranchesOfRecursionCheck();
-		check.setMaximumBORThreshold(2);
-		SourceFile file = ErlangAstScanner.scanSingleFile(new File(
-				"src/test/resources/checks/branchesofrecursion.erl"), check);
-				CheckMessagesVerifier.verify(file.getCheckMessages())
-		
-		.noMore();
-	}
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File(
+        "src/test/resources/checks/branchesofrecursion.erl"), check);
+    CheckMessagesVerifier.verify(file.getCheckMessages()).noMore();
+  }
+
+  @Test
+  public void test2() {
+    BranchesOfRecursionCheck check = new BranchesOfRecursionCheck();
+    check.setMaximumBORThreshold(2);
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File(
+        "src/test/resources/checks/branchesofrecursion.erl"), check);
+    CheckMessagesVerifier.verify(file.getCheckMessages())
+
+        .noMore();
+  }
 }

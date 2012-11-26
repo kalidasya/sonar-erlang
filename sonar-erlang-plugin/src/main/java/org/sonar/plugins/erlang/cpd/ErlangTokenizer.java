@@ -19,21 +19,19 @@
  */
 package org.sonar.plugins.erlang.cpd;
 
-import java.io.File;
-import java.nio.charset.Charset;
-import java.util.List;
-
+import com.sonar.sslr.api.GenericTokenType;
+import com.sonar.sslr.api.Token;
+import com.sonar.sslr.impl.Lexer;
 import net.sourceforge.pmd.cpd.SourceCode;
 import net.sourceforge.pmd.cpd.TokenEntry;
 import net.sourceforge.pmd.cpd.Tokenizer;
 import net.sourceforge.pmd.cpd.Tokens;
-
 import org.kalidasya.sonar.erlang.ErlangConfiguration;
 import org.kalidasya.sonar.erlang.lexer.ErlangLexer;
 
-import com.sonar.sslr.api.GenericTokenType;
-import com.sonar.sslr.api.Token;
-import com.sonar.sslr.impl.Lexer;
+import java.io.File;
+import java.nio.charset.Charset;
+import java.util.List;
 
 public class ErlangTokenizer implements Tokenizer {
 
@@ -43,6 +41,7 @@ public class ErlangTokenizer implements Tokenizer {
     this.charset = charset;
   }
 
+  @Override
   public final void tokenize(SourceCode source, Tokens cpdTokens) {
     Lexer lexer = ErlangLexer.create(new ErlangConfiguration(charset));
     String fileName = source.getFileName();

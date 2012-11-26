@@ -19,75 +19,64 @@
  */
 package org.sonar.plugins.erlang.cover;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import org.apache.commons.configuration.Configuration;
+import org.junit.Before;
+import org.junit.Test;
+import org.sonar.api.batch.SensorContext;
+import org.sonar.api.measures.Measure;
+import org.sonar.api.measures.Metric;
+import org.sonar.api.resources.InputFile;
+import org.sonar.api.resources.Project;
+import org.sonar.api.resources.Resource;
+import org.sonar.plugins.erlang.ErlangPlugin;
+import org.sonar.plugins.erlang.core.Erlang;
+import org.sonar.plugins.erlang.dialyzer.ProjectUtil;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.configuration.Configuration;
-import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.sonar.api.batch.SensorContext;
-import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.measures.Measure;
-import org.sonar.api.measures.Metric;
-import org.sonar.api.measures.PropertiesBuilder;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.resources.InputFile;
-import org.sonar.api.resources.InputFileUtils;
-import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Resource;
-import org.sonar.api.rules.ActiveRule;
-import org.sonar.api.rules.Violation;
-import org.sonar.plugins.erlang.ErlangPlugin;
-import org.sonar.plugins.erlang.core.Erlang;
-import org.sonar.plugins.erlang.dialyzer.ProjectUtil;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class CoverCoverageSensorTest {
 
-	private ErlangFileCoverage cov;
-	private Configuration configuration;
-	private Erlang erlang;
-	private Project project;
-	private SensorContext context;
+  private ErlangFileCoverage cov;
+  private Configuration configuration;
+  private Erlang erlang;
+  private Project project;
+  private SensorContext context;
 
-	@Before
-	public void setup() throws URISyntaxException, IOException {
-		configuration = mock(Configuration.class);
-		when(
-				configuration.getString(ErlangPlugin.EUNIT_FOLDER_KEY,
-						ErlangPlugin.EUNIT_DEFAULT_FOLDER)).thenReturn(
-				ErlangPlugin.EUNIT_DEFAULT_FOLDER);
-		erlang = new Erlang(configuration);
-		context = mock(SensorContext.class);
-	}
+  @Before
+  public void setup() throws URISyntaxException, IOException {
+    configuration = mock(Configuration.class);
+    when(
+        configuration.getString(ErlangPlugin.EUNIT_FOLDER_KEY,
+            ErlangPlugin.EUNIT_DEFAULT_FOLDER)).thenReturn(
+        ErlangPlugin.EUNIT_DEFAULT_FOLDER);
+    erlang = new Erlang(configuration);
+    context = mock(SensorContext.class);
+  }
 
-	@Test
-	public void checkCoverSensor() throws URISyntaxException {
-		List<InputFile> srcFiles = new ArrayList<InputFile>();
-		List<InputFile> otherFiles = new ArrayList<InputFile>();
-		srcFiles.add(ProjectUtil
-				.getInputFileByPath("/org/sonar/plugins/erlang/erlcount/.eunit/erlcount_lib.erl"));
-		otherFiles
-				.add(ProjectUtil
-						.getInputFileByPath("/org/sonar/plugins/erlang/erlcount/.eunit/erlcount_lib.COVER.html"));
-		project = ProjectUtil.getProject(srcFiles, otherFiles, configuration);
-		new CoverCoverageSensor(erlang).analyse(project, context);
-		
-		verify(context).saveMeasure((Resource) anyObject(), (Measure)anyObject());
-		verify(context).saveMeasure((Resource) anyObject(), (Metric) anyObject(), eq(21.0));
-		verify(context).saveMeasure((Resource) anyObject(), (Metric) anyObject(), eq(2.0));
-	}
-	
+  @Test
+  public void checkCoverSensor() throws URISyntaxException {
+    List<InputFile> srcFiles = new ArrayList<InputFile>();
+    List<InputFile> otherFiles = new ArrayList<InputFile>();
+    srcFiles.add(ProjectUtil
+        .getInputFileByPath("/org/sonar/plugins/erlang/erlcount/.eunit/erlcount_lib.erl"));
+    otherFiles
+        .add(ProjectUtil
+            .getInputFileByPath("/org/sonar/plugins/erlang/erlcount/.eunit/erlcount_lib.COVER.html"));
+    project = ProjectUtil.getProject(srcFiles, otherFiles, configuration);
+    new CoverCoverageSensor(erlang).analyse(project, context);
+
+    verify(context).saveMeasure((Resource) anyObject(), (Measure) anyObject());
+    verify(context).saveMeasure((Resource) anyObject(), (Metric) anyObject(), eq(21.0));
+    verify(context).saveMeasure((Resource) anyObject(), (Metric) anyObject(), eq(2.0));
+  }
+
 }

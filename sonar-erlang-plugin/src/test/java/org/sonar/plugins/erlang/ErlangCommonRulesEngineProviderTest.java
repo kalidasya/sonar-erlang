@@ -19,9 +19,9 @@
  */
 package org.sonar.plugins.erlang;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.junit.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 public class ErlangCommonRulesEngineProviderTest {
 

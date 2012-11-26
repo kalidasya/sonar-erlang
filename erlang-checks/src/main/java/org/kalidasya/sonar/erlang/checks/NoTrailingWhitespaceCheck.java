@@ -19,50 +19,49 @@
  */
 package org.kalidasya.sonar.erlang.checks;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-
+import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.squid.checks.SquidCheck;
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Cardinality;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.squid.checks.SquidCheck;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 @Rule(key = "NoTrailingWhiteSpace", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE,
-		name = "NoTrailingWhiteSpace", description="No trailing white space is allowed")
+  name = "NoTrailingWhiteSpace", description = "No trailing white space is allowed")
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class NoTrailingWhitespaceCheck extends SquidCheck<ErlangGrammar> {
 
-	@Override
-	public void visitFile(AstNode astNode) {
-		try {
-			checkFileIndention(getContext().getFile());
-		} catch (FileNotFoundException e) {
-		}
-	}
+  @Override
+  public void visitFile(AstNode astNode) {
+    try {
+      checkFileIndention(getContext().getFile());
+    } catch (FileNotFoundException e) {
+    }
+  }
 
-	@Override
-	public void leaveFile(AstNode astNode) {
-	}
+  @Override
+  public void leaveFile(AstNode astNode) {
+  }
 
-	private void checkFileIndention(File source) throws FileNotFoundException {
-		Scanner scanner = new Scanner(new FileInputStream(source));
-		try {
-			int lineNumber = 1;
-			while (scanner.hasNextLine()) {
-				String line = scanner.nextLine();
-				if (line.matches(".*\\s+$")) {
-					getContext().createLineViolation(this, "No trailing white space.", lineNumber);
-				}
-				lineNumber++;
-			}
-		} finally {
-			scanner.close();
-		}
-	}
+  private void checkFileIndention(File source) throws FileNotFoundException {
+    Scanner scanner = new Scanner(new FileInputStream(source));
+    try {
+      int lineNumber = 1;
+      while (scanner.hasNextLine()) {
+        String line = scanner.nextLine();
+        if (line.matches(".*\\s+$")) {
+          getContext().createLineViolation(this, "No trailing white space.", lineNumber);
+        }
+        lineNumber++;
+      }
+    } finally {
+      scanner.close();
+    }
+  }
 }

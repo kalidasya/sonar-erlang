@@ -19,17 +19,6 @@
  */
 package org.sonar.plugins.erlang.dialyzer;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.io.File;
-import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.configuration.Configuration;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.InputFile;
@@ -41,49 +30,61 @@ import org.sonar.api.resources.Resource;
 import org.sonar.plugins.erlang.ErlangPlugin;
 import org.sonar.plugins.erlang.core.Erlang;
 
+import java.io.File;
+import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 public class ProjectUtil {
 
-	public static Project getProject(List<InputFile> srcFiles,
-			List<InputFile> otherFiles, final Configuration configuration)
-			throws URISyntaxException {
-		final ProjectFileSystem fileSystem = mock(ProjectFileSystem.class);
-		when(fileSystem.getSourceCharset()).thenReturn(Charset.defaultCharset());
+  public static Project getProject(List<InputFile> srcFiles, List<InputFile> otherFiles,
+      final Configuration configuration) throws URISyntaxException {
+    final ProjectFileSystem fileSystem = mock(ProjectFileSystem.class);
+    when(fileSystem.getSourceCharset()).thenReturn(Charset.defaultCharset());
 
-		final File folder = new File(ProjectUtil.class.getResource(
-				"/org/sonar/plugins/erlang/erlcount").toURI());
-		when(fileSystem.getBuildDir()).thenReturn(folder);
-		when(fileSystem.getBasedir()).thenReturn(folder);
-		when(fileSystem.getSourceDirs()).thenReturn(new ArrayList<File>() {
-			{
-				add(new File(folder, ErlangPlugin.EUNIT_DEFAULT_FOLDER));
-			}
-		});
+    final File folder = new File(ProjectUtil.class.getResource(
+        "/org/sonar/plugins/erlang/erlcount").toURI());
+    when(fileSystem.getBuildDir()).thenReturn(folder);
+    when(fileSystem.getBasedir()).thenReturn(folder);
+    when(fileSystem.getSourceDirs()).thenReturn(new ArrayList<File>() {
+      {
+        add(new File(folder, ErlangPlugin.EUNIT_DEFAULT_FOLDER));
+      }
+    });
 
-		when(fileSystem.testFiles(any(String.class))).thenReturn(otherFiles);
-		when(fileSystem.mainFiles(ErlangPlugin.LANG_KEY)).thenReturn(srcFiles);
-		Project project = new Project("dummy") {
+    when(fileSystem.testFiles(any(String.class))).thenReturn(otherFiles);
+    when(fileSystem.mainFiles(ErlangPlugin.LANG_KEY)).thenReturn(srcFiles);
+    Project project = new Project("dummy") {
 
-			public ProjectFileSystem getFileSystem() {
-				return fileSystem;
-			}
+      @Override
+      public ProjectFileSystem getFileSystem() {
+        return fileSystem;
+      }
 
-			public Language getLanguage() {
-				return new Erlang(configuration);
-			}
-		};
+      @Override
+      public Language getLanguage() {
+        return new Erlang(configuration);
+      }
+    };
 
-		return project;
-	}
+    return project;
+  }
 
-	public static SensorContext mockContext() {
-		SensorContext context = mock(SensorContext.class);
-		when(context.isIndexed(any(Resource.class), eq(false))).thenReturn(true);
-		return context;
-	}
+  public static SensorContext mockContext() {
+    SensorContext context = mock(SensorContext.class);
+    when(context.isIndexed(any(Resource.class), eq(false))).thenReturn(true);
+    return context;
+  }
 
-	public static InputFile getInputFileByPath(String path) throws URISyntaxException {
-		File fileToAnalyse = new File(ProjectUtil.class.getResource(path).toURI());
-		InputFile inputFile = InputFileUtils.create(fileToAnalyse.getParentFile(), fileToAnalyse);
-		return inputFile;
-	}
+  public static InputFile getInputFileByPath(String path) throws URISyntaxException {
+    File fileToAnalyse = new File(ProjectUtil.class.getResource(path).toURI());
+    InputFile inputFile = InputFileUtils.create(fileToAnalyse.getParentFile(), fileToAnalyse);
+    return inputFile;
+  }
 }

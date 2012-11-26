@@ -24,8 +24,9 @@ import org.sonar.api.resources.Project;
 import org.sonar.plugins.erlang.core.Erlang;
 
 /**
- * This is a helper base class for sensors that should only be executed on Erlang projects.
- *
+ * This is a helper base class for sensors that should only be executed on
+ * Erlang projects.
+ * 
  * @since 0.1
  */
 public abstract class AbstractErlangSensor implements Sensor {
@@ -36,6 +37,7 @@ public abstract class AbstractErlangSensor implements Sensor {
     this.erlang = erlang;
   }
 
+  @Override
   public final boolean shouldExecuteOnProject(Project project) {
     return project.getLanguage().equals(erlang);
   }

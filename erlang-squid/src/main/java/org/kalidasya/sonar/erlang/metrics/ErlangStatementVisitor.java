@@ -19,27 +19,26 @@
  */
 package org.kalidasya.sonar.erlang.metrics;
 
+import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.squid.SquidAstVisitor;
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.kalidasya.sonar.erlang.api.ErlangMetric;
 
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.squid.SquidAstVisitor;
-
 public class ErlangStatementVisitor extends SquidAstVisitor<ErlangGrammar> {
 
-	ErlangGrammar grammar;
+  ErlangGrammar grammar;
 
-	@Override
-	public void init() {
-		grammar = getContext().getGrammar();
-		subscribeTo(grammar.statement);
-	}
+  @Override
+  public void init() {
+    grammar = getContext().getGrammar();
+    subscribeTo(grammar.statement);
+  }
 
-	@Override
-	public void visitNode(AstNode astNode) {
-		if (astNode.findFirstParent(grammar.functionDeclaration)!=null) {
-			getContext().peekSourceCode().add(ErlangMetric.STATEMENTS, 1);
-		}
+  @Override
+  public void visitNode(AstNode astNode) {
+    if (astNode.findFirstParent(grammar.functionDeclaration) != null) {
+      getContext().peekSourceCode().add(ErlangMetric.STATEMENTS, 1);
+    }
 
-	}
+  }
 }

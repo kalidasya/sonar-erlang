@@ -20,9 +20,11 @@
 package org.kalidasya.sonar.erlang.metrics;
 
 /**
- * Not for checks, it is a valid code metric (needs a widget to display on the gui)
+ * Not for checks, it is a valid code metric (needs a widget to display on the
+ * gui)
+ * 
  * @author tkende
- *
+ * 
  */
 public class NumberOfRecords {
 

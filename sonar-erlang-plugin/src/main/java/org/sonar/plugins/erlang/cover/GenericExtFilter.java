@@ -24,13 +24,14 @@ import java.io.FilenameFilter;
 
 public class GenericExtFilter implements FilenameFilter {
 
-	private String ext;
+  private String ext;
 
-	public GenericExtFilter(String ext) {
-		this.ext = ext;
-	}
+  public GenericExtFilter(String ext) {
+    this.ext = ext;
+  }
 
-	public boolean accept(File dir, String name) {
-		return (name.endsWith(ext));
-	}
+  @Override
+  public boolean accept(File dir, String name) {
+    return (name.endsWith(ext));
+  }
 }

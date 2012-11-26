@@ -19,14 +19,14 @@
  */
 package org.kalidasya.sonar.erlang;
 
-import java.nio.charset.Charset;
-
 import org.sonar.squid.api.SquidConfiguration;
+
+import java.nio.charset.Charset;
 
 public class ErlangConfiguration extends SquidConfiguration {
 
-	public ErlangConfiguration(Charset charset) {
-		super(charset);
-	}
+  public ErlangConfiguration(Charset charset) {
+    super(charset);
+  }
 
 }

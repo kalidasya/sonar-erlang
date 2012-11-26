@@ -23,19 +23,21 @@ import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.TokenType;
 
 public enum ErlangTokenType implements TokenType {
-	NUMERIC_LITERAL,
-	REGULAR_EXPRESSION_LITERAL;
+  NUMERIC_LITERAL, REGULAR_EXPRESSION_LITERAL;
 
-	public String getName() {
-		return name();
-	}
+  @Override
+  public String getName() {
+    return name();
+  }
 
-	public String getValue() {
-		return name();
-	}
+  @Override
+  public String getValue() {
+    return name();
+  }
 
-	public boolean hasToBeSkippedFromAst(AstNode node) {
-		return false;
-	}
+  @Override
+  public boolean hasToBeSkippedFromAst(AstNode node) {
+    return false;
+  }
 
 }

@@ -23,61 +23,32 @@ import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.TokenType;
 
 public enum ErlangPunctuator implements TokenType {
-	ARROW("->"),
-	ARROWBACK("<-"),
-	DOUBLEARROWBACK("<="),
-	LCURLYBRACE("{"),
-	RCURLYBRACE("}"),
-	LPARENTHESIS("("),
-	RPARENTHESIS(")"),
-	LBRACKET("["),
-	RBRACKET("]"),
-	DOT("."),
-	SEMI(";"),
-	COMMA(","),
-	COLON(":"),
-	MATCHOP("="),
-	PLUS("+"),
-	MINUS("-"),
-	STAR("*"),
-	DIV("/"),
-	LT("<"),
-	GT(">"),
-	LE("=<"),
-	GE(">="),
-	EQUAL("=="),
-	NOTEQUAL("/="),
-	EQUAL2("=:="),
-	NOTEQUAL2("=/="),
-	BINSTART("<<"),
-	BINEND(">>"),
-	LISTCOMP("||"),
-	PIPE("|"),
-	DOLLAR("$"),
-	APOSTROPHE("'"),
-	PLUSPLUS("++"),
-	MINUSMINUS("--"),
-	NUMBERSIGN("#"),
-	EXCLAMATION("!"),
-	QUESTIONMARK("?")
-	;
-	
-	private final String value;
-	
-	private ErlangPunctuator(String word){
-		this.value = word;
-	}
-	
-	public String getName() {
-		return name();
-	}
+  ARROW("->"), ARROWBACK("<-"), DOUBLEARROWBACK("<="), LCURLYBRACE("{"), RCURLYBRACE("}"), LPARENTHESIS(
+      "("), RPARENTHESIS(")"), LBRACKET("["), RBRACKET("]"), DOT("."), SEMI(";"), COMMA(","), COLON(
+      ":"), MATCHOP("="), PLUS("+"), MINUS("-"), STAR("*"), DIV("/"), LT("<"), GT(">"), LE(
+      "=<"), GE(">="), EQUAL("=="), NOTEQUAL("/="), EQUAL2("=:="), NOTEQUAL2("=/="), BINSTART(
+      "<<"), BINEND(">>"), LISTCOMP("||"), PIPE("|"), DOLLAR("$"), APOSTROPHE("'"), PLUSPLUS(
+      "++"), MINUSMINUS("--"), NUMBERSIGN("#"), EXCLAMATION("!"), QUESTIONMARK("?");
 
-	public String getValue() {
-		return value;
-	}
+  private final String value;
 
-	public boolean hasToBeSkippedFromAst(AstNode node) {
-		return false;
-	}
+  private ErlangPunctuator(String word) {
+    this.value = word;
+  }
+
+  @Override
+  public String getName() {
+    return name();
+  }
+
+  @Override
+  public String getValue() {
+    return value;
+  }
+
+  @Override
+  public boolean hasToBeSkippedFromAst(AstNode node) {
+    return false;
+  }
 
 }

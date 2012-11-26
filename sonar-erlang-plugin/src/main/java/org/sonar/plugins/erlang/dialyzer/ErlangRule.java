@@ -19,49 +19,49 @@
  */
 package org.sonar.plugins.erlang.dialyzer;
 
+import org.sonar.api.rules.Rule;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.sonar.api.rules.Rule;
+public class ErlangRule {
+  private List<String> messages = new ArrayList<String>();
+  private Rule sonarRule = Rule.create();
 
-public class ErlangRule{
-	private List<String> messages = new ArrayList<String>();
-	private Rule sonarRule = Rule.create();
+  public ErlangRule() {
+    super();
+  }
 
-	public ErlangRule(){
-		super();
-	}
-	
-	public ErlangRule(Rule rule, List<String> messages){
-		this.messages = messages;
-		sonarRule = rule;
-	}
-	
-	public boolean hasMessage(String message) {
-		boolean ret = false;
-		for (String ruleMessage : messages) {
-			if(message.matches(ruleMessage)){
-				ret = true;
-				break;
-			}
-		}
-		return ret;
-	}
+  public ErlangRule(Rule rule, List<String> messages) {
+    this.messages = messages;
+    sonarRule = rule;
+  }
 
-	public void setMessages(List<String> messageList) {
-		messages = messageList;
-	}
-	
-	public List<String> getMessages(){
-		return messages;
-	}
-	
-	public void addMessage(String message) {
-		messages.add(message);
-	}
-	
-	public Rule getRule(){
-		return sonarRule;
-	}
+  public boolean hasMessage(String message) {
+    boolean ret = false;
+    for (String ruleMessage : messages) {
+      if (message.matches(ruleMessage)) {
+        ret = true;
+        break;
+      }
+    }
+    return ret;
+  }
+
+  public void setMessages(List<String> messageList) {
+    messages = messageList;
+  }
+
+  public List<String> getMessages() {
+    return messages;
+  }
+
+  public void addMessage(String message) {
+    messages.add(message);
+  }
+
+  public Rule getRule() {
+    return sonarRule;
+  }
 
 }

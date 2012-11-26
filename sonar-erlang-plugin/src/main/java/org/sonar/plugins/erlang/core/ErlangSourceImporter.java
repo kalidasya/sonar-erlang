@@ -32,8 +32,10 @@ public class ErlangSourceImporter extends AbstractSourceImporter {
     super(erlang);
   }
 
+  @Override
   protected void analyse(ProjectFileSystem fileSystem, SensorContext context) {
-    parseDirs(context, InputFileUtils.toFiles(fileSystem.mainFiles(Erlang.KEY)), fileSystem.getSourceDirs(), false, fileSystem.getSourceCharset());
+    parseDirs(context, InputFileUtils.toFiles(fileSystem.mainFiles(Erlang.KEY)), fileSystem
+        .getSourceDirs(), false, fileSystem.getSourceCharset());
   }
 
   @Override

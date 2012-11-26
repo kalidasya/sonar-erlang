@@ -19,39 +19,33 @@
  */
 package org.kalidasya.sonar.erlang.checks;
 
-import java.io.File;
-
+import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
 import org.junit.Test;
 import org.kalidasya.sonar.erlang.ErlangAstScanner;
 import org.sonar.squid.api.SourceFile;
 
-import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
+import java.io.File;
 
 public class NumberOfFunctionClausesCheckTest {
 
-	@Test
-	public void test() {
-		NoMacrosCheck check = new NoMacrosCheck();
+  @Test
+  public void test() {
+    NoMacrosCheck check = new NoMacrosCheck();
 
-		SourceFile file = ErlangAstScanner.scanSingleFile(new File(
-				"src/test/resources/checks/nomacros.erl"), check);
-		CheckMessagesVerifier.verify(file.getCheckMessages())
-		.next().atLine(2).withMessage("Do not use macros.")
-		.next().atLine(10)
-		.noMore();
-	}
-	
-	@Test
-	public void test2() {
-		NoMacrosCheck check = new NoMacrosCheck();
-		check.setSkipDefineInFlowControl(false);
-		SourceFile file = ErlangAstScanner.scanSingleFile(new File(
-				"src/test/resources/checks/nomacros.erl"), check);
-		CheckMessagesVerifier.verify(file.getCheckMessages())
-		.next().atLine(2).withMessage("Do not use macros.")
-		.next().atLine(4).withMessage("Do not use macros.")
-		.next().atLine(6).withMessage("Do not use macros.")
-		.next().atLine(10)
-		.noMore();
-	}
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File(
+        "src/test/resources/checks/nomacros.erl"), check);
+    CheckMessagesVerifier.verify(file.getCheckMessages()).next().atLine(2).withMessage(
+        "Do not use macros.").next().atLine(10).noMore();
+  }
+
+  @Test
+  public void test2() {
+    NoMacrosCheck check = new NoMacrosCheck();
+    check.setSkipDefineInFlowControl(false);
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File(
+        "src/test/resources/checks/nomacros.erl"), check);
+    CheckMessagesVerifier.verify(file.getCheckMessages()).next().atLine(2).withMessage(
+        "Do not use macros.").next().atLine(4).withMessage("Do not use macros.").next()
+        .atLine(6).withMessage("Do not use macros.").next().atLine(10).noMore();
+  }
 }

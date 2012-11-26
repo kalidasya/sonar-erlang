@@ -19,26 +19,24 @@
  */
 package org.kalidasya.sonar.erlang.checks;
 
-import java.io.File;
-
+import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
 import org.junit.Test;
 import org.kalidasya.sonar.erlang.ErlangAstScanner;
 import org.sonar.squid.api.SourceFile;
 
-import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
+import java.io.File;
 
 public class NoTrailingWhitespaceCheckTest {
 
-	@Test
-	public void test() {
-		NoTrailingWhitespaceCheck check = new NoTrailingWhitespaceCheck();
+  @Test
+  public void test() {
+    NoTrailingWhitespaceCheck check = new NoTrailingWhitespaceCheck();
 
-		SourceFile file = ErlangAstScanner.scanSingleFile(new File(
-				"src/test/resources/checks/notrailingwhitespace.erl"), check);
-		CheckMessagesVerifier.verify(file.getCheckMessages())
-		.next().atLine(2).withMessage("No trailing white space.")
-		.next().atLine(6).withMessage("No trailing white space.")
-		.next().atLine(7).withMessage("No trailing white space.")
-		.noMore();
-	}
+    SourceFile file = ErlangAstScanner.scanSingleFile(new File(
+        "src/test/resources/checks/notrailingwhitespace.erl"), check);
+    CheckMessagesVerifier.verify(file.getCheckMessages()).next().atLine(2).withMessage(
+        "No trailing white space.").next().atLine(6)
+        .withMessage("No trailing white space.").next().atLine(7).withMessage(
+            "No trailing white space.").noMore();
+  }
 }

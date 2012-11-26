@@ -19,6 +19,8 @@
  */
 package org.kalidasya.sonar.erlang.checks;
 
+import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.squid.checks.SquidCheck;
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.kalidasya.sonar.erlang.api.ErlangMetric;
 import org.sonar.check.BelongsToProfile;
@@ -28,40 +30,37 @@ import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.squid.api.SourceFunction;
 
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.squid.checks.SquidCheck;
-
 @Rule(key = "BranchesOfRecursion", priority = Priority.MAJOR, cardinality = Cardinality.SINGLE,
-		name = "BranchesOfRecursion", description = "Check the maximum allowed branches of recursion")
+  name = "BranchesOfRecursion",
+  description = "Check the maximum allowed branches of recursion")
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class BranchesOfRecursionCheck extends SquidCheck<ErlangGrammar> {
 
-	private static final int DEFAULT_MAXIMUM_BOR_THRESHOLD = 10;
+  private static final int DEFAULT_MAXIMUM_BOR_THRESHOLD = 10;
 
-	@RuleProperty(key = "maximumBORThreshold", defaultValue = ""
-			+ DEFAULT_MAXIMUM_BOR_THRESHOLD)
-	private int maximumBORThreshold = DEFAULT_MAXIMUM_BOR_THRESHOLD;
+  @RuleProperty(key = "maximumBORThreshold", defaultValue = "" + DEFAULT_MAXIMUM_BOR_THRESHOLD)
+  private int maximumBORThreshold = DEFAULT_MAXIMUM_BOR_THRESHOLD;
 
-	@Override
-	public void init() {
-		subscribeTo(getContext().getGrammar().functionDeclaration);
-	}
+  @Override
+  public void init() {
+    subscribeTo(getContext().getGrammar().functionDeclaration);
+  }
 
-	@Override
-	public void leaveNode(AstNode node) {
-		SourceFunction function = (SourceFunction) getContext().peekSourceCode();
-		if (function.getInt(ErlangMetric.BRANCHES_OF_RECURSION) > maximumBORThreshold) {
-			getContext()
-					.createLineViolation(
-							this,
-							"Function has a complexity of {0,number,integer} which is greater than {1,number,integer} authorized.",
-							node, function.getInt(ErlangMetric.BRANCHES_OF_RECURSION),
-							maximumBORThreshold);
-		}
-	}
+  @Override
+  public void leaveNode(AstNode node) {
+    SourceFunction function = (SourceFunction) getContext().peekSourceCode();
+    if (function.getInt(ErlangMetric.BRANCHES_OF_RECURSION) > maximumBORThreshold) {
+      getContext()
+          .createLineViolation(
+              this,
+              "Function has a complexity of {0,number,integer} which is greater than {1,number,integer} authorized.",
+              node, function.getInt(ErlangMetric.BRANCHES_OF_RECURSION),
+              maximumBORThreshold);
+    }
+  }
 
-	public void setMaximumBORThreshold(int threshold) {
-		this.maximumBORThreshold = threshold;
-	}
+  public void setMaximumBORThreshold(int threshold) {
+    this.maximumBORThreshold = threshold;
+  }
 
 }
