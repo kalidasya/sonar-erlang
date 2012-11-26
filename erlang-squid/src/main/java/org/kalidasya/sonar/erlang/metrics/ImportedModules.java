@@ -19,6 +19,11 @@
  */
 package org.kalidasya.sonar.erlang.metrics;
 
+/**
+ * simple counter metric, need threshold first 
+ * @author tkende
+ *
+ */
 public class ImportedModules {
 
 }
