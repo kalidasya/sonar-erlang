@@ -15,7 +15,12 @@
   <packaging>pom</packaging>
 
   <name>Erlang</name>
+  <description>Parent pom of Sonar erlang plugin</description>
+  <url></url>
   <inceptionYear>2012</inceptionYear>
+  <organization>
+    <name>Tamas Kende</name>
+  </organization>
   <licenses>
     <license>
       <name>GNU LGPL 3</name>
@@ -23,10 +28,6 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-
-  <organization>
-    <name>Tamas Kende</name>
-  </organization>
 
   <developers>
     <developer>
