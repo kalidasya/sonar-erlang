@@ -665,7 +665,10 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	    funExpression.is(
 			ErlangKeyword.FUN,
 			firstOf(
-				funcArity,
+				and(
+					opt(memberExpression,COLON),
+					funcArity
+				),
 				and(functionDeclarationsNoName, END)
 			),
 			opt(arguments)

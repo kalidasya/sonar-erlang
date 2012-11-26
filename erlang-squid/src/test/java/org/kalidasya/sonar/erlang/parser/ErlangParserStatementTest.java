@@ -80,6 +80,8 @@ public class ErlangParserStatementTest {
 		assertThat(p).matches((code("fun module:function/3")));
 
 		assertThat(p).matches((code("fun M:F/Arity")));
+		
+		assertThat(p).matches((code("fun ?MODULE:passthrough_fun_to_sql/1")));
 
 	}
 
