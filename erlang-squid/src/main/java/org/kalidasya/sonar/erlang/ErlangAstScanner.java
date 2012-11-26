@@ -128,14 +128,15 @@ public final class ErlangAstScanner {
 						}
 						String functionName = clause.findFirstDirectChild(grammar.clauseHead)
 								.getTokenValue();
-						return functionName + "/" + ((!isDec)?"c":"") + getArity(clause) + ":" + clause.getTokenLine();
+						return functionName + "/" + ((!isDec) ? "c" : "") + getArity(clause) + ":"
+								+ clause.getTokenLine();
 					}
 
 					private String getArity(AstNode ast) {
 						AstNode args = ast.findFirstDirectChild(grammar.clauseHead)
 								.findFirstDirectChild(grammar.funcDecl).findFirstDirectChild(
 										grammar.arguments);
-						int num = args.getNumberOfChildren() > 3 ? args.findChildren(
+						int num = args.getNumberOfChildren() > 3 ? args.findDirectChildren(
 								ErlangPunctuator.COMMA).size() + 1 : args.getNumberOfChildren() - 2;
 						return String.valueOf(num);
 					}

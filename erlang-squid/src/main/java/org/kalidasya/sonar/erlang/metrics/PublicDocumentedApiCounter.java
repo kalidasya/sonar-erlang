@@ -55,7 +55,7 @@ public class PublicDocumentedApiCounter extends SquidAstVisitor<ErlangGrammar> {
 		 * TODO: analyse common export related flow controls
 		 */
 		if (astNode.findFirstParent(g.flowControlAttr) == null) {
-			List<AstNode> exports = astNode.findChildren(getContext().getGrammar().funcArity);
+			List<AstNode> exports = astNode.findFirstDirectChild(g.funcExport).findDirectChildren(g.funcArity);
 			numOfPublicAPIs += exports.size();
 			for (AstNode export : exports) {
 				AstNode func = findFunctionByArity(getArity(export));
