@@ -22,7 +22,6 @@ package org.kalidasya.sonar.erlang;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.Collection;
-import java.util.List;
 
 import org.kalidasya.sonar.erlang.api.ErlangGrammar;
 import org.kalidasya.sonar.erlang.api.ErlangMetric;
