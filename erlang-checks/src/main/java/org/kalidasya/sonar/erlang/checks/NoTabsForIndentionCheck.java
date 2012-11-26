@@ -38,6 +38,8 @@ import com.sonar.sslr.squid.checks.SquidCheck;
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class NoTabsForIndentionCheck extends SquidCheck<ErlangGrammar> {
 
+	private int numOfViolations = 0;
+	
 	@Override
 	public void visitFile(AstNode astNode) {
 		try {
@@ -59,6 +61,12 @@ public class NoTabsForIndentionCheck extends SquidCheck<ErlangGrammar> {
 				if (line.matches("^ *\t+.*")) {
 					getContext().createLineViolation(this, "Line has tabs as indention.",
 							lineNumber);
+					numOfViolations++;
+				}
+				if(numOfViolations == 100){
+					getContext().createLineViolation(this, "File has reached 100 'Line has tabs as indention' violation.",
+							lineNumber);
+					return;
 				}
 				lineNumber++;
 			}

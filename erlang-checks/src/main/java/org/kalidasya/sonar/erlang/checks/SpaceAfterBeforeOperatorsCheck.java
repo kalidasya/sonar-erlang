@@ -43,6 +43,8 @@ public class SpaceAfterBeforeOperatorsCheck extends SquidCheck<ErlangGrammar> {
 			ErlangPunctuator.STAR, ErlangPunctuator.DIV, ErlangPunctuator.PLUS,
 			ErlangPunctuator.MINUS);
 	List<Integer> failedLines = new ArrayList<Integer>();
+	
+	private int numOfViolations = 0;
 
 	@Override
 	public void init() {
@@ -60,7 +62,7 @@ public class SpaceAfterBeforeOperatorsCheck extends SquidCheck<ErlangGrammar> {
 	@Override
 	public void visitNode(AstNode ast) {
 		AstNode compTo;
-		if (!failedLines.contains(ast.getTokenLine())) {
+		if (numOfViolations<100 && !failedLines.contains(ast.getTokenLine())) {
 			if (ast.nextSibling() != null && operators.contains(ast.nextSibling().getType())) {
 				compTo = ast.nextSibling();
 				failedLines.add(check(ast, compTo, false));
@@ -82,6 +84,11 @@ public class SpaceAfterBeforeOperatorsCheck extends SquidCheck<ErlangGrammar> {
 		if (actCheckPoint != compCheckPoint) {
 			getContext().createLineViolation(this, "No space after operator in column: {0}.",
 					ast.getToken().getLine(), actCol + 1);
+			numOfViolations++;
+			if(numOfViolations == 100){
+				getContext().createLineViolation(this, "File has reached 100 'No space after operator' violation.",
+						ast.getToken().getLine(), actCol + 1);
+			}
 			return ast.getToken().getLine();
 		}
 		return -1;

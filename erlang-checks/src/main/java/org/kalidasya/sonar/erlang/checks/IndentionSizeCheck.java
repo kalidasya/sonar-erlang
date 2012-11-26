@@ -37,6 +37,7 @@ import com.sonar.sslr.squid.checks.SquidCheck;
 public class IndentionSizeCheck extends SquidCheck<ErlangGrammar> implements AstAndTokenVisitor {
 
 	private Token previousToken;
+	private int numOfViolations = 0;
 
 	@RuleProperty(key = "regularExpression", defaultValue = "4")
 	public int indentionSize = 4;
@@ -52,15 +53,23 @@ public class IndentionSizeCheck extends SquidCheck<ErlangGrammar> implements Ast
 	}
 
 	public void visitToken(Token token) {
-		if (!token.isGeneratedCode()) {
+		if (numOfViolations<100 && !token.isGeneratedCode()) {
 			if (previousToken == null
 					|| (previousToken != null && previousToken.getLine() != token.getLine())) {
-				if (token.getColumn() % 4 != 0) {
+				if (token.getColumn() % indentionSize != 0) {
 					getContext()
 							.createLineViolation(
 									this,
 									"The line starts with {0, number, integer} characters which is cannot be divided by {1, number, integer}.",
 									token.getLine(), token.getColumn(), indentionSize);
+					numOfViolations++;
+					if(numOfViolations == 100){
+						getContext()
+						.createLineViolation(
+								this,
+								"File has reached 100 indention violation.",
+								token.getLine(), token.getColumn(), indentionSize);
+					}
 				} 
 				previousToken = token;
 			}

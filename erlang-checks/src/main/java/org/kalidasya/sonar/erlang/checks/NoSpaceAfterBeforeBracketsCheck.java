@@ -45,6 +45,8 @@ public class NoSpaceAfterBeforeBracketsCheck extends SquidCheck<ErlangGrammar> {
 	List<ErlangPunctuator> noSpaceAfter = ImmutableList.of(ErlangPunctuator.LBRACKET,
 			ErlangPunctuator.LCURLYBRACE, ErlangPunctuator.LPARENTHESIS);
 	List<Integer> failedLines = new ArrayList<Integer>();
+	
+	private int numOfViolations = 0;
 
 	@Override
 	public void init() {
@@ -64,7 +66,7 @@ public class NoSpaceAfterBeforeBracketsCheck extends SquidCheck<ErlangGrammar> {
 	@Override
 	public void visitNode(AstNode ast) {
 		Token compTo;
-		if (!failedLines.contains(ast.getTokenLine())) {
+		if (numOfViolations<100  && !failedLines.contains(ast.getTokenLine())) {
 			if (ast.hasParents(getContext().getGrammar().clauseBody)) {
 				if (noSpaceAfter.contains(ast.getType())) {
 					compTo = ast.nextSibling().getToken();
@@ -93,6 +95,11 @@ public class NoSpaceAfterBeforeBracketsCheck extends SquidCheck<ErlangGrammar> {
 		if (actCheckPoint != compCheckPoint) {
 			getContext().createLineViolation(this, "Space after bracket in column: {0}.",
 					ast.getToken().getLine(), actCol + 1);
+			numOfViolations++;
+			if(numOfViolations == 100){
+				getContext().createLineViolation(this, "File has reached 100 no space after/before brackets violation.",
+						ast.getToken().getLine(), actCol + 1);
+			}
 			return ast.getToken().getLine();
 		}
 		return -1;
