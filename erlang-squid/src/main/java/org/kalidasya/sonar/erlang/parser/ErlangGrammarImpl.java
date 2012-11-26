@@ -272,7 +272,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 			MINUS,
 			"import",
 			LPARENTHESIS,
-			IDENTIFIER,
+			firstOf(macroLiteral, IDENTIFIER),
 			COMMA,
 			LBRACKET,
 			funcArity,
@@ -328,7 +328,8 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 	private void functions() {
 		spec.is(
 			ErlangPunctuator.MINUS,
-			"spec",
+			firstOf("spec","callback"),
+			opt(LPARENTHESIS),
 			opt(
 				IDENTIFIER,
 				COLON
@@ -344,6 +345,7 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				SEMI,
 				funcSpec
 			),
+			opt(RPARENTHESIS),
 			DOT
 		);
 		
@@ -472,8 +474,9 @@ public class ErlangGrammarImpl extends ErlangGrammar {
 				firstOf(
 					IDENTIFIER,
 					NUMERIC_LITERAL,
-					//handle string concetanation ("..."\n[\r\t]"..." is one literal
-					one2n(LITERAL)
+					//handle string concetanation ("..."\n[\r\t]"..." is one literal as well this:
+					//"asasd" ?MACRO "asdasd"
+					and(LITERAL, o2n(firstOf(LITERAL, macroLiteral)))
 				)
 			);
 	    primaryExpression.is(firstOf(

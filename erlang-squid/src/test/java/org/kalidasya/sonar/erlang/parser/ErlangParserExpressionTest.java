@@ -184,6 +184,14 @@ public class ErlangParserExpressionTest {
 		assertThat(p).matches((code("t_from_range(-(1 bsl (N - 1)), 1 bsl (N - 1) - 1)")));
 	}
 
+	@Test
+	public void string(){
+		assertThat(p).matches((code("\"asdasd\"")));
+		assertThat(p).matches((code("\"asdasd\" \"asdasd\"")));
+		assertThat(p).matches((code("\"asdasd\" \"asdasd\"\n \"effef\"")));
+		assertThat(p).matches((code("\"asdasd\" ?MARCI\n \"effef\"")));
+	}
+	
 	private static String code(String... lines) {
 		return Joiner.on("\n").join(lines);
 	}

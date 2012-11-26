@@ -182,6 +182,10 @@ public class ModuleAttributesTest {
 		assertThat(p)
 				.matches(
 						(code("-spec check_access_pt(fun(), any(), {access_checks(), atom(), atom() | tuple(), atom() | string()}) -> any().")));
+
+		assertThat(p).matches((code("-spec(new/0 :: () -> a()).")));
+
+		assertThat(p).matches((code("-spec(n/1 :: (any()) -> boolean()).")));
 	}
 
 	@Test
@@ -215,6 +219,8 @@ public class ModuleAttributesTest {
 						"t_sup/1, t_sup/2, t_subtract/2, t_to_string/2, t_to_tlist/1,",
 						"t_tuple/0, t_tuple/1, t_tuple_args/1, t_tuple_subtypes/1,",
 						"t_unit/0, t_unopaque/1]).")));
+
+		assertThat(p).matches((code("-import(?FILE, [test/1]).")));
 	}
 
 	@Test
@@ -242,6 +248,14 @@ public class ModuleAttributesTest {
 	@Test
 	public void fileTest() {
 		assertThat(p).matches((code("-file(\"megaco_text_parser_prev3b.yrl\", 1593).")));
+	}
+
+	@Test
+	public void callbackTest() {
+		assertThat(p).matches(
+				(code("-callback init(Args :: term()) ->", "{ok, State :: term()} |",
+						"{ok, State :: term(), timeout() | hibernate} |",
+						"{stop, Reason :: term()} | ignore.")));
 	}
 
 	private static String code(String... lines) {

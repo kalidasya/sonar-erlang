@@ -57,7 +57,7 @@ public final class ErlangLexer {
 				.withChannel(regexp(NUMERIC_LITERAL, "[0-9]++"))
 				.withChannel(regexp(NUMERIC_LITERAL, escapeSequence))
 				.withChannel(regexp(NUMERIC_LITERAL, "\\$[\\x00-\\x7F]"))
-				.withChannel(new IdentifierAndKeywordChannel(or("('[^'\n\r]*')","^(?!\\$)(\\p{javaJavaIdentifierStart}++\\p{javaJavaIdentifierPart}*+)"), true, ErlangKeyword.values()))
+				.withChannel(new IdentifierAndKeywordChannel(or("('[^'\n\r]*')","^(?!\\$)(\\p{javaJavaIdentifierStart}++[\\p{javaJavaIdentifierPart}@]*+)"), true, ErlangKeyword.values()))
 				.withChannel(new PunctuatorChannel(ErlangPunctuator.values()))
 				.withChannel(new UnknownCharacterChannel(true))
 				.build();

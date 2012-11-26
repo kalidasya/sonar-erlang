@@ -92,6 +92,7 @@ public class ErlangLexerTest {
 	  public void atomLiteral() {
 	    assertThat(lexer.lex("'find/me'"), hasToken("'find/me'", GenericTokenType.IDENTIFIER));
 	    assertThat(lexer.lex("whatShallW3d0"), hasToken("whatShallW3d0", GenericTokenType.IDENTIFIER));
+	    assertThat(lexer.lex("nonode@nohost"), hasToken("nonode@nohost", GenericTokenType.IDENTIFIER));
 	  }
 	
 	  @Test
