@@ -35,6 +35,7 @@ public final class CheckList {
   public static List<Class> getChecks() {
     return ImmutableList.<Class> of(
         BlockSeparatorCharacterCheck.class,
+        BranchesOfRecursionCheck.class,
         CommentRegularExpressionCheck.class,
         DepthOfCasesCheck.class,
         DoNotUseExportAllCheck.class,
@@ -49,6 +50,7 @@ public final class CheckList {
         NoTabsForIndentionCheck.class,
         NoTrailingWhitespaceCheck.class,
         NumberOfFunctionArgsCheck.class,
+        NumOfFunctionClausesCheck.class,
         SpaceAfterBeforeOperatorsCheck.class,
         XPathCheck.class);
   }

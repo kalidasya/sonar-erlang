@@ -94,7 +94,7 @@ public class ErlangSquidSensorTest {
 		verify(context).saveMeasure(Mockito.any(Resource.class), Mockito.eq(CoreMetrics.NCLOC),
 				Mockito.eq(14.0));
 		verify(context).saveMeasure(Mockito.any(Resource.class), Mockito.eq(CoreMetrics.FUNCTIONS),
-				Mockito.eq(4.0));
+				Mockito.eq(2.0));
 		verify(context).saveMeasure(Mockito.any(Resource.class),
 				Mockito.eq(CoreMetrics.STATEMENTS), Mockito.eq(8.0));
 		verify(context).saveMeasure(Mockito.any(Resource.class),
@@ -125,7 +125,7 @@ public class ErlangSquidSensorTest {
 		verify(context).saveMeasure(Mockito.any(Resource.class), Mockito.eq(CoreMetrics.NCLOC),
 				Mockito.eq(371.0));
 		verify(context).saveMeasure(Mockito.any(Resource.class), Mockito.eq(CoreMetrics.FUNCTIONS),
-				Mockito.eq(90.0));
+				Mockito.eq(10.0));
 		verify(context).saveMeasure(Mockito.any(Resource.class),
 				Mockito.eq(CoreMetrics.STATEMENTS), Mockito.eq(210.0));
 		verify(context).saveMeasure(Mockito.any(Resource.class),
