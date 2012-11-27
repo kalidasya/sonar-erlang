@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.sonar.erlang</groupId>
+    <groupId>org.codehaus.sonar-plugins.erlang</groupId>
     <artifactId>erlang</artifactId>
     <version>2.0-SNAPSHOT</version>
   </parent>
@@ -18,7 +18,6 @@
     <sonar.pluginKey>erl</sonar.pluginKey>
     <sonar.pluginName>Erlang</sonar.pluginName>
     <sonar.pluginClass>org.sonar.plugins.erlang.ErlangPlugin</sonar.pluginClass>
-    <jdk.min.version>1.6</jdk.min.version>
   </properties>
 
   <dependencies>
@@ -72,27 +71,6 @@
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.codehaus.sonar</groupId>
-        <artifactId>sonar-packaging-maven-plugin</artifactId>
-        <extensions>true</extensions>
-        <executions>
-          <execution>
-            <id>default-sonar-plugin</id>
-            <phase>package</phase>
-            <goals>
-              <goal>sonar-plugin</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>default-check-dependencies</id>
-            <phase>initialize</phase>
-            <goals>
-              <goal>check-dependencies</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.codehaus.sonar</groupId>
         <artifactId>sonar-dev-maven-plugin</artifactId>
