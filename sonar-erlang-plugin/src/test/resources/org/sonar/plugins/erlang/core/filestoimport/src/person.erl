@@ -1,1 +1,0 @@
-This is content for person.erl Erlang file used in unit tests.
